@@ -95,17 +95,31 @@ def read():
             auth.revoke_refresh_tokens(check['sub'])
             return jsonify(check)
         except auth.InvalidSessionCookieError:
+            g.user = None
             return redirect(url_for('pages.root_signIn'))
         except:
+            g.user = None
             return redirect(url_for('pages.root_signIn'))
     else:
+        g.user = None
         return redirect(url_for('pages.root_signIn'))
+
+
+@secure.route('/secure/cookie_login')
+@api.validate(tags=['Secure'])
+def remember_cookie():
+    email = request.cookies.get('hash_email')
+    password = request.cookies.get('hash_password')
+    remember = request.cookies.get('remember')
+    data = {'email': email, 'password': password, 'remember': remember}
+    return jsonify(data)
 
 
 @secure.route('/secure/logout')
 @api.validate(tags=['Secure'])
 def logout():
     session.clear()
+    g.user = None
     res = redirect(url_for('pages.root_signIn'))
     res.set_cookie('access_token', max_age=0)
     return res
