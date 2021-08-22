@@ -5,13 +5,14 @@ from bson import ObjectId
 from modules.swagger import api
 from config.object_str import CutId
 from environ.line_token import mango_channel
+from environ.client_environ import MONGODB_URI
 import os
 
 route_intent = Blueprint('intents', __name__, template_folder='templates')
 
 # client = 'mongodb://127.0.0.1:27017'
-client = os.environ.get('MONGODB_URI')
-db = MongoDB(database_name='Mango', uri=client)
+# client = os.environ.get('MONGODB_URI')
+db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'intents'
 
 

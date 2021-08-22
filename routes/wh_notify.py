@@ -6,13 +6,14 @@ from random import randint
 from modules.Invalidate import InvalidUsage
 from environ.line_token import line_bot_api, handler
 from config.db import MongoDB
+from environ.client_environ import MONGODB_URI
 import json
 import os
 
 notify = Blueprint('callback_notify', __name__, template_folder='templates')
 
-client = os.environ.get('MONGODB_URI')
-db = MongoDB(database_name='Mango', uri=client)
+# client = os.environ.get('MONGODB_URI')
+db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'line_bot_notify'
 
 line_bot_api_notify = LineBotApi(line_bot_api)

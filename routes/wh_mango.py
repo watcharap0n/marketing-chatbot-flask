@@ -9,13 +9,14 @@ from random import randint
 from config.db import MongoDB
 from environ.line_token import mango_channel, mango_secret
 from numpy import random
+from environ.client_environ import MONGODB_URI
 import logging
 import json
 import os
 
 # client = 'mongodb://127.0.0.1:27017'
-client = os.environ.get('MONGODB_URI')
-db = MongoDB(database_name='Mango', uri=client)
+# client = os.environ.get('MONGODB_URI')
+db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'line_bot_mango'
 
 route_callback_mango = Blueprint('callback_mango', __name__, template_folder='templates')

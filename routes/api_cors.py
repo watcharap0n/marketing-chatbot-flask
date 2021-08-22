@@ -8,13 +8,14 @@ from modules.swagger import api
 from config.db import MongoDB
 from features_line.flex_message import flex_notify_channel
 from routes.wh_notify import line_bot_api_notify
+from environ.client_environ import MONGODB_URI
 import os
 
 public = Blueprint('public', __name__, template_folder='templates')
 
 # client = 'mongodb://127.0.0.1:27017'
-client = os.environ.get('MONGODB_URI')
-db = MongoDB(database_name='Mango', uri=client)
+# client = os.environ.get('MONGODB_URI')
+db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'imports'
 
 

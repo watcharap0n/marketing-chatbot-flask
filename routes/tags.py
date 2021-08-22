@@ -3,13 +3,14 @@ from config.db import MongoDB
 from config.object_str import CutId
 from bson import ObjectId
 from modules.swagger import api
+from environ.client_environ import MONGODB_URI
 import os
 
 route_tag = Blueprint('tags', __name__, template_folder='templates')
 
 # client = 'mongodb://127.0.0.1:27017'
-client = os.environ.get('MONGODB_URI')
-db = MongoDB(database_name='Mango', uri=client)
+# client = os.environ.get('MONGODB_URI')
+db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'tags_customer'
 
 

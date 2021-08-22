@@ -5,6 +5,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import StickerSendMessage, TextSendMessage
 from machine_leanning.model_text_classifire import intent_model
+from environ.client_environ import MONGODB_URI
 from random import randint
 from bson import ObjectId
 from config.object_str import CutId
@@ -15,8 +16,8 @@ import json
 import os
 
 # client = 'mongodb://127.0.0.1:27017'
-client = os.environ.get('MONGODB_URI')
-db = MongoDB(database_name='Mango', uri=client)
+# client = os.environ.get('MONGODB_URI')
+db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'line_bot'
 
 route_callback = Blueprint('callback', __name__, template_folder='templates')

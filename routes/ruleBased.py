@@ -3,11 +3,12 @@ from config.object_str import CutId
 from bson import ObjectId
 from config.db import MongoDB
 from environ.line_token import mango_channel
+from environ.client_environ import MONGODB_URI
 import os
 
 # client = 'mongodb://127.0.0.1:27017'
-client = os.environ.get('MONGODB_URI')
-db = MongoDB(database_name='Mango', uri=client)
+# client = os.environ.get('MONGODB_URI')
+db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'match_rule_based'
 rule_base = Blueprint('rule_based', __name__, template_folder='templates')
 
