@@ -1,3 +1,7 @@
 .gitattributes
 .idea
 venv
+test_coding.py
+log
+environ/client_environ.py
+__pycache__
