@@ -346,7 +346,7 @@ new Vue({
                 this.showWebhook = true
                 this.showBotMango = false
                 this.showRuleBased = false
-            } else if (data === 'สอนบอท') {
+            } else if (data === 'สอนบอทด้วยไลน์อื่น') {
                 this.nameAccestoken = ''
                 this.mangoAccess = ''
                 this.showWebhook = false
@@ -360,7 +360,7 @@ new Vue({
                 this.showIntent = false
                 this.showBotMango = true
                 this.showRuleBased = false
-            } else if (data === 'Rule Based') {
+            } else if (data === 'RuleBased') {
                 this.nameAccestoken = ''
                 this.mangoAccess = 'mango'
                 this.showWebhook = false
