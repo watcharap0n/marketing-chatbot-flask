@@ -36,7 +36,7 @@ def line_construction():
 
 @page.route('/line/questionnaire/planning')
 def line_planning():
-    return render_template('LINE/planning.vue')
+    return render_template('LINE/planing.vue')
 
 
 @page.route('/line/questionnaire/powerbi')
