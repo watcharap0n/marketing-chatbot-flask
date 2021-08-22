@@ -106,6 +106,7 @@ def read():
 @api.validate(tags=['Secure'])
 def logout():
     session.clear()
+    g.user = None
     res = redirect(url_for('pages.root_signIn'))
     res.set_cookie('access_token', max_age=0)
     return res

@@ -51,7 +51,7 @@ def add_intent():
     return jsonify(item)
 
 
-@route_intent.route('/intent/query/<string:id>', methods=['PUT'])
+@route_intent.route('/intent/query/<string:id>', methods=['POST'])
 @api.validate(tags=['Intent'])
 def query_intent(id):
     data = db.find_one(collection=collection, query={'id': id})
@@ -73,7 +73,7 @@ def update_intent():
     return jsonify(res)
 
 
-@route_intent.route('/intent/delete_intent/<string:id>', methods=['DELETE'])
+@route_intent.route('/intent/delete_intent/<string:id>', methods=['POST'])
 @api.validate(tags=['Intent'])
 def delete_intent(id):
     db.delete_one(collection=collection, query={'id': id})

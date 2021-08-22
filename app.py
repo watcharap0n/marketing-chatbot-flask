@@ -31,7 +31,7 @@ def before_request():
         else:
             g.user = None
     except:
-        g.user = session
+        g.user = None
         raise InvalidUsage(message='Not Include Your APP', status_code=400)
 
 

@@ -57,7 +57,7 @@ def post_customer():
     return jsonify(data)
 
 
-@route_import.route('/api/import/<string:id>', methods=['PUT'])
+@route_import.route('/api/import/<string:id>', methods=['POST'])
 @api.validate(resp=Response(HTTP_204=None, HTTP_400=None), tags=['Import'])
 def put_customer(id):
     payload = request.get_json()
@@ -68,7 +68,7 @@ def put_customer(id):
     return jsonify({'message': 'success'})
 
 
-@route_import.route('/api/import/<string:id>', methods=['DELETE'])
+@route_import.route('/api/import/<string:id>', methods=['POST'])
 @api.validate(resp=Response(HTTP_204=None, HTTP_403=None), tags=['Import'])
 def customer_delete(id):
     db.delete_one(collection=collection, query={'id': id})
