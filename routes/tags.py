@@ -30,7 +30,7 @@ def find_tag():
     return jsonify(data[::-1])
 
 
-@route_tag.route('/api/tag/<string:item>', methods=['POST'])
+@route_tag.route('/api/tag/<string:item>', methods=['PUT'])
 @api.validate(tags=['Tag'])
 def add_tag(item):
     id = request.args.get('id-query')

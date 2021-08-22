@@ -66,7 +66,7 @@ def update_rule_based():
 # return jsonify(res)
 
 
-@rule_base.route('/callback/mango/delete_rule_based/<string:id>', methods=['POST'])
+@rule_base.route('/callback/mango/delete_rule_based/<string:id>', methods=['DELETE'])
 def delete_intent(id):
     db.delete_one(collection=collection, query={'id': id})
     res = {'message': 'success'}
