@@ -34,7 +34,7 @@ def line_construction():
     return render_template('LINE/construction.vue')
 
 
-@page.route('/line/questionnaire/planning')
+@page.route('/line/questionnaire/planing')
 def line_planning():
     return render_template('LINE/planing.vue')
 
