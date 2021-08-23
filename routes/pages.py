@@ -52,3 +52,8 @@ def line_quote():
 @page.route('/line/questionnaire/realestate')
 def line_realestate():
     return render_template('LINE/reales.vue')
+
+
+@page.route('/line/questionnaire/care')
+def line_mangocare():
+    return render_template('LINE/care.vue')
