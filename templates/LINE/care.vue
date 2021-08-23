@@ -90,7 +90,6 @@
                   color="success"
                   label="ท่านต้องการรับข้อมูลข่าวสารหรือไม่"
                   v-model="checkbox"
-                  label="รับข้อมูลข่าวสาร"
               ></v-checkbox>
 
               <v-card-actions>
