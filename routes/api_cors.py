@@ -42,12 +42,13 @@ def condition_message(channel, date, time, company, name, tel, email, product,
                                 email=email, product=product, message='ไม่มีข้อความ'))
 
 
-def key_model_transaction(item: dict, channel: str) -> dict:
-    item['other'] = None
-    item['userId'] = None
-    item['email_private'] = None
-    item['profile'] = None
-    item['picture'] = None
+def key_model_transaction(item: dict, channel: str, userId=None, email_private=None, profile=None, picture=None,
+                          other=None) -> dict:
+    item['other'] = other
+    item['userId'] = userId
+    item['email_private'] = email_private
+    item['profile'] = profile
+    item['picture'] = picture
     item['channel'] = channel
     item['username'] = None
     item['uid'] = None

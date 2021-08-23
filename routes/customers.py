@@ -9,6 +9,7 @@ from config.db import MongoDB
 from modules.pandasModules import DataColumnFilter
 from environ.client_environ import MONGODB_URI
 import os
+
 route_customer = Blueprint('customers', __name__, template_folder='templates')
 
 # client = 'mongodb://127.0.0.1:27017'
