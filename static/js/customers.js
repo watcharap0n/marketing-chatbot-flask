@@ -189,7 +189,7 @@ new Vue({
         navigatorAppbar: false,
         selectedList: 0,
         itemsAppbar: [
-            {text: 'DataTable', icon: 'mdi-database'},
+            {text: 'Mango', icon: 'mdi-database'},
             {text: 'Intents', icon: 'mdi-account'},
         ],
 
@@ -713,8 +713,8 @@ new Vue({
         //appBar
         redirectPage(item) {
             console.log(item)
-            if (item.text === 'DataTable')
-                window.location = '/customers'
+            if (item.text === 'Mango')
+                window.location = '/'
             if (item.text === 'Intents')
                 window.location = '/intents'
         }
