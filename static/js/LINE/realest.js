@@ -42,7 +42,7 @@ new Vue({
                             this.formElement.userId = profile.userId
                             this.formElement.profile = profile.displayName
                             this.formElement.picture = profile.pictureUrl
-                            this.formElement.email_private = liff.getDecodedIDToken
+                            this.formElement.email_private = liff.getDecodedIDToken().email
                         })
                 }
                 else {

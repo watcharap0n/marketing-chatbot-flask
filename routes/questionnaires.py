@@ -7,7 +7,7 @@ from config.object_str import CutId
 from modules.swagger import api
 from config.db import MongoDB
 from environ.client_environ import MONGODB_URI
-from routes.api_cors import key_model_transaction
+from routes.api_cors import key_model_transaction, condition_message
 import os
 
 question = Blueprint('question', __name__, template_folder='templates')
@@ -44,5 +44,16 @@ def q_line():
                                  profile=profile,
                                  picture=picture, other=other)
     db.insert_one(collection, item)
+    name = item['name']
+    product = item['product']
+    tel = item['tel']
+    channel = item['channel']
+    date = item['date']
+    time = item['time']
+    email = item['email']
+    message = item['message']
+    company = item['company']
+    del item['_id']
+    condition_message(channel, date, time, company, name, tel, email, product, message)
     res = {'message': 'success'}
     return jsonify(res)
