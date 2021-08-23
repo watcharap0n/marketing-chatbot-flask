@@ -63,7 +63,6 @@ new Vue({
                     .then(() => {
                         this.spinBtn = true
                         this.popUp()
-                        this.$refs.form.reset()
                     })
                     .catch((err) => {
                         this.spinBtn = true
