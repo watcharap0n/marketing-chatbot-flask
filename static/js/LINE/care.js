@@ -61,6 +61,12 @@ new Vue({
                 }
                 axios.post(path, this.formElement)
                     .then(() => {
+                        if (this.formElement.product){
+                            this.formElement.product = true
+                        }
+                        else if (!this.formElement.product){
+                            this.formElement.product = false
+                        }
                         this.spinBtn = true
                         this.popUp()
                     })
