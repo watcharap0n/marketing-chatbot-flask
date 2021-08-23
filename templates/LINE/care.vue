@@ -87,10 +87,10 @@
               ></v-textarea>
 
               <v-checkbox
-                  color="red"
+                  color="success"
                   label="ท่านต้องการรับข้อมูลข่าวสารหรือไม่"
                   v-model="checkbox"
-                  :label="`${this.checkbox === true ? 'ไม่รับข้อมูลข่าวสาร': 'รับข้อมูลข่าวสาร'}`"
+                  label="รับข้อมูลข่าวสาร"
               ></v-checkbox>
 
               <v-card-actions>
