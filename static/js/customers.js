@@ -38,11 +38,11 @@ new Vue({
                 href: 'imports',
                 icon: 'mdi-import'
             },
-            {
-                header: 'API',
-                href: 'api',
-                icon: 'mdi-api'
-            }
+            // {
+            //     header: 'API',
+            //     href: 'api',
+            //     icon: 'mdi-api'
+            // }
         ],
         headers: [
             {
