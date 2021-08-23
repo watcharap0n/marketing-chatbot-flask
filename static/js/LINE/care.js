@@ -18,7 +18,7 @@ new Vue({
             email: '',
             company: '',
             tel: '',
-            product: '',
+            product: null,
             other: '',
             message: '',
             userId: '',
@@ -53,7 +53,12 @@ new Vue({
             let validate = this.$refs.form.validate()
             if (validate === true) {
                 this.spinBtn = false
-      const path = '/api/line/questionnaire'
+                const path = '/api/line/questionnaire'
+                if (this.formElement.product === true) {
+                    this.formElement.product = 'รับข้อมูลข่าวสาร'
+                } else if (this.formElement.product === false) {
+                    this.formElement.product = 'ไม่รับข้อมูลข่าวสาร'
+                }
                 axios.post(path, this.formElement)
                     .then(() => {
                         this.spinBtn = true
@@ -62,7 +67,7 @@ new Vue({
                     })
                     .catch((err) => {
                         this.spinBtn = true
-                         Swal.fire("มีบางอย่างผิดพลาด", "กรุณาลองใหม่อีกครั้งค่ะ", "error").then(() => {
+                        Swal.fire("มีบางอย่างผิดพลาด", "กรุณาลองใหม่อีกครั้งค่ะ", "error").then(() => {
                             liff.closeWindow();
                         })
                     })
