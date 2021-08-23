@@ -56,8 +56,8 @@ new Vue({
                 const path = '/api/line/questionnaire'
                 if (this.formElement.product === true) {
                     this.formElement.product = 'รับข้อมูลข่าวสาร'
-                } else if (this.formElement.product === false) {
-                    this.formElement.product = 'ไม่รับข้อมูลข่าวสาร'
+                } else if (!this.formElement.product) {
+                    this.formElement.product = 'รับข้อมูลข่าวสาร'
                 }
                 axios.post(path, this.formElement)
                     .then(() => {
