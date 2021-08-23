@@ -13,12 +13,13 @@ new Vue({
             v => (v && v.length <= 10) || 'เบอร์โทรกรอกไม่ครบ',
         ],
         validOther: [v => !!v || 'กรุณากรอกข้อมูลให้ครบถ้วน'],
+        checkbox: false,
         formElement: {
             name: '',
             email: '',
             company: '',
             tel: '',
-            product: null,
+            product: '',
             other: '',
             message: '',
             userId: '',
@@ -54,19 +55,13 @@ new Vue({
             if (validate === true) {
                 this.spinBtn = false
                 const path = '/api/line/questionnaire'
-                if (this.formElement.product === true) {
+                if (this.checkbox === true) {
                     this.formElement.product = 'รับข้อมูลข่าวสาร'
-                } else if (!this.formElement.product) {
+                } else if (this.checkbox === false) {
                     this.formElement.product = 'ไม่รับข้อมูลข่าวสาร'
                 }
                 axios.post(path, this.formElement)
                     .then(() => {
-                        if (this.formElement.product){
-                            this.formElement.product = true
-                        }
-                        else if (!this.formElement.product){
-                            this.formElement.product = false
-                        }
                         this.spinBtn = true
                         this.popUp()
                     })

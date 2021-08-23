@@ -89,8 +89,8 @@
               <v-checkbox
                   color="red"
                   label="ท่านต้องการรับข้อมูลข่าวสารหรือไม่"
-                  v-model="formElement.product"
-                  :label="`${this.formElement.product === true ? 'ไม่รับข้อมูลข่าวสาร': 'รับข้อมูลข่าวสาร'}`"
+                  v-model="checkbox"
+                  :label="`${this.checkbox === true ? 'ไม่รับข้อมูลข่าวสาร': 'รับข้อมูลข่าวสาร'}`"
               ></v-checkbox>
 
               <v-card-actions>
