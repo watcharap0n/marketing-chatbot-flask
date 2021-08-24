@@ -2,13 +2,14 @@
 check the document at URL location /apidoc/redoc or /apidoc/swagger
 """
 
-from flask import Flask, jsonify, session, g
+from flask import Flask, jsonify, session, g, request
 from modules.swagger import api
 from routes import customers, imports, intents, tags, wh_client, secure, pages, questionnaires, wh_mango, ruleBased, \
     wh_notify, api_cors
 from flask_cors import CORS
 from datetime import timedelta
 from modules.Invalidate import InvalidUsage
+from routes.secure import auth
 
 app = Flask(__name__)
 
@@ -26,19 +27,21 @@ def handle_invalid_usage(error):
 @app.before_request
 def before_request():
     try:
-        if 'user_id' in session:
-            user = session['user_id']['idToken']
-            g.user = user
-        else:
-            g.user = None
+        access_token = request.cookies.get('access_token')
+        check = auth.verify_session_cookie(access_token)
+        auth.revoke_refresh_tokens(check['sub'])
+        user = session['user_id'] = check
+        g.user = user
+    except auth.InvalidSessionCookieError:
+        g.user = None
     except:
-        raise InvalidUsage(status_code=403, message='authentication error')
+        g.user = None
 
 
 @app.before_request
 def make_session_permanent():
     session.permanent = True
-    secure.permanent_session_lifetime = timedelta(minutes=60)
+    app.permanent_session_lifetime = timedelta(minutes=60)
 
 
 app.register_blueprint(

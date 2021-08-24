@@ -261,6 +261,9 @@ new Vue({
                 user.email = res.data.email
                 user.uid = res.data.uid
             })
+            .catch((err) => {
+                console.error(err)
+            })
     },
     async created() {
         await this.APIImport();

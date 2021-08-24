@@ -56,7 +56,6 @@ def login():
         check_verify = auth.get_user_by_email(user['email'])
         if check_verify.email_verified:
             if len(remember) > 0:
-                session['user_id'] = user
                 expires_token = 60 * 60 * 1
                 expires_remember = 60 * 60 * 24 * 5
                 auth_cookie = auth.create_session_cookie(id_token=user['idToken'], expires_in=timedelta(hours=1))
@@ -69,7 +68,6 @@ def login():
                 flash('You were successfully logged in')
                 return response
             else:
-                session['user_id'] = user
                 expires_token = 60 * 60 * 1
                 auth_cookie = auth.create_session_cookie(id_token=user['idToken'], expires_in=timedelta(hours=1))
                 content = {'url': '/', 'status': True, 'detail': 'login success'}
@@ -95,23 +93,9 @@ def read():
             auth.revoke_refresh_tokens(check['sub'])
             return jsonify(check)
         except auth.InvalidSessionCookieError:
-            session.clear()
-            g.user = None
-            res = redirect(url_for('pages.root_signIn'))
-            res.set_cookie('access_token', max_age=0)
-            return res
+            raise InvalidUsage(message='auth Invalid SessionCookie Error', status_code=403)
         except:
-            session.clear()
-            g.user = None
-            res = redirect(url_for('pages.root_signIn'))
-            res.set_cookie('access_token', max_age=0)
-            return res
-    else:
-        session.clear()
-        g.user = None
-        res = redirect(url_for('pages.root_signIn'))
-        res.set_cookie('access_token', max_age=0)
-        return res
+            raise InvalidUsage(message='Something Wrong!', status_code=403)
 
 
 @secure.route('/secure/cookie_login')
