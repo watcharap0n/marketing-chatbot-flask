@@ -5,15 +5,15 @@
     dense
 >
 
-  {% include 'public/extends/customers/appBar.vue' %}
+  {% include 'public/extends/layout/appBar.vue' %}
 
-  <v-app-bar-title>Mango BOT</v-app-bar-title>
+  <v-app-bar-title>Mango AI</v-app-bar-title>
 
   <v-switch
       style="margin-top: 25px; margin-left: 15px"
       v-model="$vuetify.theme.dark"
       inset
-      label="Change Theme Dark"
+      label="เปลี่ยนธีมมืด"
   ></v-switch>
 
   <v-spacer></v-spacer>

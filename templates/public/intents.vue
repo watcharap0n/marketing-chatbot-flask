@@ -2,7 +2,7 @@
 {% block content %}
 <!-- contents -->
 
-{% include 'public/extends/customers/navigationTop.vue' %}
+{% include 'public/extends/layout/navigationTop.vue' %}
 
 
   <br><br><br>

@@ -54,47 +54,57 @@ new Vue({
             {
                 text: 'แท็ก',
                 value: 'tag',
+                width: 140
             },
             {
                 text: 'ผลิตภัณฑ์',
                 value: 'product',
-                align: 'start'
+                align: 'start',
+                width: 140
             },
             {
                 text: 'อื่นๆ',
                 value: 'other',
                 align: "center",
+                width: 140,
             },
             {
                 text: 'ข้อมูลลูกค้า',
                 value: 'name',
                 align: 'center',
-                width: 80
+                width: 150,
             },
             {
                 text: 'บริษัท',
                 value: 'company',
+                width: 140
             },
             {
                 text: 'ข้อความ',
-                value: 'message'
+                value: 'message',
+                width: 140
             },
             {
                 text: 'ช่องทาง',
-                value: 'channel'
+                value: 'channel',
+                width: 140
             },
             {
                 text: 'โปรไฟล์',
-                value: 'profile'
+                value: 'profile',
+                width: 140
+
             },
             {
                 text: 'คนนำเข้า',
-                value: 'username'
+                value: 'username',
+                width: 140
             },
             {
                 text: 'วัน/เวลา',
                 value: 'date',
                 align: 'center',
+                width: 140
             },
 
         ],
