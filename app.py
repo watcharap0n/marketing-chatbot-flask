@@ -4,7 +4,8 @@ check the document at URL location /apidoc/redoc or /apidoc/swagger
 
 from flask import Flask, jsonify, session, g
 from modules.swagger import api
-from routes import customers, imports, intents, tags, wh_client, secure, pages, questionnaires, wh_mango, ruleBased, wh_notify, api_cors
+from routes import customers, imports, intents, tags, wh_client, secure, pages, questionnaires, wh_mango, ruleBased, \
+    wh_notify, api_cors
 from flask_cors import CORS
 from datetime import timedelta
 from modules.Invalidate import InvalidUsage
@@ -31,8 +32,7 @@ def before_request():
         else:
             g.user = None
     except:
-        g.user = session
-        raise InvalidUsage(message='Not Include Your APP', status_code=400)
+        raise InvalidUsage(status_code=403, message='authentication error')
 
 
 @app.before_request
