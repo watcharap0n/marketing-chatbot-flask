@@ -41,7 +41,7 @@
 
 
   <!--     start table     -->
-  <v-data-table v-model="selected" :loading="!spinTable" show-select multi-sort :search="search"
+  <v-data-table v-model="selected" :loading="!spinTable" show-select :search="search"
                 :headers="headers"
                 loading-text="Loading... Please wait"
                 class="elevation-5 rounded-xl"

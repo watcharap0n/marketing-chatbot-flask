@@ -1,155 +1,100 @@
 <template v-slot:header.tag>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-label
     </v-icon>
-    Tags
-  </v-chip>
+    แท็ก
+  </div>
 </template>
 
 <template v-slot:header.actions>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-wrench
     </v-icon>
     แก้ไข/ลบ
-  </v-chip>
+  </div>
 </template>
 
 <template v-slot:header.product>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-office-building
     </v-icon>
     ผลิตภัณฑ์
-  </v-chip>
+  </div>
 </template>
 
 <template v-slot:header.other>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-office-building-outline
     </v-icon>
     อื่นๆ
-  </v-chip>
+  </div>
 </template>
 
 <template v-slot:header.name>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-account-circle-outline
     </v-icon>
     ข้อมูลลูกค้า
-  </v-chip>
+  </div>
 </template>
 
 
 <template v-slot:header.company>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-briefcase-account
     </v-icon>
     บริษัท
-  </v-chip>
+  </div>
 </template>
 
 
 <template v-slot:header.message>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-message
     </v-icon>
     ข้อความ
-  </v-chip>
+  </div>
 </template>
 
 <template v-slot:header.channel>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-alpha-c-circle
     </v-icon>
     ช่องทาง
-  </v-chip>
+  </div>
 </template>
 
 <template v-slot:header.profile>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-shield-account
     </v-icon>
     โปรไฟล์
-  </v-chip>
+  </div>
 </template>
 
 <template v-slot:header.username>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
-     mdi-badge-account
+  <div class="text-subtitle-2">
+    <v-icon left small>
+      mdi-badge-account
     </v-icon>
     คนนำเข้า
-  </v-chip>
+  </div>
 </template>
 
 <template v-slot:header.date>
-  <v-chip
-      outlined
-      small
-      color="pink lighten-2"
-      label
-  >
-    <v-icon left>
+  <div class="text-subtitle-2">
+    <v-icon left small>
       mdi-calendar-account-outline
     </v-icon>
     วัน/เวลา
-  </v-chip>
+  </div>
 </template>
