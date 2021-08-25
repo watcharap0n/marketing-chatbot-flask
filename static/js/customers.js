@@ -48,7 +48,7 @@ new Vue({
             {
                 text: 'แก้ไข/ลบ',
                 value: 'actions',
-                width: 140,
+                width: 120,
                 sortable: false,
             },
             {
