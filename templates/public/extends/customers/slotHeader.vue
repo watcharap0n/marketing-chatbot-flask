@@ -9,9 +9,6 @@
 
 <template v-slot:header.actions>
   <div class="text-subtitle-2">
-    <v-icon left small>
-      mdi-wrench
-    </v-icon>
     แก้ไข/ลบ
   </div>
 </template>
