@@ -206,6 +206,8 @@ new Vue({
         // btn or table hidden
         btnHiddenAPI: true,
         btnAPI: true,
+
+        // copy
     },
 
 
@@ -730,8 +732,14 @@ new Vue({
                 window.location = '/'
             if (item.text === 'Intents')
                 window.location = '/intents'
-        }
-        ,
+        },
+
+        //copy
+        copyTag(data) {
+            this.snackbar = true
+            this.text = `คัดลอก ${data}`
+            this.colorSb = 'primary'
+        },
 
     }
     ,

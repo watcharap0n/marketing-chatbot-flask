@@ -6,7 +6,16 @@
       v-for="i in item.tag" :key="i.length"
       @click="sortingOnclick({'tag': i})"
   >
+
     [[ i ]]
+    <v-icon
+        ref="copyTag"
+        right
+        v-clipboard:copy.prevent="i"
+        @click.stop.prevent="copyTag(i)"
+    >
+      mdi-content-copy
+    </v-icon>
   </v-chip>
 </template>
 

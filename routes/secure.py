@@ -118,7 +118,4 @@ def logout():
     return res
 
 
-@secure.route('/secure/uid')
-def test():
-    uid = auth.get_user('')
-    return jsonify(message=uid.__dict__)
+
