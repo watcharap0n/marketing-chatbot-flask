@@ -90,7 +90,40 @@ def webhook(token):
 
 ```
 
-**Build && Setup Python**
+**Structure Coding**
+
+```bash
+-> Fronend
+/template/
+|-- template
+|   |-- admin
+|   |-- public
+|   |-- FACEBOOK
+|   |-- LINE
+|-- root -> /app/
+```
+
+```bash
+-> Routes Backend
+/routes/
+|-- routes
+|   |-- api_cors.py
+|   |-- customers.py
+|   |-- imports.py
+|   |-- intents.py
+|   |-- pages.py
+|   |-- questionnaires.py
+|   |-- ruleBased.py
+|   |-- secure.py
+|   |-- tags.py
+|   |-- wh_client.py
+|   |-- wh_mango.py
+|   |-- wh_notify.py
+|-- root -> /app/
+```
+
+
+
 **Build && Setup Python**
 
 ~~~~
