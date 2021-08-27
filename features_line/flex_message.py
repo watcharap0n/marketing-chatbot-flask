@@ -444,231 +444,506 @@ def person_team_two():
     flex_message = FlexSendMessage(
         alt_text='นามบัตรทีมสอง',
         contents={
-  "type": "bubble",
-  "hero": {
-    "type": "image",
-    "url": "https://www.img.in.th/images/d4cafbf94c2f0e0a3bb9e3c51cdf8685.png",
-    "size": "full",
-    "aspectRatio": "20:13",
-    "aspectMode": "cover",
-    "action": {
-      "type": "uri",
-      "label": "Line",
-      "uri": "https://www.img.in.th/images/d4cafbf94c2f0e0a3bb9e3c51cdf8685.png"
-    }
-  },
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "text",
-        "text": "บริษัทแมงโก้ คอนซัลแตนท์ จำกัด ",
-        "weight": "bold",
-        "size": "md",
-        "wrap": True,
-        "contents": []
-      },
-      {
-        "type": "text",
-        "text": "555 อาคารรสา ทาวเวอร์ 1 ยูนิต 2304-1 ชั้น 23 ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900 Call Center.02-123-3900 ",
-        "size": "xs",
-        "wrap": True,
-        "contents": []
-      },
-      {
-        "type": "text",
-        "text": "เลขประจำตัวผู้เสียภาษี 0105551067687 ",
-        "size": "sm",
-        "wrap": True,
-        "contents": []
-      },
-      {
-        "type": "separator",
-        "margin": "xl"
-      },
-      {
-        "type": "text",
-        "text": "คุณริญญภัสร์ ปิยเดชไพบูลย์",
-        "weight": "bold",
-        "size": "lg",
-        "margin": "lg",
-        "contents": []
-      },
-      {
-        "type": "text",
-        "text": "Rinyaphas Piyadechaibul",
-        "margin": "none",
-        "contents": []
-      },
-      {
-        "type": "text",
-        "text": "(Sales Executive)",
-        "size": "sm",
-        "margin": "xs",
-        "contents": []
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "sm",
-        "margin": "lg",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "Mobile",
-                "size": "sm",
-                "color": "#AAAAAA",
-                "flex": 1,
-                "contents": []
-              },
-              {
-                "type": "text",
-                "text": "086-956-5929",
-                "size": "sm",
-                "color": "#3442E6FF",
-                "flex": 5,
-                "wrap": True,
+            "type": "bubble",
+            "hero": {
+                "type": "image",
+                "url": "https://www.img.in.th/images/d4cafbf94c2f0e0a3bb9e3c51cdf8685.png",
+                "size": "full",
+                "aspectRatio": "20:13",
+                "aspectMode": "cover",
                 "action": {
-                  "type": "postback",
-                  "label": "action",
-                  "data": "team2_tel1"
-                },
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "Email",
-                "size": "sm",
-                "color": "#AAAAAA",
-                "flex": 1,
-                "contents": []
-              },
-              {
-                "type": "text",
-                "text": "rinyaphas@mangoconsultant.com",
-                "size": "sm",
-                "color": "#666666",
-                "flex": 5,
-                "wrap": True,
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "separator",
-            "margin": "xl"
-          }
-        ]
-      },
-      {
-        "type": "text",
-        "text": "คุณศุภกฤต  สมสาย",
-        "weight": "bold",
-        "size": "lg",
-        "margin": "md",
-        "contents": []
-      },
-      {
-        "type": "text",
-        "text": "Suppakrit  Somsai",
-        "contents": []
-      },
-      {
-        "type": "text",
-        "text": "(Key Account Executive)",
-        "size": "sm",
-        "contents": []
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "sm",
-        "margin": "lg",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "Mobile",
-                "size": "sm",
-                "color": "#AAAAAA",
-                "flex": 1,
-                "contents": []
-              },
-              {
-                "type": "text",
-                "text": " 098-828-5742",
-                "size": "sm",
-                "color": "#3442E6FF",
-                "flex": 5,
-                "wrap": True,
-                "action": {
-                  "type": "postback",
-                  "label": "action",
-                  "data": "team2_tel2"
-                },
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "Email",
-                "size": "sm",
-                "color": "#AAAAAA",
-                "flex": 1,
-                "contents": []
-              },
-              {
-                "type": "text",
-                "text": "suppakrit@mangoconsultant.com",
-                "size": "sm",
-                "color": "#666666",
-                "flex": 6,
-                "wrap": True,
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "separator",
-            "margin": "xl"
-          },
-          {
-            "type": "text",
-            "text": "www.mangoconsultant.com",
-            "size": "sm",
-            "color": "#999999",
-            "align": "center",
-            "margin": "lg",
-            "wrap": True,
-            "contents": []
-          }
-        ]
-      }
-    ]
-  }
-}
+                    "type": "uri",
+                    "label": "Line",
+                    "uri": "https://www.img.in.th/images/d4cafbf94c2f0e0a3bb9e3c51cdf8685.png"
+                }
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "บริษัทแมงโก้ คอนซัลแตนท์ จำกัด ",
+                        "weight": "bold",
+                        "size": "md",
+                        "wrap": True,
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "555 อาคารรสา ทาวเวอร์ 1 ยูนิต 2304-1 ชั้น 23 ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900 Call Center.02-123-3900 ",
+                        "size": "xs",
+                        "wrap": True,
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "เลขประจำตัวผู้เสียภาษี 0105551067687 ",
+                        "size": "sm",
+                        "wrap": True,
+                        "contents": []
+                    },
+                    {
+                        "type": "separator",
+                        "margin": "xl"
+                    },
+                    {
+                        "type": "text",
+                        "text": "คุณริญญภัสร์ ปิยเดชไพบูลย์",
+                        "weight": "bold",
+                        "size": "lg",
+                        "margin": "lg",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "Rinyaphas Piyadechaibul",
+                        "margin": "none",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "(Sales Executive)",
+                        "size": "sm",
+                        "margin": "xs",
+                        "contents": []
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "spacing": "sm",
+                        "margin": "lg",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "spacing": "sm",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "Mobile",
+                                        "size": "sm",
+                                        "color": "#AAAAAA",
+                                        "flex": 1,
+                                        "contents": []
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "086-956-5929",
+                                        "size": "sm",
+                                        "color": "#3442E6FF",
+                                        "flex": 5,
+                                        "wrap": True,
+                                        "action": {
+                                            "type": "postback",
+                                            "label": "action",
+                                            "data": "team2_tel1"
+                                        },
+                                        "contents": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "spacing": "sm",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "Email",
+                                        "size": "sm",
+                                        "color": "#AAAAAA",
+                                        "flex": 1,
+                                        "contents": []
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "rinyaphas@mangoconsultant.com",
+                                        "size": "sm",
+                                        "color": "#666666",
+                                        "flex": 5,
+                                        "wrap": True,
+                                        "contents": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "separator",
+                                "margin": "xl"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "text": "คุณศุภกฤต  สมสาย",
+                        "weight": "bold",
+                        "size": "lg",
+                        "margin": "md",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "Suppakrit  Somsai",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "(Key Account Executive)",
+                        "size": "sm",
+                        "contents": []
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "spacing": "sm",
+                        "margin": "lg",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "spacing": "sm",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "Mobile",
+                                        "size": "sm",
+                                        "color": "#AAAAAA",
+                                        "flex": 1,
+                                        "contents": []
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": " 098-828-5742",
+                                        "size": "sm",
+                                        "color": "#3442E6FF",
+                                        "flex": 5,
+                                        "wrap": True,
+                                        "action": {
+                                            "type": "postback",
+                                            "label": "action",
+                                            "data": "team2_tel2"
+                                        },
+                                        "contents": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "spacing": "sm",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "Email",
+                                        "size": "sm",
+                                        "color": "#AAAAAA",
+                                        "flex": 1,
+                                        "contents": []
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "suppakrit@mangoconsultant.com",
+                                        "size": "sm",
+                                        "color": "#666666",
+                                        "flex": 6,
+                                        "wrap": True,
+                                        "contents": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "separator",
+                                "margin": "xl"
+                            },
+                            {
+                                "type": "text",
+                                "text": "www.mangoconsultant.com",
+                                "size": "sm",
+                                "color": "#999999",
+                                "align": "center",
+                                "margin": "lg",
+                                "wrap": True,
+                                "contents": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    )
+    return flex_message
+
+
+def erpSoftware():
+    flex_message = FlexSendMessage(
+        alt_text='ERPSoftWare',
+        contents={"type": "carousel",
+                  "contents": [
+                      {
+                          "type": "bubble",
+                          "hero": {
+                              "type": "image",
+                              "url": "https://sv1.picz.in.th/images/2020/10/08/OLdApf.png",
+                              "size": "full"
+                          },
+                          "body": {
+                              "type": "box",
+                              "layout": "vertical",
+                              "contents": [
+                                  {
+                                      "type": "text",
+                                      "text": "ราคามีทั้งแบบซื้อและแบบเช่ารายเดือน",
+                                      "size": "md",
+                                      "color": "#ffffff",
+                                      "weight": "bold"
+                                  },
+                                  {
+                                      "type": "text",
+                                      "text": "ขึ้นอยู่กับ Package และจำนวน User ที่ต้องการ",
+                                      "size": "xs",
+                                      "color": "#ffffff",
+                                      "weight": "bold"
+                                  },
+                                  {
+                                      "type": "text",
+                                      "text": "ใช้งาน โดยราคาเริ่มตั้งแต่หลักหมื่น",
+                                      "size": "xs",
+                                      "color": "#ffffff",
+                                      "weight": "bold"
+                                  }
+                              ],
+                              "backgroundColor": "#008891"
+                          },
+                          "footer": {
+                              "type": "box",
+                              "layout": "vertical",
+                              "contents": [
+                                  {
+                                      "type": "box",
+                                      "layout": "vertical",
+                                      "contents": [
+                                          {
+                                              "type": "filler"
+                                          },
+                                          {
+                                              "type": "box",
+                                              "layout": "baseline",
+                                              "contents": [
+                                                  {
+                                                      "type": "filler"
+                                                  },
+                                                  {
+                                                      "type": "text",
+                                                      "text": "ข้อมูลเพิ่มเติม",
+                                                      "color": "#ffffff",
+                                                      "size": "lg",
+                                                      "flex": 0
+                                                  },
+                                                  {
+                                                      "type": "filler"
+                                                  }
+                                              ],
+                                              "action": {
+                                                  "type": "uri",
+                                                  "label": "action",
+                                                  "uri": "https://www.mangoconsultant.com/th/mango-anywhere-software/software-erp-for-construction-2"
+                                              }
+                                          },
+                                          {
+                                              "type": "filler"
+                                          }
+                                      ],
+                                      "backgroundColor": "#008891",
+                                      "spacing": "sm",
+                                      "height": "35px",
+                                      "borderWidth": "1px",
+                                      "borderColor": "#ffffff",
+                                      "flex": 0,
+                                      "cornerRadius": "4px"
+                                  },
+                                  {
+                                      "type": "box",
+                                      "layout": "vertical",
+                                      "contents": [
+                                          {
+                                              "type": "filler"
+                                          },
+                                          {
+                                              "type": "box",
+                                              "layout": "baseline",
+                                              "contents": [
+                                                  {
+                                                      "type": "filler"
+                                                  },
+                                                  {
+                                                      "type": "text",
+                                                      "text": "ขอใบเสนอราคา",
+                                                      "color": "#ffffff",
+                                                      "size": "lg",
+                                                      "flex": 0
+                                                  },
+                                                  {
+                                                      "type": "filler"
+                                                  }
+                                              ],
+                                              "action": {
+                                                  "type": "uri",
+                                                  "label": "action",
+                                                  "uri": "https://liff.line.me/1655208213-8r59zjPv"
+                                              }
+                                          },
+                                          {
+                                              "type": "filler"
+                                          }
+                                      ],
+                                      "backgroundColor": "#008891",
+                                      "spacing": "sm",
+                                      "height": "35px",
+                                      "borderWidth": "1px",
+                                      "borderColor": "#ffffff",
+                                      "flex": 0,
+                                      "cornerRadius": "4px",
+                                      "margin": "md"
+                                  }
+                              ],
+                              "backgroundColor": "#008891"
+                          }
+                      },
+                      {
+                          "type": "bubble",
+                          "hero": {
+                              "type": "image",
+                              "url": "https://sv1.picz.in.th/images/2020/10/08/OLSzAy.png",
+                              "size": "full"
+                          },
+                          "body": {
+                              "type": "box",
+                              "layout": "vertical",
+                              "contents": [
+                                  {
+                                      "type": "text",
+                                      "text": "ราคามีทั้งแบบซื้อและแบบเช่ารายเดือน",
+                                      "size": "md",
+                                      "color": "#ffffff",
+                                      "weight": "bold"
+                                  },
+                                  {
+                                      "type": "text",
+                                      "text": "ขึ้นอยู่กับ Package และจำนวน User ที่ต้องการ",
+                                      "size": "xs",
+                                      "color": "#ffffff",
+                                      "weight": "bold"
+                                  },
+                                  {
+                                      "type": "text",
+                                      "text": "ใช้งาน โดยราคาเริ่มตั้งแต่หลักหมื่น",
+                                      "size": "xs",
+                                      "weight": "bold",
+                                      "color": "#ffffff"
+                                  }
+                              ],
+                              "backgroundColor": "#008891"
+                          },
+                          "footer": {
+                              "type": "box",
+                              "layout": "vertical",
+                              "contents": [
+                                  {
+                                      "type": "box",
+                                      "layout": "vertical",
+                                      "contents": [
+                                          {
+                                              "type": "filler"
+                                          },
+                                          {
+                                              "type": "box",
+                                              "layout": "baseline",
+                                              "contents": [
+                                                  {
+                                                      "type": "filler"
+                                                  },
+                                                  {
+                                                      "type": "text",
+                                                      "text": "ข้อมูลเพิ่มเติม",
+                                                      "color": "#ffffff",
+                                                      "size": "lg",
+                                                      "flex": 0
+                                                  },
+                                                  {
+                                                      "type": "filler"
+                                                  }
+                                              ],
+                                              "action": {
+                                                  "type": "uri",
+                                                  "label": "action",
+                                                  "uri": "https://www.mangoconsultant.com/th/mango-anywhere-software/software-erp-for-real-estate"
+                                              }
+                                          },
+                                          {
+                                              "type": "filler"
+                                          }
+                                      ],
+                                      "backgroundColor": "#008891",
+                                      "spacing": "sm",
+                                      "height": "35px",
+                                      "borderWidth": "1px",
+                                      "borderColor": "#ffffff",
+                                      "cornerRadius": "4px",
+                                      "flex": 0
+                                  },
+                                  {
+                                      "type": "box",
+                                      "layout": "vertical",
+                                      "contents": [
+                                          {
+                                              "type": "filler"
+                                          },
+                                          {
+                                              "type": "box",
+                                              "layout": "baseline",
+                                              "contents": [
+                                                  {
+                                                      "type": "filler"
+                                                  },
+                                                  {
+                                                      "type": "text",
+                                                      "text": "ขอใบเสนอราคา",
+                                                      "color": "#ffffff",
+                                                      "size": "lg",
+                                                      "flex": 0,
+                                                      "action": {
+                                                          "type": "uri",
+                                                          "label": "action",
+                                                          "uri": "https://liff.line.me/1655208213-bR4352Oe"
+                                                      }
+                                                  },
+                                                  {
+                                                      "type": "filler"
+                                                  }
+                                              ],
+                                              "action": {
+                                                  "type": "uri",
+                                                  "label": "action",
+                                                  "uri": "https://liff.line.me/1655208213-bR4352Oe"
+                                              }
+                                          },
+                                          {
+                                              "type": "filler"
+                                          }
+                                      ],
+                                      "backgroundColor": "#008891",
+                                      "spacing": "sm",
+                                      "height": "35px",
+                                      "borderWidth": "1px",
+                                      "borderColor": "#ffffff",
+                                      "flex": 0,
+                                      "cornerRadius": "4px",
+                                      "margin": "md"
+                                  }
+                              ],
+                              "backgroundColor": "#008891"
+                          }
+                      }
+                  ]}
     )
     return flex_message

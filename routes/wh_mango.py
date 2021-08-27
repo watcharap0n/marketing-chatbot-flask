@@ -183,6 +183,9 @@ def handler_message_mango(event):
             if text == 'ขอข้อมูลผลิตภัณฑ์':
                 line_bot_api.reply_message(reply, card.mango_products())
 
+            elif intent_name == 'ขอราคา':
+                line_bot_api.reply_message(reply, flex_message.erpSoftware())
+
             """
             END ========================= FIX DEV =============================== 
             """
