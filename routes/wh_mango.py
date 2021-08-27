@@ -156,6 +156,8 @@ def handler_message_mango(event):
     intent_name = data_intent['name']
     label = data_intent['predict'][0]
     choice_answers = data_intent['answers']
+    contents = data_intent['contents']
+    type = data_intent['type']
     confident = data_intent['confident'][0] * 100
     logging.warning(intent_name)
     logging.warning(confident)
@@ -180,17 +182,21 @@ def handler_message_mango(event):
                 
             """
 
-            if text == 'ขอข้อมูลผลิตภัณฑ์':
-                line_bot_api.reply_message(reply, card.mango_products())
-
-            elif intent_name == 'ขอราคา':
-                line_bot_api.reply_message(reply, flex_message.erpSoftware())
-
             """
             END ========================= FIX DEV =============================== 
             """
-            choice = random.choice(choice_answers[label])
-            line_bot_api.reply_message(reply, TextSendMessage(text=choice))
+
+            if text == 'ขอข้อมูลผลิตภัณฑ์':
+                line_bot_api.reply_message(reply, card.mango_products())
+
+            if type:
+                contents = json.loads(contents)
+                flex_custom = flex_mango(alt_text=intent_name, contents=contents)
+                line_bot_api.reply_message(reply, flex_custom)
+            elif not type:
+                choice = random.choice(choice_answers[label])
+                line_bot_api.reply_message(reply, TextSendMessage(text=choice))
+
         else:
 
             """

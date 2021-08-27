@@ -61,11 +61,10 @@ def query_intent(id):
     return jsonify(res)
 
 
-@route_intent.route('/intent/update_intent', methods=['POST'])
+@route_intent.route('/intent/update_intent/<string:id>', methods=['PUT'])
 @api.validate(tags=['Intent'])
-def update_intent():
+def update_intent(id):
     data = request.get_json()
-    id = data.get('id')
     query = {'id': id}
     values = {'$set': data}
     db.update_one(collection=collection, query=query, values=values)

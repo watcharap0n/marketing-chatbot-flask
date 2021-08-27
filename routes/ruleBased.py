@@ -71,10 +71,6 @@ def update_rule_based(id):
         raise InvalidUsage(message='keyword duplicate', status_code=400, payload={'status': False})
 
 
-# res = {'message': 'failed', 'status': False}
-# return jsonify(res)
-
-
 @rule_base.route('/callback/mango/delete_rule_based/<string:id>', methods=['DELETE'])
 def delete_intent(id):
     db.delete_one(collection=collection, query={'id': id})

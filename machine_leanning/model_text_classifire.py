@@ -30,5 +30,12 @@ def intent_model(p_text=str, query=str):
     x_test_vect = tf_vect.transform([p_text])
     prediction = my_classifire.predict(x_test_vect)
     proba = my_classifire.predict_proba(x_test_vect)[0][prediction]
-    nameIntent = data[prediction[0]]
-    return {'predict': prediction, 'confident': proba, 'answers': ans_text, 'name': nameIntent.get('name')}
+    intent = data[prediction[0]]
+    return {
+        'predict': prediction,
+        'confident': proba,
+        'answers': ans_text,
+        'name': intent.get('name'),
+        'contents': intent.get('contents'),
+        'type': intent.get('type')
+    }

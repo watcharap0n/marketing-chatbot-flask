@@ -35,6 +35,7 @@ new Vue({
         showBotMango: false,
         showRuleBased: false,
 
+
         spinAuth: false,
         hasSaved: false,
         isEditing: null,
@@ -68,6 +69,8 @@ new Vue({
             question: [],
             answer: [],
             access_token: '',
+            type: false,
+            contents: '',
         },
 
         navigatorAppbar: false,
@@ -210,13 +213,12 @@ new Vue({
             const path = `/callback/mango/update_rule_based/${this.selectedRuleBased.id}`
             axios.put(path, this.selectedRuleBased)
                 .then((res) => {
-                    if (res.data.status){
+                    if (res.data.status) {
                         this.colorSnackbar = 'success'
                         this.text = 'บันทึกสำเร็จ'
                         this.snackbar = true
                         console.log(res.data)
-                    }
-                    else if (!res.data.status){
+                    } else if (!res.data.status) {
                         this.colorSnackbar = 'red'
                         this.text = 'Keyword ซ้ำ! โปรดเปลี่ยน Keyword'
                         this.snackbar = true
@@ -277,7 +279,6 @@ new Vue({
                 this.dataAppend.name = this.nameIntent
                 this.dataAppend.uid = this.userAuth.uid
                 this.dataAppend.access_token = null
-                console.log(this.dataAppend)
                 this.addIntent(this.dataAppend)
             }
         },
@@ -326,14 +327,20 @@ new Vue({
             await this.updateIntent();
         },
         async updateIntent() {
-            const path = '/intent/update_intent'
-            await axios.post(path, this.selectedIntent)
+            const path = `/intent/update_intent/${this.selectedIntent.id}`
+            await axios.put(path, this.selectedIntent)
                 .then((res) => {
                     this.question = ''
                     this.answer = ''
+                    this.colorSnackbar = 'success'
+                    this.text = 'สำเร็จ'
+                    this.snackbar = true
                     console.log(res.data)
                 })
                 .catch((err) => {
+                    this.colorSnackbar = 'red'
+                    this.text = 'เกิดข้อผิดพลาด โปรดลองใหม่!'
+                    this.snackbar = true
                     console.log(err)
                 })
         },
