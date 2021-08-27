@@ -33,6 +33,38 @@
     - pymongo
     - firebase_admin
     - pyrebase4
+      
+**Structure Coding**
+
+```bash
+-> Fronend
+/template/
+|-- template
+|   |-- admin
+|   |-- public
+|   |-- FACEBOOK
+|   |-- LINE
+|-- root -> /app/
+```
+
+```bash
+-> Routes Backend
+/routes/
+|-- routes
+|   |-- api_cors.py
+|   |-- customers.py
+|   |-- imports.py
+|   |-- intents.py
+|   |-- pages.py
+|   |-- questionnaires.py
+|   |-- ruleBased.py
+|   |-- secure.py
+|   |-- tags.py
+|   |-- wh_client.py
+|   |-- wh_mango.py
+|   |-- wh_notify.py
+|-- root -> /app/
+```
 
 **Webhook Callback can create Channel LINE your self**
 
@@ -89,40 +121,6 @@ def webhook(token):
     return jsonify(raw_json)
 
 ```
-
-**Structure Coding**
-
-```bash
--> Fronend
-/template/
-|-- template
-|   |-- admin
-|   |-- public
-|   |-- FACEBOOK
-|   |-- LINE
-|-- root -> /app/
-```
-
-```bash
--> Routes Backend
-/routes/
-|-- routes
-|   |-- api_cors.py
-|   |-- customers.py
-|   |-- imports.py
-|   |-- intents.py
-|   |-- pages.py
-|   |-- questionnaires.py
-|   |-- ruleBased.py
-|   |-- secure.py
-|   |-- tags.py
-|   |-- wh_client.py
-|   |-- wh_mango.py
-|   |-- wh_notify.py
-|-- root -> /app/
-```
-
-
 
 **Build && Setup Python**
 
