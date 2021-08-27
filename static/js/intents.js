@@ -35,7 +35,6 @@ new Vue({
         showBotMango: false,
         showRuleBased: false,
 
-
         spinAuth: false,
         hasSaved: false,
         isEditing: null,
