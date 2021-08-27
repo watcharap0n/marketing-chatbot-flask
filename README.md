@@ -37,7 +37,7 @@
 **Webhook Callback can create Channel LINE your self**
 
 ```python
-    @route_callback.route('/callback/<string:token>', methods=['POST'])
+@route_callback.route('/callback/<string:token>', methods=['POST'])
 @api.validate(tags=['Callback'])
 def webhook(token):
     raw_json = request.get_json()
