@@ -207,8 +207,8 @@ new Vue({
 
         saveRuleBased() {
             this.selectedRuleBased.status = this.checkbox
-            const path = '/callback/mango/update_rule_based'
-            axios.post(path, this.selectedRuleBased)
+            const path = `/callback/mango/update_rule_based/${this.selectedRuleBased.id}`
+            axios.put(path, this.selectedRuleBased)
                 .then((res) => {
                     if (res.data.status){
                         this.colorSnackbar = 'success'
@@ -224,7 +224,8 @@ new Vue({
                     }
                 })
                 .catch((err) => {
-                    this.text = 'มีบางอย่างผิดพลาด'
+                    this.colorSnackbar = 'red'
+                    this.text = 'มีบางอย่างผิดพลาด keyword อาจซ้ำ!'
                     this.snackbar = true
                     console.error(err)
                 })

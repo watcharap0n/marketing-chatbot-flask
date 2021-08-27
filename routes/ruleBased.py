@@ -4,6 +4,7 @@ from bson import ObjectId
 from config.db import MongoDB
 from environ.line_token import mango_channel
 from environ.client_environ import MONGODB_URI
+from modules.Invalidate import InvalidUsage
 import os
 
 # client = 'mongodb://127.0.0.1:27017'
@@ -11,6 +12,13 @@ import os
 db = MongoDB(database_name='Mango', uri=MONGODB_URI)
 collection = 'match_rule_based'
 rule_base = Blueprint('rule_based', __name__, template_folder='templates')
+
+
+@rule_base.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
 
 @rule_base.route('/callback/mango/get_rule_based', methods=['POST'])
@@ -45,21 +53,22 @@ def match_rule_based():
     return jsonify(item)
 
 
-@rule_base.route('/callback/mango/update_rule_based', methods=['POST'])
-def update_rule_based():
+@rule_base.route('/callback/mango/update_rule_based/<string:id>', methods=['PUT'])
+def update_rule_based(id):
     """
     - Update Keyword RuleBased
     :return:
     """
     item = request.get_json(force=True)
-    # check = db.find_one(collection=collection, query={'keyword': item['keyword']})
-    # if not check:
-    id = item['id']
-    query = {'id': id}
-    values = {'$set': item}
-    db.update_one(collection=collection, query=query, values=values)
-    res = {'message': 'success', 'status': True}
-    return jsonify(res)
+    check_keyword = db.find_one(collection, {'keyword': item['keyword']})
+    if check_keyword is None or check_keyword.get('id') == id:
+        query = {'id': id}
+        values = {'$set': item}
+        db.update_one(collection=collection, query=query, values=values)
+        res = {'message': 'success', 'status': True}
+        return jsonify(res)
+    else:
+        raise InvalidUsage(message='keyword duplicate', status_code=400, payload={'status': False})
 
 
 # res = {'message': 'failed', 'status': False}
