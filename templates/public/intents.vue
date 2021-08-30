@@ -7,8 +7,8 @@
 
   <br><br><br>
   <div class="container-fluid">
-  <v-row>
 
+  <v-row>
     <v-col cols="3">
       <v-card
           class="mx-auto"
@@ -34,8 +34,6 @@
     </v-col>
 
     <v-col cols="9">
-
-
       <div :hidden="!showWebhook">
         <v-toolbar
             style="background: linear-gradient(to right, #7C4DFF, #304FFE, #448AFF);"
@@ -459,7 +457,6 @@
       <div :hidden="!showRuleBased">
         {% include 'public/extends/intents/ruleBased.vue' %}
       </div>
-
     </v-col>
   </v-row>
 

@@ -7,19 +7,7 @@
   <br><br><br>
   <div class="container-fluid">
 
-    <v-row>
-      <v-col cols="6">
-
-      </v-col>
-
-      <v-col cols="6">
-
-      </v-col>
-
-    </v-row>
-
-
-    <v-card class="mx-auto" class="elevation-1">
+    <v-card class="mx-auto overflow-y-auto elevation-1">
       <v-bottom-navigation
           style="background: linear-gradient(to right, #7C4DFF, #304FFE, #448AFF);"
           v-model="page"
@@ -44,8 +32,7 @@
       <v-data-table v-model="selected" :loading="!spinTable" show-select :search="search"
                     :headers="headers"
                     loading-text="Loading... Please wait"
-                    class="elevation-5 rounded-xl"
-                    height="600"
+                    class="elevation-5 overflow-y-auto"
                     :items="transaction"
                     checkbox-color="pink lighten-2"
       >
