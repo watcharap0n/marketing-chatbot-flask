@@ -213,7 +213,12 @@ new Vue({
         rulesImport: [
             value => !value || value.size < 2000000 || 'ขนาดไฟล์ควรน้อยกว่า 2 MB!',
         ],
-        fileImportExcel: null
+        fileImportExcel: null,
+
+
+        //notify
+        notify_today: [],
+        selectedNotify: 0
     },
 
 
@@ -280,6 +285,10 @@ new Vue({
     },
 
     computed: {
+        datetimeNow() {
+            const today = new Date();
+            return today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+        },
         formTitle() {
             return this.editedIndex === -1 ? 'เพิ่มข้อมูล' : 'แก้ไขข้อมูล'
         },
@@ -319,6 +328,7 @@ new Vue({
             await axios.get(path)
                 .then((res) => {
                     this.spinTable = true;
+                    this.notify_today = res.data.notify_today
                     this.transaction = res.data.transaction;
                     this.href = 'import'
                     this.btnImport = true

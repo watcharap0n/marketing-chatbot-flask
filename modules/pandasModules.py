@@ -215,3 +215,10 @@ class DataColumnFilter:
         df["id"] = ids_lst
         data = df.to_dict('records')
         self.database.insert_many(self.collection, data)
+
+    @staticmethod
+    def last_date_today(df):
+        _d = datetime.now()
+        last_datetime = df['date'] == _d.strftime("%d/%m/%y")
+        df = df.replace(np.nan, '', regex=True)
+        return df.loc[last_datetime]

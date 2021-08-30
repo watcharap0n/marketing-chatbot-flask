@@ -30,16 +30,21 @@ def handle_invalid_usage(error):
 def get_customers():
     data = db.find(collection=collection, query={})
     data = list(data)
+    module = DataColumnFilter(database=db, collection=collection)
     for v in data:
         del v['_id']
     products = set([v['product'] for v in data if v['product']])
     channels = set([v['channel'] for v in data if v['channel']])
     tags = set([v['tag'][0] for v in data if v.get('tag')])
+    filter = module.filter()
+    last_today = module.last_date_today(filter)
+    notify_today = last_today.to_dict('records')
     return jsonify({
         'transaction': data[::-1],
         'products': list(products),
         'channels': list(channels),
-        'tags': list(tags)
+        'tags': list(tags),
+        'notify_today': notify_today
     })
 
 

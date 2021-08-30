@@ -60,7 +60,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/web-socket-js/1.0.0/web_socket.min.js"
                 integrity="sha512-jtr9/t8rtBf1Sv832XjG1kAtUECQCqFnTAJWccL8CSC82VGzkPPih8rjtOfiiRKgqLXpLA1H/uQ/nq2bkHGWTQ=="
                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
         {% block script %}
         {% endblock %}
     {% endblock moreScripts %}
@@ -72,8 +71,7 @@
 <div id="content">
     <div id="app">
         <v-app id="inspire" style="background-color: rgb(246, 247, 255); font-family: 'Prompt', sans-serif;">
-            <v-responsive
-                    class="overflow-y-auto">
+            <v-responsive class="overflow-y-auto">
                 {% block content %}{% endblock %}
             </v-responsive>
         </v-app>

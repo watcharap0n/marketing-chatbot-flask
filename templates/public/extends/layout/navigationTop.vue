@@ -17,6 +17,8 @@
   ></v-switch>
 
   <v-spacer></v-spacer>
+
+
   <div :hidden="!loaderSpin">
     <v-progress-circular
         :width="3"
@@ -24,6 +26,8 @@
         indeterminate
     ></v-progress-circular>
   </div>
+
+  {% include 'public/extends/layout/notify.vue' %}
 
   <div :hidden="!loaderData">
     [[userAuth.name]]
