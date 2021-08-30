@@ -20,7 +20,7 @@
     <v-list >
       <v-list-item @click="navigatorAppbar = true">
         <v-list shaped>
-          <v-subheader>แจ้งเตือนคนข้อมูลใหม่: [[datetimeNow]]</v-subheader>
+          <v-subheader>แจ้งเตือนข้อมูลใหม่: [[datetimeNow]]</v-subheader>
           <v-list-item-group
               v-model="selectedNotify"
               color="pink lighten-2"
