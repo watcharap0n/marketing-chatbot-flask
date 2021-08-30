@@ -771,13 +771,13 @@ new Vue({
             })
         },
 
-        excelPreview() {
+        async excelPreview() {
             this.spinPreview = false
             const path = '/api/preview/excel'
-            axios.get(path, {
+            await axios.get(path, {
                 headers: {
                     'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'Content-Disposition': "attachment; filename=preview.xlsx"
+                    'Content-Disposition': "attachment; filename=preview.xlsm"
                 },
                 responseType: 'blob',
 
@@ -796,10 +796,11 @@ new Vue({
                     this.spinPreview = true
                 })
                 .catch((err) => {
+                    console.error(err)
                     this.snackbar = true
                     this.text = 'มีบางอย่างผิดพลาด ลองใหม่อีกครั้ง'
                     this.colorSb = 'red'
-                    spinPreview = true
+                    this.spinPreview = true
                 })
         },
 

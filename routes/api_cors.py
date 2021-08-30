@@ -135,6 +135,6 @@ def contact():
 @public.route('/api/preview/excel', methods=['GET'])
 @api.validate(resp=Response(HTTP_200=None, HTTP_400=None), tags=['customer'])
 def preview_excel():
-    file = os.path.join('static', 'excels/preview.xlsx')
+    file = os.path.join('static', 'excels/preview.xlsm')
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                     attachment_filename='preview.xlsx')
+                     attachment_filename='preview.xlsm')
