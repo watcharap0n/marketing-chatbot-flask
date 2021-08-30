@@ -200,7 +200,7 @@ class DataColumnFilter:
         return writer
 
     def import_excel(self, username: Optional[str] = None, uid: Optional[str] = None):
-        file = pd.read_excel(self.path_excel)
+        file = pd.read_excel(self.path_excel, engine='openpyxl')
         df = pd.DataFrame(file)
         df = df.replace(np.nan, '', regex=True)
         self.filter_data(df)

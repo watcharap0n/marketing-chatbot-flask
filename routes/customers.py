@@ -144,7 +144,7 @@ def customer_import_excel():
     username = request.form['username']
     upload_dir = os.path.join('static', 'uploads')
     excel_dir = os.path.join(upload_dir, 'excels')
-    file_input = os.path.join(excel_dir, file.filename)
+    file_input = os.path.join(excel_dir, 'customers.xlsm')
     file.save(file_input)
     result = DataColumnFilter(database=db, collection=collection, path_excel=file_input)
     result.import_excel(username=username, uid=uid)
