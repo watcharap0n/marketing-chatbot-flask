@@ -777,7 +777,7 @@ new Vue({
             axios.get(path, {
                 headers: {
                     'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'Content-Disposition': "attachment; filename=customers.xlsx"
+                    'Content-Disposition': "attachment; filename=preview.xlsx"
                 },
                 responseType: 'blob',
 
