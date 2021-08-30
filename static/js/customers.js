@@ -361,13 +361,11 @@ new Vue({
                 responseType: 'blob'
             })
                 .then((res) => {
-                    const contDis = res.headers["content-disposition"]
-                    const filename = contDis.split("=")[1]
                     const blob = res.data;
                     const link = document.createElement("a");
 
                     link.href = URL.createObjectURL(blob);
-                    link.download = filename;
+                    link.download = 'customers.xlsx';
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
@@ -780,16 +778,14 @@ new Vue({
                     'Content-Disposition': "attachment; filename=preview.xlsx"
                 },
                 responseType: 'blob',
-
             })
                 .then((res) => {
-                    const contDis = res.headers["content-disposition"]
-                    const filename = contDis.split("=")[1]
+                    console.log(res.data)
                     const blob = res.data;
                     const link = document.createElement("a");
 
                     link.href = URL.createObjectURL(blob);
-                    link.download = filename;
+                    link.download = 'preview.xlsx';
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
