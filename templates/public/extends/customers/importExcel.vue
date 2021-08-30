@@ -15,7 +15,7 @@
   </template>
 
   <v-card>
-    <v-card-title class="text-h5">กรุณาเลือกไฟล์ excel ที่ท่านต้องการ</v-card-title>
+    <v-card-title class="text-h5">กรุณาเลือกไฟล์ excel ที่ท่านต้องการเพื่อนำเข้ารายการ</v-card-title>
     <v-card-text>
       <v-file-input v-model="fileImportExcel" :rules="rulesImport"
                     required
@@ -23,7 +23,7 @@
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                     prepend-icon="mdi-paperclip"
                     :show-size="2000"
-                    label="อัพโหลดรูปโปรไฟล์"
+                    label="อัพโหลดไฟล์ excel"
                     counter
       >
         <template v-slot:selection="{ index, text }">
