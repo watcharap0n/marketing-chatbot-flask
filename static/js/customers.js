@@ -799,6 +799,7 @@ new Vue({
                     this.snackbar = true
                     this.text = 'มีบางอย่างผิดพลาด ลองใหม่อีกครั้ง'
                     this.colorSb = 'red'
+                    spinPreview = true
                 })
         },
 
