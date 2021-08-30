@@ -1,4 +1,4 @@
-<v-dialog v-model="dialogImportExcel" max-width="500px">
+<v-dialog v-model="dialogImportExcel" max-width="500px" persistent>
   <template v-slot:activator="{ on, attrs }">
     <v-btn
         style="margin-left: 8px;"
