@@ -1,4 +1,4 @@
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, send_file
 from flask_pydantic_spec import Response
 from modules.Invalidate import InvalidUsage
 import datetime
@@ -130,3 +130,11 @@ def contact():
         return jsonify(item)
     except:
         raise InvalidUsage(message='please try again', status_code=400, payload={'status': True})
+
+
+@public.route('/api/preview/excel', methods=['GET'])
+@api.validate(resp=Response(HTTP_200=None, HTTP_400=None), tags=['customer'])
+def preview_excel():
+    file = os.path.join('static', 'excels/preview.xlsx')
+    return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                     attachment_filename='preview.xlsx')

@@ -14,6 +14,7 @@ new Vue({
         dialogExcel: false,
         btnExcel: true,
         spinExcel: false,
+        spinPreview: true,
 
         // auth
         userAuth: {
@@ -770,6 +771,36 @@ new Vue({
             })
         },
 
+        excelPreview() {
+            this.spinPreview = false
+            const path = '/api/preview/excel'
+            axios.get(path, {
+                headers: {
+                    'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'Content-Disposition': "attachment; filename=customers.xlsx"
+                },
+                responseType: 'blob',
+
+            })
+                .then((res) => {
+                    const contDis = res.headers["content-disposition"]
+                    const filename = contDis.split("=")[1]
+                    const blob = res.data;
+                    const link = document.createElement("a");
+
+                    link.href = URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    this.spinPreview = true
+                })
+                .catch((err) => {
+                    this.snackbar = true
+                    this.text = 'มีบางอย่างผิดพลาด ลองใหม่อีกครั้ง'
+                    this.colorSb = 'red'
+                })
+        },
 
         logout() {
             return window.location = '/secure/logout'
