@@ -134,3 +134,18 @@ def customers_excel():
     file = os.path.join('static', 'excels/customers.xlsx')
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                      attachment_filename='customers.xlsx')
+
+
+@route_customer.route('/api/customer/import/excel', methods=['POST'])
+@api.validate(resp=Response(HTTP_200=None, HTTP_400=None), tags=['customer'])
+def customer_import_excel():
+    file = request.files['file']
+    uid = request.form['uid']
+    username = request.form['username']
+    upload_dir = os.path.join('static', 'uploads')
+    excel_dir = os.path.join(upload_dir, 'excels')
+    file_input = os.path.join(excel_dir, file.filename)
+    file.save(file_input)
+    result = DataColumnFilter(database=db, collection=collection, path_excel=file_input)
+    result.import_excel(username=username, uid=uid)
+    return jsonify(message='success')

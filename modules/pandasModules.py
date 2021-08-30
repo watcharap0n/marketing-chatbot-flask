@@ -2,6 +2,8 @@ import pandas as pd
 from typing import Any, Optional
 from datetime import datetime
 import numpy as np
+from bson import ObjectId
+from config.object_str import CutId
 
 
 class DataColumnFilter:
@@ -24,7 +26,8 @@ class DataColumnFilter:
             channel: Optional[str] = None,
             product: Optional[str] = None,
             tag: Optional[list] = None,
-            id: Optional[list] = None
+            id: Optional[list] = None,
+            path_excel: Any = None
     ):
         self.database = database
         self.collection = collection
@@ -34,6 +37,7 @@ class DataColumnFilter:
         self.product = product
         self.tag = tag
         self.id = id
+        self.path_excel = path_excel
 
     @staticmethod
     def location_data(dataframe, key, value, result):
@@ -194,3 +198,20 @@ class DataColumnFilter:
         writer = pd.ExcelWriter('static/excels/customers.xlsx')
         df.to_excel(writer, sheet_name='Sheet1')
         return writer
+
+    def import_excel(self, username: Optional[str] = None, uid: Optional[str] = None):
+        file = pd.read_excel(self.path_excel)
+        df = pd.DataFrame(file)
+        df = df.replace(np.nan, '', regex=True)
+        self.filter_data(df)
+        df['userId'] = ''
+        df['username'] = username
+        df['uid'] = uid
+        _d = datetime.now()
+        df["date"] = _d.strftime("%d/%m/%y")
+        df["time"] = _d.strftime("%H:%M:%S")
+        ids = range(len(df))
+        ids_lst = [CutId(_id=ObjectId()).dict()['id'] for v in ids]
+        df["id"] = ids_lst
+        data = df.to_dict('records')
+        self.database.insert_many(self.collection, data)

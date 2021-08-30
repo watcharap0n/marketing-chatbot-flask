@@ -207,11 +207,17 @@ new Vue({
         btnHiddenAPI: true,
         btnAPI: true,
 
-        // copy
+        // import excel
+        dialogImportExcel: false,
+        rulesImport: [
+            value => !value || value.size < 2000000 || 'ขนาดไฟล์ควรน้อยกว่า 2 MB!',
+        ],
+        fileImportExcel: null
     },
 
 
     watch: {
+
         date(val) {
             if (this.date.length > 0) {
                 this.$refs.form.reset()
@@ -721,6 +727,50 @@ new Vue({
                     console.error(err)
                 })
         },
+
+        // import Excel
+        importExcel() {
+            let formData = new FormData();
+            formData.append('file', this.fileImportExcel);
+            formData.append('uid', this.userAuth.uid);
+            formData.append('username', this.userAuth.name);
+            this.spinButton = false
+            if (this.href === 'customer') {
+                this.APIImportExcel('/api/customer/import/excel', formData)
+            } else if (this.href === 'import') {
+                this.APIImportExcel('/api/import/import/excel', formData)
+            }
+        },
+
+        async APIImportExcel(path, data) {
+            await axios.post(path, data)
+                .then(() => {
+                    this.spinButton = true
+                    this.dialogImportExcel = false
+                    if (this.href === 'customer') {
+                        this.initialize()
+                    } else if (this.href === 'import') {
+                        this.APIImport()
+                    }
+                })
+                .catch((err) => {
+                    console.error(err)
+                    this.spinButton = true
+                    this.fileImportExcel = null
+                    this.snackbar = true
+                    this.text = 'มีบางอย่างผิดพลาดอาจเป็น format excel!'
+                    this.colorSb = 'red'
+                })
+        },
+
+        closeImportExcel() {
+            this.dialogImportExcel = false
+            this.$nextTick(() => {
+                this.fileImportExcel = null
+            })
+        },
+
+
         logout() {
             return window.location = '/secure/logout'
         },
