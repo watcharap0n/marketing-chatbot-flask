@@ -80,10 +80,12 @@
       </template>
     </v-snackbar>
 
-
-
-
   </div>
+
+  {% block footer %}
+    {% include 'public/extends/layout/footer.vue' %}
+  {% endblock %}
+
   {% block script %}
     <script src="/static/js/customers.js"></script>
   {% endblock %}

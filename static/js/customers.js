@@ -2,6 +2,36 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: {
+
+        // auth
+        icons: [
+            {
+                icon: 'mdi-facebook',
+                href: 'https://www.facebook.com/mangoconsultant/'
+            },
+            {
+                icon: 'mdi-twitter',
+                href: ''
+            },
+            {
+                icon: 'mdi-linkedin',
+                href: ''
+            },
+            {
+                icon: 'mdi-instagram',
+                href: 'https://www.instagram.com/mangoconsultant/'
+            },
+        ],
+        userAuth: {
+            name: '',
+            picture: '',
+            email: '',
+            uid: '',
+        },
+        spinAuth: false,
+        notify_today: [],
+        selectedNotify: 0,
+
         // datetime
         date: [],
         menu1: false,
@@ -15,15 +45,6 @@ new Vue({
         btnExcel: true,
         spinExcel: false,
         spinPreview: true,
-
-        // auth
-        userAuth: {
-            name: '',
-            picture: '',
-            email: '',
-            uid: '',
-        },
-        spinAuth: false,
 
         // table
         page: 1,
@@ -216,14 +237,10 @@ new Vue({
         fileImportExcel: null,
 
 
-        //notify
-        notify_today: [],
-        selectedNotify: 0
     },
 
 
     watch: {
-
         date(val) {
             if (this.date.length > 0) {
                 this.$refs.form.reset()

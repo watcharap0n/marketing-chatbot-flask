@@ -2,6 +2,24 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: {
+        icons: [
+            {
+                icon: 'mdi-facebook',
+                href: 'https://www.facebook.com/mangoconsultant/'
+            },
+            {
+                icon: 'mdi-twitter',
+                href: ''
+            },
+            {
+                icon: 'mdi-linkedin',
+                href: ''
+            },
+            {
+                icon: 'mdi-instagram',
+                href: 'https://www.instagram.com/mangoconsultant/'
+            },
+        ],
         loaderSpin: true,
         loaderData: false,
         userAuth: {
@@ -10,6 +28,8 @@ new Vue({
             email: '',
             uid: '',
         },
+        notify_today: [],
+        selectedNotify: 0,
 
         items: [
             {
@@ -110,6 +130,10 @@ new Vue({
             })
     },
     computed: {
+        datetimeNow() {
+            const today = new Date();
+            return today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+        },
         itemsIntent() {
             return [
                 {

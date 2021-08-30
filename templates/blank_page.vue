@@ -1,25 +1,18 @@
 {% extends "admin/main_layout.html" %}
 {% block content %}
 
-<br>
-<br>
-<div id="app">
-    <v-app id="inspire">
-        <!-- contents -->
-    </v-app>
-</div>
+  <br><br><br>
+  <div class="container-fluid">
+  </div>
+
+  {% block footer %}
+    {% include 'public/extends/layout/footer.vue' %}
+  {% endblock %}
 
 
-<script>
-
-    new Vue({
-        el: '#app' ,
-        vuetify: new Vuetify(),
-        data: {}
-    })
-
-
-</script>
+  {% block script %}
+    <script src="/static/js/blank.js"></script>
+  {% endblock %}
 
 
 
