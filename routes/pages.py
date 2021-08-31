@@ -57,3 +57,8 @@ def line_realestate():
 @page.route('/line/questionnaire/care')
 def line_mangocare():
     return render_template('LINE/care.vue')
+
+
+@page.route('/facebook/questionnaire/quotation')
+def facebook_quotation():
+    return render_template('FACEBOOK/quotation.vue')

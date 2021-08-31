@@ -143,7 +143,7 @@
 
 
   {% block script %}
-    <script src="/static/js/quotation_facebook.js"></script>
+    <script src="/static/js/Facebook/quotation_facebook.js"></script>
   {% endblock %}
 
 {% endblock %}

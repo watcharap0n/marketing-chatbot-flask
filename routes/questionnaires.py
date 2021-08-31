@@ -57,3 +57,20 @@ def q_line():
     condition_message(channel, date, time, company, name, tel, email, product, message)
     res = {'message': 'success'}
     return jsonify(res)
+
+
+@question.route('/api/facebook/questionnaire', methods=['POST'])
+@api.validate(resp=Response(HTTP_201=None, HTTP_400=None), tags=['Questionnaire'])
+def q_facebook():
+    try:
+        item = request.get_json()
+        key = CutId(_id=ObjectId()).dict()['id']
+        _d = datetime.datetime.now()
+        item["date"] = _d.strftime("%d/%m/%y")
+        item["time"] = _d.strftime("%H:%M:%S")
+        item["id"] = key
+        db.insert_one(collection=collection, data=item)
+        del item['_id']
+        return item
+    except:
+        raise InvalidUsage(status_code=400, message='api something wrong!')
