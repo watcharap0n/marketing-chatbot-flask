@@ -75,10 +75,41 @@ def q_facebook():
         profile = item.get('profile')
         picture = item.get('picture')
         other = item.get('other')
-        item = key_model_transaction(item=item, channel=channel, userId=userId, email_private=email_private, profile=profile,
+        item = key_model_transaction(item=item, channel=channel, userId=userId, email_private=email_private,
+                                     profile=profile,
                                      picture=picture, other=other)
         db.insert_one(collection=collection, data=item)
         del item['_id']
         return item
     except:
         raise InvalidUsage(status_code=400, message='api something wrong!')
+
+
+@question.route('/api/form/custom/get', methods=['GET'])
+@api.validate(resp=Response(HTTP_201=None, HTTP_400=None), tags=['Questionnaire'])
+def get_custom_form_line():
+    id = request.args.get('id')
+    item = db.find_one(collection='form_custom', query={'id': id})
+    del item['_id']
+    return jsonify(message=id, item=item)
+
+
+@question.route('/api/form/custom/update/product/<string:id>', methods=['PUT'])
+@api.validate(resp=Response(HTTP_201=None, HTTP_400=None), tags=['Questionnaire'])
+def update_custom_form_line(id):
+    data = request.get_json()
+    query = {'id': id}
+    values = {'$set': data}
+    item = db.update_one(collection='form_custom', query=query, values=values)
+    print(item)
+    res = {'message': 'success'}
+    return jsonify(res)
+
+
+@question.route('/api/form/custom/delete/product/<string:id>', methods=['DELETE'])
+@api.validate(resp=Response(HTTP_201=None, HTTP_400=None), tags=['Questionnaire'])
+def delete_custom_form_line(id):
+    query = {'id': id}
+    db.delete_one(collection='form_custom', query=query)
+    res = {'message': 'success'}
+    return jsonify(res)

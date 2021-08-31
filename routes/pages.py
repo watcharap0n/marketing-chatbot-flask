@@ -29,6 +29,14 @@ def root_intents():
         return redirect(url_for('pages.root_signIn'))
 
 
+@page.route('/custom/form/line/<string:id>')
+def line_custom(id):
+    if g.user:
+        return render_template('public/form_custom.vue', id=id)
+    else:
+        return redirect(url_for('pages.root_signIn'))
+
+
 @page.route('/line/questionnaire/construction')
 def line_construction():
     return render_template('LINE/construction.vue')
@@ -62,3 +70,8 @@ def line_mangocare():
 @page.route('/facebook/questionnaire/quotation')
 def facebook_quotation():
     return render_template('FACEBOOK/quotation.vue')
+
+
+@page.route('/custom/page/<string:id>')
+def custom_page(id):
+    return render_template('public/page_custom.vue', id=id)
