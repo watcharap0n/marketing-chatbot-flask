@@ -30,6 +30,14 @@ new Vue({
         spinAuth: false,
         notify_today: [],
         selectedNotify: 0,
+        navigatorAppbar: false,
+        selectedList: 1,
+        itemsAppbar: [
+            {text: 'Mango', icon: 'mdi-database'},
+            {text: 'Intents', icon: 'mdi-account'},
+        ],
+        loaderSpin: true,
+        loaderData: false,
     },
     beforeCreate() {
         const path = '/secure/read'
@@ -51,6 +59,11 @@ new Vue({
         datetimeNow() {
             const today = new Date();
             return today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+        },
+    },
+    methods: {
+        logout() {
+            return window.location = '/secure/logout'
         },
     },
     delimiters: ["[[", "]]"],

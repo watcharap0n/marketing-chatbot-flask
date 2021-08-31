@@ -2,7 +2,6 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: {
-
         // auth
         icons: [
             {
@@ -31,14 +30,22 @@ new Vue({
         spinAuth: false,
         notify_today: [],
         selectedNotify: 0,
+        // Appbar
+        navigatorAppbar: false,
+        selectedList: 0,
+        itemsAppbar: [
+            {text: 'Mango', icon: 'mdi-database'},
+            {text: 'Intents', icon: 'mdi-account'},
+        ],
+
+        loaderSpin: true,
+        loaderData: false,
+        //================================
 
         // datetime
         date: [],
         menu1: false,
         dialogDate: false,
-
-        loaderSpin: true,
-        loaderData: false,
 
         // excel
         dialogExcel: false,
@@ -217,13 +224,6 @@ new Vue({
             {img: 'google.png', title: 'Google+'},
         ],
 
-        // Appbar
-        navigatorAppbar: false,
-        selectedList: 0,
-        itemsAppbar: [
-            {text: 'Mango', icon: 'mdi-database'},
-            {text: 'Intents', icon: 'mdi-account'},
-        ],
 
         // btn or table hidden
         btnHiddenAPI: true,

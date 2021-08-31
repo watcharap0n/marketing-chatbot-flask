@@ -20,8 +20,12 @@ new Vue({
                 href: 'https://www.instagram.com/mangoconsultant/'
             },
         ],
-        loaderSpin: true,
-        loaderData: false,
+        navigatorAppbar: false,
+        selectedList: 1,
+        itemsAppbar: [
+            {text: 'Mango', icon: 'mdi-database'},
+            {text: 'Intents', icon: 'mdi-account'},
+        ],
         userAuth: {
             name: '',
             picture: '',
@@ -30,6 +34,10 @@ new Vue({
         },
         notify_today: [],
         selectedNotify: 0,
+
+        loaderSpin: true,
+        loaderData: false,
+        //================================
 
         items: [
             {
@@ -91,13 +99,6 @@ new Vue({
             type: false,
             contents: '',
         },
-
-        navigatorAppbar: false,
-        selectedList: 1,
-        itemsAppbar: [
-            {text: 'Mango', icon: 'mdi-database'},
-            {text: 'Intents', icon: 'mdi-account'},
-        ],
 
         // rule based
         nameRuleBased: '',

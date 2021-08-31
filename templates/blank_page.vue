@@ -1,8 +1,11 @@
 {% extends "admin/main_layout.html" %}
 {% block content %}
 
+  {% include 'public/extends/layout/navigationTop.vue' %}
+
   <br><br><br>
   <div class="container-fluid">
+
   </div>
 
   {% block footer %}

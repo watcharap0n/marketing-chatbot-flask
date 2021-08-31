@@ -69,6 +69,14 @@ def q_facebook():
         item["date"] = _d.strftime("%d/%m/%y")
         item["time"] = _d.strftime("%H:%M:%S")
         item["id"] = key
+        channel = item.get('channel')
+        userId = item.get('userId')
+        email_private = item.get('email_private')
+        profile = item.get('profile')
+        picture = item.get('picture')
+        other = item.get('other')
+        item = key_model_transaction(item=item, channel=channel, userId=userId, email_private=email_private, profile=profile,
+                                     picture=picture, other=other)
         db.insert_one(collection=collection, data=item)
         del item['_id']
         return item

@@ -8,3 +8,5 @@ environ/client_environ.py
 __pycache__
 .DS_Store
 test_coding.ipynb
+node_modules
+package-lock.json
