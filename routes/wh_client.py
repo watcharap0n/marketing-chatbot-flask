@@ -3,7 +3,7 @@ from flask_pydantic_spec import Response
 from modules.swagger import api
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import StickerSendMessage, TextSendMessage
+from linebot.models import StickerSendMessage, TextSendMessage, FlexSendMessage
 from machine_leanning.model_text_classifire import intent_model
 from environ.client_environ import MONGODB_URI
 from random import randint
@@ -13,6 +13,7 @@ from config.db import MongoDB
 from numpy import random
 import uuid
 import json
+from features_line import card, flex_message
 import os
 
 # client = 'mongodb://127.0.0.1:27017'
@@ -114,22 +115,52 @@ def event_postback(events, q):
     pass
 
 
+def flex_client(alt_text: str, contents: dict):
+    flex_custom = FlexSendMessage(
+        alt_text=alt_text,
+        contents=contents
+    )
+    return flex_custom
+
+
 def handler_message(events, q):
     line_bot_api = q['ACCESS_TOKEN']
     line_bot_api = LineBotApi(line_bot_api)
     text = events['message']['text']
-    replyToken = events['replyToken']
+    reply = events['replyToken']
     user_id = events['source']['userId']
-    data = intent_model(text, q['ACCESS_TOKEN'])
-    if data.get('require'):
-        line_bot_api.reply_message(replyToken, TextSendMessage(text=data.get('require')))
-    label = data['predict']
-    choice_answers = data['answers']
-    confident = data['confident'][0] * 100
-    user = get_profile(user_id, q)
-    displayName = user['displayName']
-    if confident > 69:
-        choice = random.choice(choice_answers[int(label)])
-        line_bot_api.reply_message(replyToken, TextSendMessage(text=choice))
-    else:
-        line_bot_api.reply_message(replyToken, TextSendMessage(text='ฉันไม่เข้าใจ'))
+    data_intent = intent_model(text, q['ACCESS_TOKEN'])
+    intent_name = data_intent['name']
+    label = data_intent['predict'][0]
+    choice_answers = data_intent['answers']
+    contents = data_intent['contents']
+    type = data_intent['type']
+    confident = data_intent['confident'][0] * 100
+
+    if data_intent.get('require'):
+        line_bot_api.reply_message(reply, TextSendMessage(text=data_intent.get('require')))
+    check_keyword = db.find_one(collection='match_rule_based', query={'keyword': text})
+    if not check_keyword:
+        if confident > 69:
+            if text == 'ขอข้อมูลผลิตภัณฑ์':
+                line_bot_api.reply_message(reply, card.mango_products())
+
+            if type:
+                contents = json.loads(contents)
+                flex_custom = flex_client(alt_text=intent_name, contents=contents)
+                line_bot_api.reply_message(reply, flex_custom)
+            elif not type:
+                choice = random.choice(choice_answers[label])
+                line_bot_api.reply_message(reply, TextSendMessage(text=choice))
+        else:
+            line_bot_api.reply_message(reply, TextSendMessage(text='ฉันไม่เข้าใจ'))
+    elif check_keyword:
+        alt_text = check_keyword['name']
+        contents = check_keyword['contents']
+        status = check_keyword['status']
+        if status:
+            contents = json.loads(contents)
+            flex_custom = flex_client(alt_text=alt_text, contents=contents)
+            line_bot_api.reply_message(reply, flex_custom)
+        elif not status:
+            line_bot_api.reply_message(reply, TextSendMessage(text=contents))
