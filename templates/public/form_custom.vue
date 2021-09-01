@@ -250,7 +250,7 @@
               </div>
               <small>
                 <strong>url:</strong>
-                <a :href="form.href">
+                <a :href="form.href" target="_blank">
                   [[form.href]]
                 </a>
               </small>

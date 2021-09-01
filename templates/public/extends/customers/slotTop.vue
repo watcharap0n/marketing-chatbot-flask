@@ -45,6 +45,19 @@
 
     {% include "public/extends/customers/importExcel.vue" %}
 
+    <v-btn
+        style="margin-left: 8px;"
+        color="pink lighten-2"
+        dark
+        :hidden="!btnHiddenAPI"
+        href="/custom/form/612e981a451b29f9cab64295"
+        target="_blank"
+    >
+      <v-icon>
+        mdi-form-select
+      </v-icon>
+    </v-btn>
+
     <v-spacer></v-spacer>
 
     <div class="small" style="margin-right: 20px">

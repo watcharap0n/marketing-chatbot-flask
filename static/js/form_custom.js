@@ -91,6 +91,13 @@ new Vue({
         logout() {
             return window.location = '/secure/logout'
         },
+        redirectPage(item) {
+            console.log(item)
+            if (item.text === 'Mango')
+                window.location = '/'
+            if (item.text === 'Intents')
+                window.location = '/intents'
+        },
         getForm() {
             const path = `/api/form/custom/get?id=${this.form.id}`
             axios.get(path)
@@ -135,8 +142,7 @@ new Vue({
             if (data.key === 'product') {
                 this.form.itemProducts.splice(this.form.itemProducts.indexOf(data.item), 1)
                 this.updateProduct()
-            }
-            else if (data.key === 'other'){
+            } else if (data.key === 'other') {
                 this.form.itemOthers.splice(this.form.itemOthers.indexOf(data.item), 1)
                 this.updateProduct()
             }

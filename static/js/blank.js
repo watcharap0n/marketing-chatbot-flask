@@ -65,6 +65,13 @@ new Vue({
         logout() {
             return window.location = '/secure/logout'
         },
+        redirectPage(item) {
+            console.log(item)
+            if (item.text === 'Mango')
+                window.location = '/'
+            if (item.text === 'Intents')
+                window.location = '/intents'
+        },
     },
     delimiters: ["[[", "]]"],
 })
