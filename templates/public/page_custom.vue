@@ -68,6 +68,16 @@
                       required
                   ></v-select>
 
+                  <v-select
+                      dense
+                      outlined
+                      clearable
+                      v-model="formElement.other"
+                      :items="form.itemOthers"
+                      :rules="validSelect"
+                      :label="form.other"
+                      required
+                  ></v-select>
 
                   <v-text-field
                       dense
