@@ -29,7 +29,7 @@ def root_intents():
         return redirect(url_for('pages.root_signIn'))
 
 
-@page.route('/custom/form/line/<string:id>')
+@page.route('/custom/form/<string:id>')
 def line_custom(id):
     if g.user:
         return render_template('public/form_custom.vue', id=id)
