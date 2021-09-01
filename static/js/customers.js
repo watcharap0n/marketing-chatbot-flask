@@ -773,6 +773,7 @@ new Vue({
                 .then(() => {
                     this.spinButton = true
                     this.dialogImportExcel = false
+                    this.fileImportExcel = null
                     if (this.href === 'customer') {
                         this.initialize()
                     } else if (this.href === 'import') {

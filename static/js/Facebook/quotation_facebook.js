@@ -91,7 +91,7 @@ new Vue({
             let validate = this.$refs.form.validate()
             if (validate === true) {
                 this.spinBtn = false
-                const path = '/api/facebook/questionnaire'
+                const path = '/api/all/questionnaire'
                 axios.post(path, this.formElement)
                     .then(() => {
                         this.spinBtn = true

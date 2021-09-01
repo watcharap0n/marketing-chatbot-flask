@@ -249,7 +249,10 @@
                 </div>
               </div>
               <small>
-                <strong>url:</strong> [[form.href]]
+                <strong>url:</strong>
+                <a :href="form.href">
+                  [[form.href]]
+                </a>
               </small>
             </v-list-item-content>
           </v-list-item>

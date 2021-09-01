@@ -25,9 +25,9 @@ def handle_invalid_usage(error):
     return response
 
 
-@question.route('/api/line/questionnaire', methods=['POST'])
+@question.route('/api/all/questionnaire', methods=['POST'])
 @api.validate(resp=Response(HTTP_201=None, HTTP_400=None), tags=['Questionnaire'])
-def q_line():
+def api_send_all_question():
     item = request.get_json()
     key = CutId(_id=ObjectId()).dict()['id']
     _d = datetime.datetime.now()
@@ -57,32 +57,6 @@ def q_line():
     condition_message(channel, date, time, company, name, tel, email, product, message)
     res = {'message': 'success'}
     return jsonify(res)
-
-
-@question.route('/api/facebook/questionnaire', methods=['POST'])
-@api.validate(resp=Response(HTTP_201=None, HTTP_400=None), tags=['Questionnaire'])
-def q_facebook():
-    try:
-        item = request.get_json()
-        key = CutId(_id=ObjectId()).dict()['id']
-        _d = datetime.datetime.now()
-        item["date"] = _d.strftime("%d/%m/%y")
-        item["time"] = _d.strftime("%H:%M:%S")
-        item["id"] = key
-        channel = item.get('channel')
-        userId = item.get('userId')
-        email_private = item.get('email_private')
-        profile = item.get('profile')
-        picture = item.get('picture')
-        other = item.get('other')
-        item = key_model_transaction(item=item, channel=channel, userId=userId, email_private=email_private,
-                                     profile=profile,
-                                     picture=picture, other=other)
-        db.insert_one(collection=collection, data=item)
-        del item['_id']
-        return item
-    except:
-        raise InvalidUsage(status_code=400, message='api something wrong!')
 
 
 @question.route('/api/form/custom/get', methods=['GET'])

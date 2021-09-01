@@ -54,7 +54,7 @@ new Vue({
             let validate = this.$refs.form.validate()
             if (validate === true) {
                 this.spinBtn = false
-                const path = '/api/line/questionnaire'
+                const path = '/api/all/questionnaire'
                 if (this.checkbox === true) {
                     this.formElement.product = 'รับข้อมูลข่าวสาร'
                 } else if (this.checkbox === false) {
