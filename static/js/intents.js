@@ -233,7 +233,6 @@ new Vue({
         },
 
         saveRuleBased() {
-            this.selectedRuleBased.status = this.checkbox
             const path = `/callback/mango/update_rule_based/${this.selectedRuleBased.id}`
             axios.put(path, this.selectedRuleBased)
                 .then((res) => {
