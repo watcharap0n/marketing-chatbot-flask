@@ -10,7 +10,7 @@
     <v-spacer></v-spacer>
 
     <v-dialog
-        v-model="dialogIntent"
+        v-model="dialogIntentMango"
         persistent
         max-width="500"
     >
@@ -27,7 +27,7 @@
           สร้าง Intent
         </v-btn>
       </template>
-      <v-card>
+      <v-card >
 
         <v-toolbar flat
                    style="background: linear-gradient(90deg, rgba(252,117,149,1) 0%, rgba(255,16,117,1) 77%, rgba(255,67,118,1) 100%);"
@@ -52,7 +52,7 @@
           <v-btn
               color="red darken-1"
               text
-              @click="dialogIntent = false"
+              @click="dialogIntentMango = false"
           >
             Disagree
           </v-btn>
@@ -93,61 +93,6 @@
             mdi-book
           </v-icon>
         </template>
-
-        <template v-slot:append="{item}">
-
-          <div v-if="!item.children">
-            <v-dialog
-                v-model="dialogDeleteIntent"
-                persistent
-                max-width="290"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    x-small
-                    color="red"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                  <v-icon dark>
-                    mdi-delete
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title class="text-h5">
-                  are you sure ?
-                </v-card-title>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                      color="green darken-1"
-                      text
-                      @click="dialogDeleteIntent = false"
-                  >
-                    Disagree
-                  </v-btn>
-                  <v-btn
-                      color="red darken-1"
-                      text
-                      :loading="!spinIntent"
-                      @click="deleteIntent(item)"
-                  >
-                    Agree
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-
-            </v-dialog>
-
-          </div>
-
-
-        </template>
-
       </v-treeview>
     </v-col>
 
@@ -218,79 +163,80 @@
           </v-card-text>
           <v-divider></v-divider>
 
+          <v-card-text>
 
-          <h3 class="text-h5 ">
-            คำตอบ (สิ่งที่ให้บอทตอบ)
-          </h3>
-          <div v-if="!selectedIntent">
-            <h2>No Data</h2>
-          </div>
-          <v-switch
-              v-else
-              v-model="selectedIntent.type"
-              label="Flex Message"
-              color="warning"
-          ></v-switch>
-
-          <div v-if="!selectedIntent">
-            <h2>No Data</h2>
-          </div>
-          <v-row
-              v-else
-              :hidden="selectedIntent.type === true"
-              class="text-left"
-              tag="v-card-text"
-          >
-            <v-text-field
-                v-model="answer"
-                :append-outer-icon="answer ? 'mdi-send' : ''"
-                filled
-                clear-icon="mdi-close-circle"
-                clearable
-                label="คำตอบ"
-                type="text"
-                :loading="!spinIntent"
-                @keyup.enter="sendAnswer"
-                @click:append-outer="sendAnswer"
-            ></v-text-field>
-
-
+            <h3 class="text-h5 ">
+              คำตอบ (สิ่งที่ให้บอทตอบ)
+            </h3>
             <div v-if="!selectedIntent">
               <h2>No Data</h2>
             </div>
-            <v-combobox
+            <v-switch
                 v-else
-                v-model="selectedIntent.answer"
-                :item="selectedIntent.answer"
-                label="คำตอบทั้งหมด"
-                chips
-                multiple
-                readonly
-            >
-              <template v-slot:selection="{ item }">
-                <v-chip
-                    class="ma-2"
-                    close
-                    @click:close="removeAnswer(item)"
-                >
-                  [[item]]
-                </v-chip>
-              </template>
-            </v-combobox>
-          </v-row>
+                v-model="selectedIntent.type"
+                label="Flex Message"
+                color="warning"
+            ></v-switch>
 
-          <div v-if="!selectedIntent">
-            <h2>No Data</h2>
-          </div>
-          <v-row
-              v-else
-              :hidden="selectedIntent.type === false"
-              class="text-left"
-              tag="v-card-text"
-          >
             <div v-if="!selectedIntent">
               <h2>No Data</h2>
             </div>
+            <v-row
+                v-else
+                :hidden="selectedIntent.type === true"
+                class="text-left"
+                tag="v-card-text"
+            >
+              <v-text-field
+                  v-model="answer"
+                  :append-outer-icon="answer ? 'mdi-send' : ''"
+                  filled
+                  clear-icon="mdi-close-circle"
+                  clearable
+                  label="คำตอบ"
+                  type="text"
+                  :loading="!spinIntent"
+                  @keyup.enter="sendAnswer"
+                  @click:append-outer="sendAnswer"
+              ></v-text-field>
+
+
+              <div v-if="!selectedIntent">
+                <h2>No Data</h2>
+              </div>
+              <v-combobox
+                  v-else
+                  v-model="selectedIntent.answer"
+                  :item="selectedIntent.answer"
+                  label="คำตอบทั้งหมด"
+                  chips
+                  multiple
+                  readonly
+              >
+                <template v-slot:selection="{ item }">
+                  <v-chip
+                      class="ma-2"
+                      close
+                      @click:close="removeAnswer(item)"
+                  >
+                    [[item]]
+                  </v-chip>
+                </template>
+              </v-combobox>
+            </v-row>
+
+            <div v-if="!selectedIntent">
+              <h2>No Data</h2>
+            </div>
+            <v-row
+                v-else
+                :hidden="selectedIntent.type === false"
+                class="text-left"
+                tag="v-card-text"
+            >
+              <div v-if="!selectedIntent">
+                <h2>No Data</h2>
+              </div>
               <v-textarea
                   v-else
                   v-model="selectedIntent.contents"
@@ -299,14 +245,12 @@
                   label="Flex message"
                   max-width="800"
               ></v-textarea>
-            <div>
-              <strong>คุณสามารถไปออกแบบ Flex message ได้ที่ </strong> : <strong><a
-                target="_blank" href="https://developers.line.biz/flex-simulator"> FlexMessage </a></strong>
-            </div>
-
-          </v-row>
-
-
+              <div>
+                <strong>คุณสามารถไปออกแบบ Flex message ได้ที่ </strong> : <strong><a
+                  target="_blank" href="https://developers.line.biz/flex-simulator"> FlexMessage </a></strong>
+              </div>
+            </v-row>
+          </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -316,6 +260,52 @@
             >
               บันทึกประเภทการตอบ
             </v-btn>
+            <div v-if="!selectedIntent"></div>
+            <v-dialog
+                v-else
+                v-model="dialogDeleteMango"
+                persistent
+                max-width="290"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    class="mx-2"
+                    fab
+                    dark
+                    x-small
+                    color="red"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                  <v-icon dark>
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title>
+                  คุณแน่ใจที่จะลบ [[selectedIntent.name]] ?
+                </v-card-title>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                      color="green darken-1"
+                      text
+                      @click="dialogDeleteMango = false"
+                  >
+                    Disagree
+                  </v-btn>
+                  <v-btn
+                      color="red darken-1"
+                      text
+                      :loading="!spinIntent"
+                      @click="deleteIntent(selectedIntent)"
+                  >
+                    Agree
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-card-actions>
 
 

@@ -117,7 +117,7 @@
 
         <div :hidden="!showIntent">
 
-          <v-card>
+          <v-card >
             <v-card-title dark
                           style="background: linear-gradient(to right, #7C4DFF, #304FFE, #448AFF);">
               <v-icon dark>
@@ -277,61 +277,6 @@
                       mdi-book
                     </v-icon>
                   </template>
-
-                  <template v-slot:append="{item}">
-
-                    <div v-if="!item.children">
-                      <v-dialog
-                          v-model="dialogDeleteIntent"
-                          persistent
-                          max-width="290"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                              class="mx-2"
-                              fab
-                              dark
-                              x-small
-                              color="red"
-                              v-bind="attrs"
-                              v-on="on"
-                          >
-                            <v-icon dark>
-                              mdi-delete
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <v-card>
-                          <v-card-title class="text-h5">
-                            คุณแน่ใจที่จะลบ ?
-                          </v-card-title>
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                color="green darken-1"
-                                text
-                                @click="dialogDeleteIntent = false"
-                            >
-                              ยกเลิก
-                            </v-btn>
-                            <v-btn
-                                color="red darken-1"
-                                text
-                                :loading="!spinIntent"
-                                @click="deleteIntent(item)"
-                            >
-                              ตกลง
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-
-                      </v-dialog>
-
-                    </div>
-
-
-                  </template>
-
                 </v-treeview>
               </v-col>
 
@@ -382,7 +327,7 @@
                             v-else
                             v-model="selectedIntent.question"
                             :item="selectedIntent.question"
-                            label="Trainset"
+                            label="คำถามที่สอนไป"
                             chips
                             multiple
                             readonly
@@ -399,13 +344,30 @@
                         </v-combobox>
                       </div>
 
-                      <v-divider></v-divider>
+                    </v-card-text>
+                    <v-divider></v-divider>
 
+                    <v-card-text>
 
                       <h3 class="text-h5 ">
                         คำตอบ (สิ่งที่ให้บอทตอบ)
                       </h3>
+                      <div v-if="!selectedIntent">
+                        <h2>No Data</h2>
+                      </div>
+                      <v-switch
+                          v-else
+                          v-model="selectedIntent.type"
+                          label="Flex Message"
+                          color="warning"
+                      ></v-switch>
+
+                      <div v-if="!selectedIntent">
+                        <h2>No Data</h2>
+                      </div>
                       <v-row
+                          v-else
+                          :hidden="selectedIntent.type === true"
                           class="text-left"
                           tag="v-card-text"
                       >
@@ -430,7 +392,7 @@
                             v-else
                             v-model="selectedIntent.answer"
                             :item="selectedIntent.answer"
-                            label="Trainset"
+                            label="คำตอบทั้งหมด"
                             chips
                             multiple
                             readonly
@@ -446,7 +408,89 @@
                           </template>
                         </v-combobox>
                       </v-row>
+
+                      <div v-if="!selectedIntent">
+                        <h2>No Data</h2>
+                      </div>
+                      <v-row
+                          v-else
+                          :hidden="selectedIntent.type === false"
+                          class="text-left"
+                          tag="v-card-text"
+                      >
+                        <div v-if="!selectedIntent">
+                          <h2>No Data</h2>
+                        </div>
+                        <v-textarea
+                            v-else
+                            v-model="selectedIntent.contents"
+                            clearable
+                            clear-icon="mdi-close-circle"
+                            label="Flex message"
+                            max-width="800"
+                        ></v-textarea>
+                        <div>
+                          <strong>คุณสามารถไปออกแบบ Flex message ได้ที่ </strong> : <strong><a
+                            target="_blank" href="https://developers.line.biz/flex-simulator"> FlexMessage </a></strong>
+                        </div>
+                      </v-row>
                     </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                          color="success darken-1"
+                          text
+                          @click="updateIntent"
+                      >
+                        บันทึกประเภทการตอบ
+                      </v-btn>
+                      <div v-if="!selectedIntent"></div>
+                      <v-dialog
+                          v-else
+                          v-model="dialogDeleteIntent"
+                          persistent
+                          max-width="290"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                              class="mx-2"
+                              fab
+                              dark
+                              x-small
+                              color="red"
+                              v-bind="attrs"
+                              v-on="on"
+                          >
+                            <v-icon dark>
+                              mdi-delete
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-card-title>
+                            คุณแน่ใจที่จะลบ [[selectedIntent.name]] ?
+                          </v-card-title>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                color="green darken-1"
+                                text
+                                @click="dialogDeleteIntent = false"
+                            >
+                              Disagree
+                            </v-btn>
+                            <v-btn
+                                color="red darken-1"
+                                text
+                                :loading="!spinIntent"
+                                @click="deleteIntent(selectedIntent)"
+                            >
+                              Agree
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-card-actions>
                   </v-card>
                 </v-scroll-y-transition>
               </v-col>

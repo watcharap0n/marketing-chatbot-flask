@@ -99,6 +99,9 @@ new Vue({
             type: false,
             contents: '',
         },
+        //IntentMango
+        dialogIntentMango: false,
+        dialogDeleteMango: false,
 
         // rule based
         nameRuleBased: '',
@@ -111,6 +114,7 @@ new Vue({
         snackbar: false,
         timeout: 2000,
         dialogRuleBased: false,
+        dialogDeleteRuleBased: false,
         checkbox: true,
         colorSnackbar: '',
 
@@ -240,12 +244,10 @@ new Vue({
                         this.colorSnackbar = 'success'
                         this.text = 'บันทึกสำเร็จ'
                         this.snackbar = true
-                        console.log(res.data)
                     } else if (!res.data.status) {
                         this.colorSnackbar = 'red'
                         this.text = 'Keyword ซ้ำ! โปรดเปลี่ยน Keyword'
                         this.snackbar = true
-                        console.log(res.data)
                     }
                 })
                 .catch((err) => {
@@ -262,10 +264,16 @@ new Vue({
             axios.delete(path)
                 .then(() => {
                     this.user_r.splice(this.user_r.indexOf(item), 1)
-                    this.dialogDeleteIntent = false
+                    this.active_r = []
+                    this.dialogDeleteRuleBased = false
                     this.spinIntent = true
                 })
-                .catch((err) => console.error(err))
+                .catch((err) => {
+                    console.error(err)
+                    this.active_r = []
+                    this.dialogDeleteRuleBased = false
+                    this.spinIntent = true
+                })
 
         },
 
@@ -313,20 +321,34 @@ new Vue({
                     this.spinIntent = true
                     this.users.push(res.data)
                     this.dialogIntent = false
+                    this.dialogIntentMango = false
                 })
-                .catch((err) => console.error(err))
+                .catch((err) => {
+                    console.error(err)
+                    this.dialogIntent = false
+                    this.dialogIntentMango = false
+                    this.nameIntent = ''
+                    this.spinIntent = true
+                })
         },
         deleteIntent(item) {
             this.spinIntent = false
             const path = `/intent/delete_intent/${item.id}`
             axios.delete(path)
                 .then((res) => {
-                    console.log(res.data)
+                    this.active = []
                     this.users.splice(this.users.indexOf(item), 1)
                     this.dialogDeleteIntent = false
+                    this.dialogDeleteMango = false
                     this.spinIntent = true
                 })
-                .catch((err) => console.error(err))
+                .catch((err) => {
+                    console.error(err)
+                    this.active = []
+                    this.dialogDeleteIntent = false
+                    this.dialogDeleteMango = false
+                    this.spinIntent = true
+                })
 
         },
         async sendQuestion() {
@@ -358,13 +380,12 @@ new Vue({
                     this.colorSnackbar = 'success'
                     this.text = 'สำเร็จ'
                     this.snackbar = true
-                    console.log(res.data)
                 })
                 .catch((err) => {
                     this.colorSnackbar = 'red'
                     this.text = 'เกิดข้อผิดพลาด โปรดลองใหม่!'
                     this.snackbar = true
-                    console.log(err)
+                    console.error(err)
                 })
         },
 
@@ -402,7 +423,6 @@ new Vue({
         },
 
         redirectPage(item) {
-            console.log(item)
             if (item.text === 'Mango')
                 window.location = '/'
             if (item.text === 'Intents')

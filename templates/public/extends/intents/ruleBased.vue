@@ -94,57 +94,6 @@
           </v-icon>
         </template>
 
-        <template v-slot:append="{item}">
-
-          <div v-if="!item.children">
-            <v-dialog
-                v-model="dialogDeleteIntent"
-                persistent
-                max-width="290"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    x-small
-                    color="red"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                  <v-icon dark>
-                    mdi-delete
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title class="text-h5">
-                  คุณแน่ใจที่จะลบ ?
-                </v-card-title>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                      color="green darken-1"
-                      text
-                      @click="dialogDeleteIntent = false"
-                  >
-                    ยกเลิก
-                  </v-btn>
-                  <v-btn
-                      color="red darken-1"
-                      text
-                      :loading="!spinIntent"
-                      @click="deleteRuleBased(item)"
-                  >
-                    ตกลง
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-
-            </v-dialog>
-
-          </div>
-        </template>
 
       </v-treeview>
     </v-col>
@@ -243,6 +192,8 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
+
+
             <v-btn
                 color="success darken-1"
                 text
@@ -251,6 +202,51 @@
               บันทึกข้อมูล
             </v-btn>
 
+            <v-dialog
+                v-model="dialogDeleteRuleBased"
+                persistent
+                max-width="290"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    class="mx-2"
+                    fab
+                    dark
+                    x-small
+                    color="red"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                  <v-icon dark>
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-card>
+                <div v-if="!selectedRuleBased"></div>
+                <v-card-title v-else>
+                  คุณแน่ใจที่จะลบ [[selectedRuleBased.name]]?
+                </v-card-title>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                      color="green darken-1"
+                      text
+                      @click="dialogDeleteRuleBased = false"
+                  >
+                    ยกเลิก
+                  </v-btn>
+                  <v-btn
+                      color="red darken-1"
+                      text
+                      :loading="!spinIntent"
+                      @click="deleteRuleBased(selectedRuleBased)"
+                  >
+                    ตกลง
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-card-actions>
 
         </v-card>
