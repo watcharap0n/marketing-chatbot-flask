@@ -259,7 +259,7 @@
           <v-card-text>
             <v-text-field
                 persistent-hint
-                hint="*เปลี่ยนชื่อฟอร์ม -> ข้อมูลลูกค้า"
+                hint="*เปลี่ยนชื่อฟอร์ม -> ข้อมูลลูกค้า ชื่อ"
                 dense
                 outlined
                 clearable
@@ -277,7 +277,7 @@
 
             <v-text-field
                 persistent-hint
-                hint="*เปลี่ยนชื่อฟอร์ม -> ข้อมูลลูกค้า"
+                hint="*เปลี่ยนชื่อฟอร์ม -> ข้อมูลลูกค้า อีเมล"
                 dense
                 outlined
                 clearable
@@ -306,12 +306,11 @@
 
             <v-text-field
                 persistent-hint
-                hint="*เปลี่ยนชื่อฟอร์ม -> ข้อมูลลูกค้า"
+                hint="*เปลี่ยนชื่อฟอร์ม -> ข้อมูลลูกค้า เบอร์"
                 dense
                 outlined
                 clearable
                 :label="form.tel"
-                type="tel"
             ></v-text-field>
 
 
