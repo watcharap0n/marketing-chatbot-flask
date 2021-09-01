@@ -4,6 +4,7 @@
 
   <div id="app">
     <v-app id="inspire">
+      <input type="hidden" value="{{ id }}" ref="formId"/>
       <v-container>
         <div class="d-flex flex-column justify-space-between align-center">
           <v-img
@@ -31,9 +32,8 @@
                       outlined
                       clearable
                       v-model="formElement.name"
-
                       :rules="validOther"
-                      label="ชื่อผู้ติดต่อ"
+                      :label="form.name"
                       required
                   ></v-text-field>
 
@@ -43,7 +43,7 @@
                       clearable
                       v-model="formElement.company"
                       :rules="validOther"
-                      label="บริษัท"
+                      :label="form.company"
                       required
                   ></v-text-field>
 
@@ -53,7 +53,7 @@
                       clearable
                       v-model="formElement.email"
                       :rules="validEmail"
-                      label="อีเมล"
+                      :label="form.email"
                       required
                   ></v-text-field>
 
@@ -62,9 +62,9 @@
                       outlined
                       clearable
                       v-model="formElement.product"
-                      :items="products"
+                      :items="form.itemProducts"
                       :rules="validSelect"
-                      label="ผลิตภัณฑ์"
+                      :label="form.product"
                       required
                   ></v-select>
 
@@ -75,7 +75,7 @@
                       clearable
                       v-model="formElement.tel"
                       :rules="validTel"
-                      label="เบอร์ที่สะดวกให้เจ้าหน้าที่ติดต่อกลับ"
+                      :label="form.tel"
                       type="tel"
                       required
                   ></v-text-field>
@@ -86,7 +86,7 @@
                       v-model="formElement.message"
                       clearable
                       autocomplete="email"
-                      label="ข้อมูลที่ท่านต้องการทราบเพิ่มเติม"
+                      :label="form.message"
                   ></v-textarea>
                   <v-card-actions>
                     <v-btn block
@@ -105,6 +105,13 @@
           </v-col>
         </v-row>
       </v-container>
+      <v-overlay :value="!spinPage">
+        <v-progress-circular
+            color="pink lighten-2"
+            indeterminate
+            size="64"
+        ></v-progress-circular>
+      </v-overlay>
     </v-app>
   </div>
 

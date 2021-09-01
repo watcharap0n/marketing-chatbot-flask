@@ -2,7 +2,6 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: {
-        products: ['Construction', 'RealEstate', 'Project Planning', 'Other'],
         validCheck: [v => !!v || 'กรุณาคลิกเพื่อไปต่อ'],
         validSelect: [v => !!v || 'กรุณาเลือกผลิตภัณฑ์'],
         validEmail: [
@@ -26,15 +25,19 @@ new Vue({
             email_private: '',
             profile: '',
             picture: '',
-            channel: 'LINE'
         },
+        form: {},
         valid: false,
         spinBtn: true,
+        spinPage: false,
     },
     delimiters: ["[[", "]]"],
-    created() {
-        liff.init({liffId: '1655208213-LYVWao4g'}, () => {
+    async mounted() {
+        this.form.id = this.$refs.formId.value
+        await this.getForm()
+        await liff.init({liffId: this.form.token_liff}, () => {
                 if (liff.isLoggedIn()) {
+                    this.spinPage = true
                     liff.getProfile()
                         .then((profile) => {
                             console.log(liff.getContext());
@@ -44,17 +47,30 @@ new Vue({
                             this.formElement.email_private = liff.getDecodedIDToken().email
                         })
                 } else {
+                    this.spinPage = true
                     liff.login();
                 }
             }
         )
     },
     methods: {
+        async getForm() {
+            const path = `/api/form/custom/get?id=${this.form.id}`
+            await axios.get(path)
+                .then((res) => {
+                    this.form = res.data.item
+                    this.spinData = true
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+        },
         onSubmit() {
             let validate = this.$refs.form.validate()
             if (validate === true) {
                 this.spinBtn = false
                 const path = '/api/line/questionnaire'
+                this.formElement.channel = this.form.channel
                 axios.post(path, this.formElement)
                     .then(() => {
                         this.spinBtn = true
@@ -63,7 +79,7 @@ new Vue({
                     })
                     .catch((err) => {
                         this.spinBtn = true
-                         Swal.fire("มีบางอย่างผิดพลาด", "กรุณาลองใหม่อีกครั้งค่ะ", "error").then(() => {
+                        Swal.fire("มีบางอย่างผิดพลาด", "กรุณาลองใหม่อีกครั้งค่ะ", "error").then(() => {
                             liff.closeWindow();
                         })
                     })
