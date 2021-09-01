@@ -226,7 +226,7 @@
                   v-else
                   color="red"
                   v-model="selectedRuleBased.status"
-                  :label="`${this.selectedRuleBased.status === true ? 'Flex Message': 'Text'}`"
+                  label="Flex Message"
               ></v-checkbox>
 
               <div v-if="!selectedRuleBased">

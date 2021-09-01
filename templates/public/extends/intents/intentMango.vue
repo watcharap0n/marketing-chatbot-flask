@@ -228,7 +228,7 @@
           <v-switch
               v-else
               v-model="selectedIntent.type"
-              :label="`${this.selectedIntent.type ? 'Flex message' : 'Text'}`"
+              label="Flex Message"
               color="warning"
           ></v-switch>
 
