@@ -57,8 +57,15 @@
                                                 type="password">
                                   </v-text-field>
 
+                                  <v-select
+                                      dense
+                                      menu-props="auto"
+                                      v-model="database"
+                                      :items="selectedDB"
+                                      label="ฐานข้อมูล"
+                                  ></v-select>
+
                                   <v-checkbox
-                                      style="margin-top: -8px"
                                       v-model="remember"
                                       label="จดจำรหัสผ่าน"
                                       color="info"

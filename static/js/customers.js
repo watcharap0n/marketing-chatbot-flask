@@ -26,6 +26,8 @@ new Vue({
             picture: '',
             email: '',
             uid: '',
+            collection: '',
+            _import: '',
         },
         spinAuth: false,
         notify_today: [],
@@ -280,9 +282,9 @@ new Vue({
 
     },
 
-    beforeCreate() {
+    async mounted() {
         const path = '/secure/read'
-        axios.get(path)
+        await axios.get(path)
             .then((res) => {
                 this.loaderSpin = false
                 this.loaderData = true
@@ -291,16 +293,16 @@ new Vue({
                 user.picture = res.data.picture
                 user.email = res.data.email
                 user.uid = res.data.uid
+                user.collection = res.data.collection
+                user._import = res.data._import
+                console.log(user)
             })
             .catch((err) => {
                 console.error(err)
             })
-    },
-    async created() {
         await this.APIImport();
         await this.getTags();
     },
-
     computed: {
         datetimeNow() {
             const today = new Date();
@@ -322,7 +324,7 @@ new Vue({
             this.btnAPI = true
             this.btnHiddenAPI = true
             this.spinTable = false
-            const path = '/api/customer'
+            const path = `/api/customer?collection=${this.userAuth.collection}`
             await axios.get(path)
                 .then((res) => {
                     this.spinTable = true;
@@ -341,7 +343,7 @@ new Vue({
             this.btnAPI = false
             this.btnHiddenAPI = true
             this.spinTable = false
-            const path = '/api/import'
+            const path = `/api/import?collection=${this.userAuth._import}`
             await axios.get(path)
                 .then((res) => {
                     this.spinTable = true;
@@ -366,21 +368,24 @@ new Vue({
         },
         submitExcel(selected) {
             this.btnExcel = true
+            let data = {}
             let data_id = []
             selected.forEach((v) => {
                 data_id.push(v.id)
             })
+            data.id = data_id
             this.spinExcel = false
-
             if (this.href === 'customer') {
-                this.exportExcel('/api/datafile/customer/excel', data_id)
+                data.collection = this.userAuth.collection
+                this.exportExcel('/api/datafile/customer/excel', data)
             }
             if (this.href === 'import') {
-                this.exportExcel('/api/datafile/import/excel', data_id)
+                data.collection = this.userAuth._import
+                this.exportExcel('/api/datafile/import/excel', data)
             }
         },
-        async exportExcel(path, data_id) {
-            await axios.post(path, data_id, {
+        async exportExcel(path, data) {
+            await axios.post(path, data, {
                 headers: {
                     'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     'Content-Disposition': "attachment; filename=customers.xlsx"
@@ -414,16 +419,18 @@ new Vue({
                     date: this.date,
                     channel: this.selectedChannel,
                     product: this.selectedProduct,
-                    tag: []
+                    tag: [],
                 }
                 if (this.selectedTag) {
                     dict.tag = [this.selectedTag]
                 }
                 if (this.href === 'customer') {
+                    dict.collection = this.userAuth.collection
                     this.sendSorting('/api/c/sorting', dict)
                     this.$refs.form.reset()
                 }
                 if (this.href === 'import') {
+                    dict.collection = this.userAuth._import
                     this.sendSorting('/api/m/sorting', dict)
                     this.$refs.form.reset()
                 }
@@ -436,7 +443,7 @@ new Vue({
                 date: [],
                 channel: null,
                 product: null,
-                tag: null
+                tag: null,
             }
             if (data.channel) {
                 dict.channel = data.channel
@@ -446,9 +453,11 @@ new Vue({
                 dict.tag = [data.tag]
             }
             if (this.href === 'customer') {
+                dict.collection = this.userAuth.collection
                 this.sendSorting('/api/c/sorting', dict)
             }
             if (this.href === 'import') {
+                dict.collection = this.userAuth._import
                 this.sendSorting('/api/m/sorting', dict)
             }
         },
@@ -490,8 +499,11 @@ new Vue({
                     data.uid = this.userAuth.uid
                     this.transaction.splice(this.transaction.indexOf(data), 1)
                 })
-                await axios.post(path, this.selected)
-                    .then((res) => {
+                let dict = {}
+                dict.selected = this.selected
+                dict.collection = this.userAuth.collection
+                await axios.post(path, dict)
+                    .then(() => {
                         this.spinImport = false
                         this.text = `คุณได้ทำการย้ายข้อมูลไปหน้า customers แล้ว!`
                         this.colorSb = 'success'
@@ -499,6 +511,7 @@ new Vue({
                         this.selected = []
                     })
                     .catch((err) => {
+                        console.error(err)
                         this.text = 'เกิดข้อผิดพลาด'
                         this.selected = []
                     })
@@ -528,10 +541,14 @@ new Vue({
             }
         },
         sendDeleteMultiple() {
+            let dict = {}
+            dict.selected = this.selected
             if (this.href === 'customer') {
-                this.deleteMultiple('/api/customer/delete/multiple', this.selected)
+                dict.collection = this.userAuth.collection
+                this.deleteMultiple('/api/customer/delete/multiple', dict)
             } else if (this.href === 'import') {
-                this.deleteMultiple('/api/import/delete/multiple', this.selected)
+                dict.collection = this.userAuth._import
+                this.deleteMultiple('/api/import/delete/multiple', dict)
             }
         },
         deleteMultiple(path, selected) {
@@ -568,9 +585,11 @@ new Vue({
         async addTransaction(data) {
             let href = this.href
             if (href === 'customer')
-                this.path = '/api/customer'
+                data.collection = this.userAuth.collection
+            this.path = '/api/customer'
             if (href === 'import')
-                this.path = '/api/import'
+                data.collection = this.userAuth._import
+            this.path = '/api/import'
             data.uid = this.userAuth.uid
             data.username = this.userAuth.name
             await axios.post(this.path, data)
@@ -589,9 +608,11 @@ new Vue({
         async editTransaction(data, id) {
             let href = this.href
             if (href === 'customer')
-                this.path = `/api/customer/${id}`
+                data.collection = this.userAuth.collection
+            this.path = `/api/customer/${id}`
             if (href === 'import')
-                this.path = `/api/import/${id}`
+                data.collection = this.userAuth._import
+            this.path = `/api/import/${id}`
             if (!data.tag) {
                 data.tag = []
             }
@@ -611,11 +632,11 @@ new Vue({
         async deleteTransaction(id) {
             let href = this.href
             if (href === 'customer')
-                this.path = `/api/customer/${id}`
+                this.path = `/api/customer/${id}?collection=${this.userAuth.collection}`
             if (href === 'import')
-                this.path = `/api/import/${id}`
+                this.path = `/api/import/${id}?collection=${this.userAuth._import}`
             await axios.delete(this.path)
-                .then((res) => {
+                .then(() => {
                     this.selected = []
                     this.spinButton = true;
                     this.colorSb = 'red'
@@ -671,7 +692,7 @@ new Vue({
 
         // tags
         async getTags() {
-            const path = '/api/tag'
+            const path = `/api/tag?collection=tags_${this.userAuth.collection}`
             await axios.get(path)
                 .then((res) => {
                     this.itemsTag = res.data
@@ -700,7 +721,7 @@ new Vue({
             }
         },
         addTag(item) {
-            const path = `/api/tag?tag=${item.text}`
+            const path = `/api/tag/add/new?collection=tags_${this.userAuth.collection}&tag=${item.text}`
             axios.get(path)
                 .then(() => {
                     this.getTags()
@@ -711,8 +732,8 @@ new Vue({
                 })
         },
         setTag(id, item) {
-            const path = `/api/tag/${item}?id-query=${id}`;
-            axios.put(path)
+            const path = `/api/tag/${id}?collection=tags_${this.userAuth.collection}`;
+            axios.put(path, item)
                 .then(() => {
                     console.log('success')
                 })
@@ -725,8 +746,7 @@ new Vue({
             this.removeTag(item.id)
         },
         removeTag(id) {
-            console.log(id)
-            const path = `/api/tag?id-query=${id}`;
+            const path = `/api/tag?id-query=${id}&collection=tags_${this.userAuth.collection}`;
             axios.delete(path)
                 .then(() => {
                     this.getTags()
@@ -738,7 +758,13 @@ new Vue({
         },
         tagTransaction(selected) {
             this.spinTag = false
-            let data = {id: selected, tag: this.model, href: this.href}
+            let data = {
+                id: selected,
+                tag: this.model,
+                href: this.href,
+                collection: this.userAuth.collection,
+                _import: this.userAuth._import
+            }
             const path = '/api/tag'
             axios.post(path, data)
                 .then((res) => {
@@ -762,8 +788,10 @@ new Vue({
             formData.append('username', this.userAuth.name);
             this.spinButton = false
             if (this.href === 'customer') {
+                formData.append('collection', this.userAuth.collection)
                 this.APIImportExcel('/api/customer/import/excel', formData)
             } else if (this.href === 'import') {
+                formData.append('collection', this.userAuth._import)
                 this.APIImportExcel('/api/import/import/excel', formData)
             }
         },

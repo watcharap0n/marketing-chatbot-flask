@@ -11,18 +11,12 @@ route_tag = Blueprint('tags', __name__, template_folder='templates')
 # client = 'mongodb://127.0.0.1:27017'
 # client = os.environ.get('MONGODB_URI')
 db = MongoDB(database_name='Mango', uri=MONGODB_URI)
-collection = 'tags_customer'
 
 
 @route_tag.route('/api/tag')
 @api.validate(tags=['Tag'])
 def find_tag():
-    tag = request.args.get('tag')
-    if tag:
-        key = CutId(_id=ObjectId()).dict()['id']
-        data = {'text': tag, 'id': key}
-        db.insert_one(collection='tags_customer', data=data)
-        return {'message': 'success'}
+    collection = request.args.get('collection')
     data = db.find(collection=collection, query={})
     data = list(data)
     for v in data:
@@ -30,12 +24,29 @@ def find_tag():
     return jsonify(data[::-1])
 
 
-@route_tag.route('/api/tag/<string:item>', methods=['PUT'])
+@route_tag.route('/api/tag/add/new')
 @api.validate(tags=['Tag'])
-def add_tag(item):
-    id = request.args.get('id-query')
+def add_tag():
+    tag = request.args.get('tag')
+    collection = request.args.get('collection')
+    print(tag)
+    print(collection)
+    key = CutId(_id=ObjectId()).dict()['id']
+    data = {'text': tag, 'id': key}
+    db.insert_one(collection=collection, data=data)
+    return {'message': 'success'}
+
+
+@route_tag.route('/api/tag/<string:id>', methods=['PUT'])
+@api.validate(tags=['Tag'])
+def update_tag(id):
+    collection = request.args.get('collection')
+    item = request.get_json()
+    print(id, 'id')
+    print(collection, 'collection')
+    print(item)
     query = {'id': id}
-    values = {'$set': {'text': item}}
+    values = {'$set': {'text': item['text']}}
     db.update_one(collection=collection, query=query, values=values)
     return jsonify({'item': item, 'q': id})
 
@@ -43,6 +54,7 @@ def add_tag(item):
 @route_tag.route('/api/tag', methods=['DELETE'])
 @api.validate(tags=['Tag'])
 def delete_tag():
+    collection = request.args.get('collection')
     id = request.args.get('id-query')
     db.delete_one(collection=collection, query={'id': id})
     res = {'message': 'success'}
@@ -60,9 +72,8 @@ def query_collection_tag(item: dict, collect: str):
 @api.validate(tags=['Tag'])
 def post_tag():
     item = request.get_json()
-    print(item)
     if item.get('href') == 'import':
-        query_collection_tag(item, 'imports')
+        query_collection_tag(item, item['_import'])
     elif item.get('href') == 'customer':
-        query_collection_tag(item, 'customers')
+        query_collection_tag(item, item['collection'])
     return jsonify(item)

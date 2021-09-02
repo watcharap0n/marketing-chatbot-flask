@@ -33,6 +33,8 @@ new Vue({
               },
               emailLG: '',
               passwordLG: '',
+              selectedDB: ['Mango', 'Test'],
+              database: 'Mango',
               remember: null,
               forgotForm: '',
               tabs: null,
@@ -107,6 +109,7 @@ new Vue({
                       formData.append('email', this.emailLG)
                       formData.append('password', this.passwordLG)
                       formData.append('remember', this.remember)
+                      formData.append('collection', this.database)
                       const path = '/secure/login';
                       axios.post(path, formData)
                           .then((res) => {

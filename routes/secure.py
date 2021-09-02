@@ -52,6 +52,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
         remember = request.form.getlist('remember')
+        database = request.form['collection']
         user = pb.sign_in_with_email_and_password(email, password)
         check_verify = auth.get_user_by_email(user['email'])
         if check_verify.email_verified:
@@ -66,6 +67,15 @@ def login():
                 response.set_cookie('remember', str(remember), max_age=expires_remember)
                 response.set_cookie('access_token', str(auth_cookie), max_age=expires_token)
                 flash('You were successfully logged in')
+                if database == 'Mango':
+                    database = 'customers'
+                    _import = 'imports'
+                    session['collection'] = database
+                    session['_import'] = _import
+                else:
+                    database = database.lower()
+                    session['collection'] = database
+                    session['_import'] = f'{database}_import'
                 return response
             else:
                 expires_token = 60 * 60 * 1
@@ -74,6 +84,15 @@ def login():
                 response = make_response(content)
                 response.set_cookie(key='access_token', value=str(auth_cookie), max_age=expires_token)
                 flash('You were successfully logged in')
+                if database == 'Mango':
+                    database = 'customers'
+                    _import = 'imports'
+                    session['collection'] = database
+                    session['_import'] = _import
+                else:
+                    database = database.lower()
+                    session['collection'] = database
+                    session['_import'] = f'{database}_import'
                 return response
         elif not check_verify.email_verified:
             pb.send_email_verification(user['idToken'])
@@ -91,6 +110,8 @@ def read():
             access_token = request.cookies.get('access_token')
             check = auth.verify_session_cookie(access_token)
             auth.revoke_refresh_tokens(check['sub'])
+            check['collection'] = session['collection']
+            check['_import'] = session['_import']
             return jsonify(check)
         except auth.InvalidSessionCookieError:
             raise InvalidUsage(message='auth Invalid SessionCookie Error', status_code=403)
@@ -116,6 +137,3 @@ def logout():
     res = redirect(url_for('pages.root_signIn'))
     res.set_cookie('access_token', max_age=0)
     return res
-
-
-

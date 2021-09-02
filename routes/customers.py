@@ -15,7 +15,6 @@ route_customer = Blueprint('customers', __name__, template_folder='templates')
 # client = 'mongodb://127.0.0.1:27017'
 # client = os.environ.get('MONGODB_URI')
 db = MongoDB(database_name='Mango', uri=MONGODB_URI)
-collection = 'customers'
 
 
 @route_customer.errorhandler(InvalidUsage)
@@ -28,6 +27,7 @@ def handle_invalid_usage(error):
 @route_customer.route('/api/customer', methods=['GET'])
 @api.validate(resp=Response(HTTP_200=None, HTTP_400=None), tags=['customer'])
 def get_customers():
+    collection = request.args.get('collection')
     data = db.find(collection=collection, query={})
     data = list(data)
     for v in data:
@@ -52,7 +52,7 @@ def post_customer():
     data["date"] = _d.strftime("%d/%m/%y")
     data["time"] = _d.strftime("%H:%M:%S")
     data["id"] = key
-    db.insert_one(collection=collection, data=data)
+    db.insert_one(collection=data['collection'], data=data)
     del data['_id']
     return jsonify(data)
 
@@ -64,13 +64,14 @@ def put_customer(id):
     _d = datetime.datetime.now()
     query = {'id': id}
     values = {'$set': payload}
-    db.update_one(collection=collection, values=values, query=query)
+    db.update_one(collection=payload['collection'], values=values, query=query)
     return jsonify({'message': 'success'})
 
 
 @route_customer.route('/api/customer/<string:id>', methods=['DELETE'])
 @api.validate(resp=Response(HTTP_204=None, HTTP_403=None), tags=['customer'])
 def customer_delete(id):
+    collection = request.args.get('collection')
     db.delete_one(collection=collection, query={'id': id})
     return jsonify({'message': 'success'})
 
@@ -79,8 +80,8 @@ def customer_delete(id):
 @api.validate(resp=Response(HTTP_204=None, HTTP_403=None), tags=['customer'])
 def customers_delete():
     items = request.get_json()
-    for i in items:
-        db.delete_one(collection=collection, query={'id': i['id']})
+    for i in items['selected']:
+        db.delete_one(collection=items['collection'], query={'id': i['id']})
     res = {'message': 'success'}
     return jsonify(res)
 
@@ -89,15 +90,16 @@ def customers_delete():
 @api.validate(resp=Response(HTTP_204=None, HTTP_403=None), tags=['customer'])
 def move_customers():
     items = request.get_json(force=True)
-    for d in items:
+    selected = items['selected']
+    for d in selected:
         db.delete_one(collection='imports', query={'id': d['id']})
-    for v in items:
+    for v in items['selected']:
         _d = datetime.datetime.now()
         key = CutId(_id=ObjectId()).dict()['id']
         v['id'] = key
         v['date_insert'] = _d.strftime("%d/%m/%y")
         v['time_insert'] = _d.strftime("%H:%M:%S")
-    db.insert_many(collection=collection, data=items)
+    db.insert_many(collection=items['collection'], data=items)
     res = {'message': 'success'}
     return jsonify(res)
 
@@ -110,6 +112,7 @@ def customer_sorting():
     channel = item['channel']
     date = item['date']
     tag = item['tag']
+    collection = item['collection']
 
     if not date:
         sorting = DataColumnFilter(collection=collection, database=db, product=product, channel=channel, tag=tag)
@@ -128,8 +131,8 @@ def customer_sorting():
 @route_customer.route('/api/datafile/customer/excel', methods=['POST'])
 @api.validate(resp=Response(HTTP_200=None, HTTP_400=None), tags=['customer'])
 def customers_excel():
-    id = request.get_json(force=True)
-    excel = DataColumnFilter(id=id, database=db, collection=collection)
+    data = request.get_json(force=True)
+    excel = DataColumnFilter(id=data['id'], database=db, collection=data['collection'])
     excel.export_excel().save()
     file = os.path.join('static', 'excels/customers.xlsx')
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -142,6 +145,7 @@ def customer_import_excel():
     file = request.files['file']
     uid = request.form['uid']
     username = request.form['username']
+    collection = request.form['collection']
     upload_dir = os.path.join('static', 'uploads')
     excel_dir = os.path.join(upload_dir, 'excels')
     file_input = os.path.join(excel_dir, 'customers.xlsm')
