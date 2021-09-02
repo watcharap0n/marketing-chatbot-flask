@@ -89,17 +89,17 @@ def customers_delete():
 @route_customer.route('/api/move/customer', methods=['POST'])
 @api.validate(resp=Response(HTTP_204=None, HTTP_403=None), tags=['customer'])
 def move_customers():
-    items = request.get_json(force=True)
+    items = request.get_json()
     selected = items['selected']
     for d in selected:
-        db.delete_one(collection='imports', query={'id': d['id']})
-    for v in items['selected']:
+        db.delete_one(collection=items['_import'], query={'id': d['id']})
+    for v in selected:
         _d = datetime.datetime.now()
         key = CutId(_id=ObjectId()).dict()['id']
         v['id'] = key
         v['date_insert'] = _d.strftime("%d/%m/%y")
         v['time_insert'] = _d.strftime("%H:%M:%S")
-    db.insert_many(collection=items['collection'], data=items)
+    db.insert_many(collection=items['collection'], data=items['selected'])
     res = {'message': 'success'}
     return jsonify(res)
 

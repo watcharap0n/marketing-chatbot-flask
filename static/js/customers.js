@@ -295,7 +295,6 @@ new Vue({
                 user.uid = res.data.uid
                 user.collection = res.data.collection
                 user._import = res.data._import
-                console.log(user)
             })
             .catch((err) => {
                 console.error(err)
@@ -502,6 +501,7 @@ new Vue({
                 let dict = {}
                 dict.selected = this.selected
                 dict.collection = this.userAuth.collection
+                dict._import = this.userAuth._import
                 await axios.post(path, dict)
                     .then(() => {
                         this.spinImport = false
