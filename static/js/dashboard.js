@@ -65,12 +65,14 @@ new Vue({
         count: [],
         categories: [],
         months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        products: ['Construction', 'RealEstate', 'Project Planning', 'Other'],
-        channels: ['LINE', 'GetDemo', 'Contact'],
+        products: [],
+        channels: [],
+        years: [2020, 2021],
         dialogChart: false,
         selectedChannel: '',
         selectedProduct: '',
         selectedMonth: '',
+        selectedYear: '',
         spinChart: true,
         spinTable: false,
 
@@ -124,6 +126,11 @@ new Vue({
         await this.initialize()
         await this.chartMonthly()
         await this.initializedChart()
+    },
+    watch:{
+        selectedYear(){
+            this.chartMonthly();
+        }
     },
     computed: {
         datetimeNow() {
@@ -207,44 +214,13 @@ new Vue({
                 })
         },
         async chartMonthly() {
-            const path = `/api/chart/monthly?collection=${this.userAuth.collection}`;
-            await axios.get(path)
+            const path = `/api/chart/monthly?collection=${this.userAuth.collection}&year=${this.selectedYear}`;
+            await axios.post(path, this.channels)
                 .then((res) => {
-                    let data = res.data
-                    let count1 = []
-                    let count2 = []
-                    let count3 = []
-                    let categories1 = []
-                    data[0].forEach((i) => {
-                        count1.push(i.count)
-                        categories1.push(`month ${i.month}`)
-                    })
-
-                    data[1].forEach((i) => {
-                        count2.push(i.count)
-                    })
-
-                    data[2].forEach((i) => {
-                        count3.push(i.count)
-                    })
-                    this.$refs.chart.updateSeries([
-                        {
-                            name: data[0][0].channel,
-                            data: count1
-                        },
-                        {
-                            name: data[1][0].channel,
-                            data: count2
-                        },
-                        {
-                            name: data[2][0].channel,
-                            data: count3
-                        },
-
-                    ])
+                    this.$refs.chart.updateSeries(res.data)
                     this.$refs.chart.updateOptions({
                         xaxis: {
-                            categories: categories1
+                            categories: res.data[0].categories
                         }
                     })
                 })
@@ -256,7 +232,8 @@ new Vue({
             this.spinChart = false
             let item = {
                 product: this.selectedProduct,
-                channel: this.selectedChannel
+                channel: this.selectedChannel,
+                year: this.selectedYear
             }
             const path = `/api/chart/productAndChannel?collection=${this.userAuth.collection}`;
             await axios.post(path, item)
@@ -285,6 +262,7 @@ new Vue({
                     })
                     this.selectedProduct = ''
                     this.selectedChannel = ''
+                    this.selectedYear = ''
                     this.spinChart = true
                     this.dialogChart = false
                 })
@@ -294,6 +272,7 @@ new Vue({
                     this.dialogChart = false
                     this.selectedProduct = ''
                     this.selectedChannel = ''
+                    this.selectedYear = ''
                 })
         },
         async conditionDay() {

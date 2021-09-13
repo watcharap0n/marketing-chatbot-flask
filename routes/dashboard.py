@@ -41,19 +41,41 @@ def chart():
     return jsonify(res)
 
 
-@route_dashboard.route('/api/chart/monthly')
+@route_dashboard.route('/api/chart/monthly', methods=['POST'])
 @api.validate(tags=['Chart'])
 def chart_monthly():
+    # CH = request.get_json(force=True)
     collection = request.args.get('collection')
+    year = 2021
+    arg_year = request.args.get('year')
+    if arg_year:
+        year = int(arg_year)
     module = DataColumnFilter(database=db, collection=collection)
     df = module.filter_datetime_time_of_day()
     CH = ['GetDemo', 'LINE', 'Contact']
-    lst = []
+    new_data = []
     for i in CH:
-        res = module.filter_of_chart(df=df, condition=True, of_monthly=True, year=2021, channel=i)
+        name = []
+        cate = []
+        data = []
+        new_dict = {}
+        res = module.filter_of_chart(df=df, condition=True, of_monthly=True, year=year, channel=i)
         res = res.to_dict('records')
-        lst.append(res)
-    return jsonify(lst)
+        for v in res:
+            v['name'] = v.pop('channel')
+            v['data'] = v.pop('count')
+            v['categories'] = v.pop('month')
+            name.append(v['name'])
+            cate.append(v['categories'])
+            data.append(v['data'])
+        try:
+            new_dict['name'] = name[0]
+        except IndexError:
+            new_dict['name'] = ''
+        new_dict['categories'] = cate
+        new_dict['data'] = data
+        new_data.append(new_dict)
+    return jsonify(new_data)
 
 
 @route_dashboard.route('/api/chart/productAndChannel', methods=['POST'])
@@ -64,6 +86,6 @@ def chart_product_and_channel():
     module = DataColumnFilter(database=db, collection=collection)
     df = module.filter_datetime_time_of_day()
     res = module.filter_of_chart(df=df, condition=True, of_months_products=True,
-                                 year=2021, channel=item['channel'], product=item['product'])
+                                 year=item['year'], channel=item['channel'], product=item['product'])
     res = res.to_dict('records')
     return jsonify(res)

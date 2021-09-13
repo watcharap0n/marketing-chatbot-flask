@@ -141,6 +141,15 @@
             max-width="520"
 
         >
+          <v-card-title>
+
+            <v-select
+                v-model="selectedYear"
+                :items="years"
+                label="ปี"
+            ></v-select>
+
+          </v-card-title>
           <v-card-text>
             <apexcharts ref="chart" width="500" height="420" type="bar" :options="chartOptions" :series="series">
             </apexcharts>
@@ -218,21 +227,28 @@
                         :series="seriesDay">
             </apexcharts>
             <v-row>
-              <v-col cols="4">
+              <v-col cols="3">
                 <v-select
                     v-model="selectedChannel"
                     :items="channels"
                     label="ผลิตภัณฑ์"
                 ></v-select>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="3">
                 <v-select
                     v-model="selectedMonth"
                     :items="months"
                     label="เดือน"
                 ></v-select>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="3">
+                <v-select
+                    v-model="selectedYear"
+                    :items="years"
+                    label="ปี"
+                ></v-select>
+              </v-col>
+              <v-col cols="3">
                 <v-btn color="success" @click="conditionDay" :loading="!spinChart">
                   ตกลง
                 </v-btn>
