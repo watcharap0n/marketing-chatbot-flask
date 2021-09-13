@@ -27,7 +27,26 @@ def chart_condition():
     res = module.filter_of_chart(df=df, year=2021, condition=True,
                                  month=item['month'], channel=item['channel'])
     res = res.to_dict('records')
-    return jsonify(res)
+    new_data = []
+    name = []
+    cate = []
+    data = []
+    new_dict = {}
+    for v in res:
+        v['name'] = v.pop('channel')
+        v['data'] = v.pop('count')
+        v['categories'] = v.pop('day')
+        name.append(v['name'])
+        cate.append(f'day {v["categories"]}')
+        data.append(v['data'])
+    try:
+        new_dict['name'] = name[0]
+    except IndexError:
+        new_dict['name'] = ''
+    new_dict['categories'] = cate
+    new_dict['data'] = data
+    new_data.append(new_dict)
+    return jsonify(new_data)
 
 
 @route_dashboard.route('/api/chart/initialized')
@@ -66,7 +85,7 @@ def chart_monthly():
             v['data'] = v.pop('count')
             v['categories'] = v.pop('month')
             name.append(v['name'])
-            cate.append(v['categories'])
+            cate.append(f'month {v["categories"]}')
             data.append(v['data'])
         try:
             new_dict['name'] = name[0]
@@ -86,6 +105,25 @@ def chart_product_and_channel():
     module = DataColumnFilter(database=db, collection=collection)
     df = module.filter_datetime_time_of_day()
     res = module.filter_of_chart(df=df, condition=True, of_months_products=True,
-                                 year=item['year'], channel=item['channel'], product=item['product'])
+                                 year=2021, channel=item['channel'], product=item['product'])
     res = res.to_dict('records')
-    return jsonify(res)
+    new_data = []
+    name = []
+    cate = []
+    data = []
+    new_dict = {}
+    for v in res:
+        v['name'] = v.pop('channel')
+        v['data'] = v.pop('count')
+        v['categories'] = v.pop('month')
+        name.append(v['name'])
+        cate.append(f'month {v["categories"]}')
+        data.append(v['data'])
+    try:
+        new_dict['name'] = name[0]
+    except IndexError:
+        new_dict['name'] = ''
+    new_dict['categories'] = cate
+    new_dict['data'] = data
+    new_data.append(new_dict)
+    return jsonify(new_data)

@@ -127,8 +127,8 @@ new Vue({
         await this.chartMonthly()
         await this.initializedChart()
     },
-    watch:{
-        selectedYear(){
+    watch: {
+        selectedYear() {
             this.chartMonthly();
         }
     },
@@ -233,28 +233,15 @@ new Vue({
             let item = {
                 product: this.selectedProduct,
                 channel: this.selectedChannel,
-                year: this.selectedYear
             }
             const path = `/api/chart/productAndChannel?collection=${this.userAuth.collection}`;
             await axios.post(path, item)
                 .then((res) => {
-                    this.count = []
-                    this.categories = []
-                    let data = res.data
                     console.log(res.data)
-                    data.forEach((i) => {
-                        this.count.push(i.count)
-                        this.categories.push(`month ${i.month}`)
-                    })
-                    this.$refs.chartInitialized.updateSeries([
-                        {
-                            name: `Channel ${data[0].channel} ,Product: ${data[0].product}`,
-                            data: this.count,
-                        },
-                    ])
+                    this.$refs.chartInitialized.updateSeries(res.data)
                     this.$refs.chartInitialized.updateOptions({
                         xaxis: {
-                            categories: this.categories
+                            categories: res.data[0].categories
                         },
                         dataLabels: {
                             enabled: false
@@ -285,22 +272,10 @@ new Vue({
             await axios.post(path, item)
                 .then((res) => {
                     console.log(res.data)
-                    let data = res.data
-                    let count = []
-                    let categories = []
-                    data.forEach((i) => {
-                        count.push(i.count)
-                        categories.push(`day ${i.day}`)
-                    })
-                    this.$refs.chartDay.updateSeries([
-                        {
-                            name: `Channel ${data[0].channel} Month ${data[0].month}`,
-                            data: count,
-                        },
-                    ])
+                    this.$refs.chartDay.updateSeries(res.data)
                     this.$refs.chartDay.updateOptions({
                         xaxis: {
-                            categories: categories
+                            categories: res.data[0].categories
                         },
                         dataLabels: {
                             enabled: false
