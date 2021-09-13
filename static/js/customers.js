@@ -37,6 +37,7 @@ new Vue({
         selectedList: 0,
         itemsAppbar: [
             {text: 'Mango', icon: 'mdi-database'},
+            {text: 'Dashboard', icon: 'mdi-monitor-dashboard'},
             {text: 'Intents', icon: 'mdi-account'},
         ],
 
@@ -867,6 +868,8 @@ new Vue({
                 window.location = '/'
             if (item.text === 'Intents')
                 window.location = '/intents'
+            if (item.text === 'Dashboard')
+                window.location = '/dashboard'
         },
 
         //copy

@@ -24,6 +24,7 @@ new Vue({
         selectedList: 1,
         itemsAppbar: [
             {text: 'Mango', icon: 'mdi-database'},
+            {text: 'Dashboard', icon: 'mdi-monitor-dashboard'},
             {text: 'Intents', icon: 'mdi-account'},
         ],
         userAuth: {
@@ -423,10 +424,13 @@ new Vue({
         },
 
         redirectPage(item) {
+            console.log(item)
             if (item.text === 'Mango')
                 window.location = '/'
             if (item.text === 'Intents')
                 window.location = '/intents'
+            if (item.text === 'Dashboard')
+                window.location = '/dashboard'
         },
     }
 })

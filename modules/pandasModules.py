@@ -6,6 +6,21 @@ from bson import ObjectId
 from config.object_str import CutId
 
 
+def f(x):
+    if (x > 4) and (x <= 8):
+        return 'Early Morning'
+    elif (x > 8) and (x <= 12):
+        return 'Morning'
+    elif (x > 12) and (x <= 16):
+        return 'Noon'
+    elif (x > 16) and (x <= 20):
+        return 'Eve'
+    elif (x > 20) and (x <= 24):
+        return 'Night'
+    elif (x <= 4):
+        return 'Late Night'
+
+
 class DataColumnFilter:
     """
     Example
@@ -73,6 +88,76 @@ class DataColumnFilter:
         dfs = dfs.reset_index()
         dfs.drop(['index'], axis=1)
         return dfs
+
+    def filter_datetime_time_of_day(self):
+        data = self.database.find(self.collection, {})
+        data = list(data)
+        df = pd.DataFrame(data)
+        df = df.drop(['_id', 'collection', 'year', 'month', 'english_day', 'day', 'index'], axis=1)
+        df = df.replace(np.nan, '', regex=True)
+        events = df.loc[df['channel'] == 'event Impact']
+        df.drop(events.index, inplace=True)
+        df = df.reset_index()[['channel', 'product', 'date', 'time']]
+        dfs = df.reset_index()[['date', 'time']]
+        dfs['date'] = pd.to_datetime(dfs['date'])
+        dfs['time'] = pd.to_datetime(dfs['time'], format='%H:%M:%S')
+        dfs['time'] = dfs['time'].dt.tz_localize('UTC').dt.tz_convert('Asia/Bangkok')
+        dfs['date'] = dfs['date'].dt.tz_localize('UTC').dt.tz_convert('Asia/Bangkok')
+        dfs['year'] = [dfs.iloc[i, 0].year for i in range(len(dfs))]
+        dfs['month'] = [dfs.iloc[i, 0].month for i in range(len(dfs))]
+        dfs['day'] = [dfs.iloc[i, 0].day for i in range(len(dfs))]
+        dfs['english_day'] = dfs.date.dt.strftime('%a')
+        dfs['hour'] = [dfs.iloc[i, 1].hour for i in range(len(dfs))]
+        dfs['min'] = [dfs.iloc[i, 1].minute for i in range(len(dfs))]
+        dfs['sec'] = [dfs.iloc[i, 1].second for i in range(len(dfs))]
+        dfs['time_of_day'] = dfs['hour'].apply(f)
+        x = dfs.merge(df[['channel', 'product']], left_index=True, right_index=True)
+        x = x.astype({
+            'month': 'category',
+            'day': 'category',
+            'english_day': 'category',
+            'hour': 'category',
+            'min': 'category',
+            'sec': 'category',
+            'time_of_day': 'category',
+        })
+        return x
+
+    @staticmethod
+    def filter_of_chart(df, condition=False, of_months_products=False,
+                        of_monthly=False, year=None, month=None,
+                        channel=None, product=None):
+        if condition:
+            if of_months_products:
+                new = df.groupby(['channel', 'month', 'year', 'product']).size()
+                count = new.reset_index()
+                count = count.rename(columns={0: 'count'})
+                year = count['year'] == year
+                channel = count['channel'] == channel
+                product = count['product'] == product
+                ym2 = year & channel & product
+                return count.loc[ym2]
+            elif of_monthly:
+                new = df.groupby(['channel', 'month', 'year']).size()
+                count = new.reset_index()
+                count = count.rename(columns={0: 'count'})
+                channel = count['channel'] == channel
+                year = count['year'] == year
+                ym2 = year & channel
+                return count.loc[ym2]
+            else:
+                new = df.groupby(['channel', 'month', 'year', 'day']).size()
+                count = new.reset_index()
+                count = count.rename(columns={0: 'count'})
+                year = count['year'] == year
+                month = count['month'] == month
+                channel = count['channel'] == channel
+                ym2 = year & month & channel
+                return count.loc[ym2]
+        new = df.groupby(['channel']).size()
+        count = new.reset_index()
+        count = count.rename(columns={0: 'count'})
+        return count
 
     @staticmethod
     def duplicated_email_tel(df):

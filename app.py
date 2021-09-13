@@ -10,7 +10,7 @@ github: watcharap0n
 from flask import Flask, jsonify, session, g, request
 from modules.swagger import api
 from routes import customers, imports, intents, tags, wh_client, secure, pages, questionnaires, wh_mango, ruleBased, \
-    wh_notify, api_cors
+    wh_notify, api_cors, dashboard
 from flask_cors import CORS
 from datetime import timedelta
 from modules.Invalidate import InvalidUsage
@@ -84,6 +84,10 @@ app.register_blueprint(
 )
 app.register_blueprint(
     wh_notify.notify
+)
+
+app.register_blueprint(
+    dashboard.route_dashboard
 )
 
 if __name__ == "__main__":

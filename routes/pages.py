@@ -20,6 +20,15 @@ def root_customers():
         return redirect(url_for('pages.root_signIn'))
 
 
+@page.route('/dashboard')
+@api.validate(tags=['Page'])
+def root_dashboard():
+    if g.user:
+        return render_template('public/dashboard.vue')
+    else:
+        return redirect(url_for('pages.root_signIn'))
+
+
 @page.route('/intents')
 @api.validate(tags=['Page'])
 def root_intents():
