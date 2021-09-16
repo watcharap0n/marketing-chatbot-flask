@@ -212,7 +212,12 @@ def handler_message_mango(event):
             """
             END ========================= FIX DEV NOT CONFIDENT =============================== 
             """
-            line_bot_api.reply_message(reply, TextSendMessage(text='ฉันไม่เข้าใจ'))
+            message_reply = "ขออภัยค่ะ\n\nหากท่านต้องการสอบถามข้อมูลโปรแกรม หรือต้องการนัดเพื่อให้ทีมงานนำเสนอข้อมูล " \
+                            "ท่านสามารถติดต่อเจ้าหน้าที่ ฝ่ายขายโทร. 063-565-4594 " \
+                            "ได้เลยค่ะ\n\nหรือกรณีที่ต้องการสอบถามการใช้งาน โปรแกรม หรือติดปัญหาการใช้งาน สามารถติดต่อผ่าน " \
+                            "Call Center 02-123-3900 ได้เลยค่ะ\n\nจะมีทีมงานผู้เชี่ยวชาญคอยให้คำปรึกษา เฉพาะด้านพร้อม " \
+                            "ระบบบันทึกเสียงและเก็บ บันทึกข้อมูลปัญหาของลูกค้าทันทีนะคะ "
+            line_bot_api.reply_message(reply, TextSendMessage(text=message_reply))
             message_user = save_message_question_reply(userId=userId, message=text, reply='บอทไม่เข้าใจ')
             db.insert_one(collection='message_user', data=message_user)
     elif check_keyword:
