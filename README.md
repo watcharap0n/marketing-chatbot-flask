@@ -48,13 +48,6 @@
 
 ![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/bot2.png?raw=true "Title")
 
-**Preview RulesBased**
-
-![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/bot1.png?raw=true "Title")
-
-**Preview RulesBased**
-
-
 **Preview CustomForm LINELIFF**
 
 ![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/line.png?raw=true "Title")
