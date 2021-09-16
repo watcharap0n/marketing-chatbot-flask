@@ -21,7 +21,7 @@ new Vue({
             },
         ],
         navigatorAppbar: false,
-        selectedList: 1,
+        selectedList: 2,
         itemsAppbar: [
             {text: 'Mango', icon: 'mdi-database'},
             {text: 'Dashboard', icon: 'mdi-monitor-dashboard'},

@@ -36,7 +36,7 @@
       
 **Preview Dashboard**
 
-![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/pewview_dashboard.png?raw=true "Title")
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/preview_dashboard.png?raw=true "Title")
 
 **Preview Intents**
 
