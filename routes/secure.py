@@ -60,7 +60,7 @@ def login():
                 expires_token = 60 * 60 * 1
                 expires_remember = 60 * 60 * 24 * 5
                 auth_cookie = auth.create_session_cookie(id_token=user['idToken'], expires_in=timedelta(hours=1))
-                content = {'url': '/', 'status': True, 'detail': 'login success'}
+                content = {'url': '/', 'status': True, 'detail': 'login success', 'user': user}
                 response = make_response(content)
                 response.set_cookie('hash_email', email, max_age=expires_remember)
                 response.set_cookie('hash_password', password, max_age=expires_remember)
@@ -80,7 +80,7 @@ def login():
             else:
                 expires_token = 60 * 60 * 1
                 auth_cookie = auth.create_session_cookie(id_token=user['idToken'], expires_in=timedelta(hours=1))
-                content = {'url': '/', 'status': True, 'detail': 'login success'}
+                content = {'url': '/', 'status': True, 'detail': 'login success', 'user': user}
                 response = make_response(content)
                 response.set_cookie(key='access_token', value=str(auth_cookie), max_age=expires_token)
                 flash('You were successfully logged in')
@@ -99,24 +99,23 @@ def login():
             return {'status': False, 'detail': 'email verification'}
     except:
         raise InvalidUsage(message='your register already exists', status_code=400,
-                           payload={'error': True})
+                           payload={'status': False})
 
 
 @secure.route('/secure/read')
 @api.validate(tags=['Secure'])
 def read():
-    if g.user:
-        try:
-            access_token = request.cookies.get('access_token')
-            check = auth.verify_session_cookie(access_token)
-            auth.revoke_refresh_tokens(check['sub'])
-            check['collection'] = session['collection']
-            check['_import'] = session['_import']
-            return jsonify(check)
-        except auth.InvalidSessionCookieError:
-            raise InvalidUsage(message='auth Invalid SessionCookie Error', status_code=403)
-        except:
-            raise InvalidUsage(message='Something Wrong!', status_code=403)
+    try:
+        access_token = request.cookies.get('access_token')
+        check = auth.verify_session_cookie(access_token)
+        auth.revoke_refresh_tokens(check['sub'])
+        check['collection'] = session['collection']
+        check['_import'] = session['_import']
+        return jsonify(check)
+    except auth.InvalidSessionCookieError:
+        raise InvalidUsage(message='auth Invalid SessionCookie Error', status_code=403)
+    except:
+        raise InvalidUsage(message='you not authentication!', status_code=403)
 
 
 @secure.route('/secure/cookie_login')

@@ -181,14 +181,12 @@ class DataColumnFilter:
             dfs = dfs.loc[dfs['channel'] == self.channel]
             dfs['date'] = dfs['date'].dt.strftime('%d/%m/%Y')
             dfs = dfs.replace(np.nan, '', regex=True)
-            print('channel')
             return dfs
 
         elif self.product and not self.channel and not self.before_end_date and not self.tag:
             dfs = dfs.loc[dfs['product'] == self.product]
             dfs['date'] = dfs['date'].dt.strftime('%d/%m/%Y')
             dfs = dfs.replace(np.nan, '', regex=True)
-            print('product')
             return dfs
 
         elif self.tag and not self.channel and not self.before_end_date and not self.product:
@@ -203,7 +201,6 @@ class DataColumnFilter:
             dfs = dfs[dfs['tag'].apply(lambda x: x == self.tag)]
             dfs['date'] = dfs['date'].dt.strftime('%d/%m/%Y')
             dfs = dfs.replace(np.nan, '', regex=True)
-            print('product and channel and tag')
             return dfs
 
         elif self.product and self.channel:
@@ -211,7 +208,6 @@ class DataColumnFilter:
             dfs = dfs.loc[dfs['product'] == self.product]
             dfs['date'] = dfs['date'].dt.strftime('%d/%m/%Y')
             dfs = dfs.replace(np.nan, '', regex=True)
-            print('product and channel')
             return dfs
 
         elif self.product and self.tag:
@@ -219,7 +215,6 @@ class DataColumnFilter:
             dfs = dfs[dfs['tag'].apply(lambda x: x == self.tag)]
             dfs['date'] = dfs['date'].dt.strftime('%d/%m/%Y')
             dfs = dfs.replace(np.nan, '', regex=True)
-            print('product and tag')
             return dfs
 
         elif self.channel and self.tag:
@@ -227,7 +222,6 @@ class DataColumnFilter:
             dfs = dfs[dfs['tag'].apply(lambda x: x == self.tag)]
             dfs['date'] = dfs['date'].dt.strftime('%d/%m/%Y')
             dfs = dfs.replace(np.nan, '', regex=True)
-            print('channel and tag')
             return dfs
 
         elif self.before_end_date and self.channel:

@@ -7,7 +7,7 @@ github: watcharap0n
 
 """
 
-from flask import Flask, jsonify, session, g, request
+from flask import Flask, jsonify, session, g, request, current_app, render_template
 from modules.swagger import api
 from routes import customers, imports, intents, tags, wh_client, secure, pages, questionnaires, wh_mango, ruleBased, \
     wh_notify, api_cors, dashboard
@@ -15,6 +15,7 @@ from flask_cors import CORS
 from datetime import timedelta
 from modules.Invalidate import InvalidUsage
 from routes.secure import auth
+import os
 
 app = Flask(__name__)
 
@@ -29,8 +30,16 @@ def handle_invalid_usage(error):
     return response
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+    current_app.logger.error("Page not found: %s", (request.path, error))
+    return render_template("error_handle/404.html"), 404
+
+
 @app.before_request
 def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=60)
     try:
         access_token = request.cookies.get('access_token')
         check = auth.verify_session_cookie(access_token)
@@ -43,10 +52,9 @@ def before_request():
         g.user = None
 
 
-@app.before_request
-def make_session_permanent():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=60)
+@app.after_request
+def after_request_func(response):
+    return response
 
 
 app.register_blueprint(
@@ -85,11 +93,10 @@ app.register_blueprint(
 app.register_blueprint(
     wh_notify.notify
 )
-
 app.register_blueprint(
     dashboard.route_dashboard
 )
-
 if __name__ == "__main__":
+    PORT = int(os.environ.get('PORT', 7000))
     api.register(app)  # if you don't register in api init step
-    app.run(port=7000, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True, use_reloader=True,)
