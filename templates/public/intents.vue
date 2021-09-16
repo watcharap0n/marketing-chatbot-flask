@@ -117,7 +117,7 @@
 
         <div :hidden="!showIntent">
 
-          <v-card >
+          <v-card>
             <v-card-title dark
                           style="background: linear-gradient(to right, #7C4DFF, #304FFE, #448AFF);">
               <v-icon dark>
@@ -297,6 +297,7 @@
                   <v-card
                       class="pt-6 mx-auto"
                       flat
+                      max-width="650"
                   >
                     <v-card-text>
                       <div class="mb-2">

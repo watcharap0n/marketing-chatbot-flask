@@ -115,6 +115,7 @@
         <v-card
             class="pt-6 mx-auto"
             flat
+              max-width="650"
         >
           <v-card-text>
             <div class="mb-2">

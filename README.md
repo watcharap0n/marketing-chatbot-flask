@@ -34,6 +34,17 @@
     - firebase_admin
     - pyrebase4
       
+**Preview Dashboard**
+
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/pewview_dashboard.png?raw=true "Title")
+
+**Preview Intents**
+
+
+**Preview RulesBased**
+
+
+
 **Structure Coding**
 
 ```bash

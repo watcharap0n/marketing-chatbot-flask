@@ -109,6 +109,7 @@
         <v-card
             class="mx-auto overflow-y-auto"
             flat
+              max-width="650"
         >
           <v-card-text>
             <div class="mb-2">
