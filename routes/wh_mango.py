@@ -81,13 +81,6 @@ def webhookMango():
                 message_type = events['message']['type']
                 if message_type == 'text':
                     try:
-                        userId = events['source']['userId']
-                        message = events['message']['text']
-                        profile = get_profile_mango(userId)
-                        push_message = {'user_id': userId, 'message': message, 'display_name': profile['displayName'],
-                                        'img': profile['img'],
-                                        'status': profile['status'], 'access_token': mango_channel}
-                        db.insert_one(collection='message_user', data=push_message)
                         handler.handle(body, signature)
                     except InvalidSignatureError as v:
                         api_error = {'status_code': v.status_code, 'message': v.message}
@@ -136,6 +129,14 @@ def flex_mango(alt_text: str, contents: dict):
         contents=contents
     )
     return flex_custom
+
+
+def save_message_question_reply(userId, message, reply):
+    profile = get_profile_mango(userId)
+    push_message = {'user_id': userId, 'message': message, 'display_name': profile['displayName'],
+                    'img': profile['img'], 'reply': reply,
+                    'status': profile['status'], 'access_token': mango_channel}
+    return push_message
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -188,15 +189,20 @@ def handler_message_mango(event):
 
             if text == 'ขอข้อมูลผลิตภัณฑ์':
                 line_bot_api.reply_message(reply, card.mango_products())
+                message_user = save_message_question_reply(userId=userId, message=text, reply='Image card')
+                db.insert_one(collection='message_user', data=message_user)
 
             if type:
                 contents = json.loads(contents)
                 flex_custom = flex_mango(alt_text=intent_name, contents=contents)
                 line_bot_api.reply_message(reply, flex_custom)
+                message_user = save_message_question_reply(userId=userId, message=text, reply='Flex message Intent')
+                db.insert_one(collection='message_user', data=message_user)
             elif not type:
                 choice = random.choice(choice_answers[label])
                 line_bot_api.reply_message(reply, TextSendMessage(text=choice))
-
+                message_user = save_message_question_reply(userId=userId, message=text, reply=choice)
+                db.insert_one(collection='message_user', data=message_user)
         else:
 
             """
@@ -207,6 +213,8 @@ def handler_message_mango(event):
             END ========================= FIX DEV NOT CONFIDENT =============================== 
             """
             line_bot_api.reply_message(reply, TextSendMessage(text='ฉันไม่เข้าใจ'))
+            message_user = save_message_question_reply(userId=userId, message=text, reply='บอทไม่เข้าใจ')
+            db.insert_one(collection='message_user', data=message_user)
     elif check_keyword:
         alt_text = check_keyword['name']
         contents = check_keyword['contents']
@@ -215,5 +223,9 @@ def handler_message_mango(event):
             contents = json.loads(contents)
             flex_custom = flex_mango(alt_text=alt_text, contents=contents)
             line_bot_api.reply_message(reply, flex_custom)
+            message_user = save_message_question_reply(userId=userId, message=text, reply='Flex message Keyword')
+            db.insert_one(collection='message_user', data=message_user)
         elif not status:
             line_bot_api.reply_message(reply, TextSendMessage(text=contents))
+            message_user = save_message_question_reply(userId=userId, message=text, reply=contents)
+            db.insert_one(collection='message_user', data=message_user)
