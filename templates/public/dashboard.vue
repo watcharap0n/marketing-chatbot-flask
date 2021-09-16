@@ -151,7 +151,7 @@
 
           </v-card-title>
           <v-card-text>
-            <apexcharts ref="chart" width="500" height="420" type="bar" :options="chartOptions" :series="series">
+            <apexcharts ref="chart" width="500" height="350" type="bar" :options="chartOptions" :series="series">
             </apexcharts>
           </v-card-text>
         </v-card>
