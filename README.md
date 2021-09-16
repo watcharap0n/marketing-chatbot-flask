@@ -52,6 +52,10 @@
 
 ![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/line.png?raw=true "Title")
 
+**Preview Use Case**
+
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/3064.jpg?raw=true "Title")
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/3065.jpg?raw=true "Title")
 
 **Structure Coding**
 
