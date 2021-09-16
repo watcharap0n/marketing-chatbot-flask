@@ -10,3 +10,4 @@ __pycache__
 test_coding.ipynb
 node_modules
 package-lock.json
+static/uploads/word.png

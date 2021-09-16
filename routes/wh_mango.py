@@ -192,17 +192,24 @@ def handler_message_mango(event):
                 message_user = save_message_question_reply(userId=userId, message=text, reply='Image card')
                 db.insert_one(collection='message_user', data=message_user)
 
-            if type:
-                contents = json.loads(contents)
-                flex_custom = flex_mango(alt_text=intent_name, contents=contents)
-                line_bot_api.reply_message(reply, flex_custom)
-                message_user = save_message_question_reply(userId=userId, message=text, reply='Flex message Intent')
-                db.insert_one(collection='message_user', data=message_user)
-            elif not type:
-                choice = random.choice(choice_answers[label])
-                line_bot_api.reply_message(reply, TextSendMessage(text=choice))
-                message_user = save_message_question_reply(userId=userId, message=text, reply=choice)
-                db.insert_one(collection='message_user', data=message_user)
+            check_quick_reply = db.find_one(collection='quick_reply', query={'quick_name': intent_name})
+            if check_quick_reply:
+                labels = check_quick_reply['labels']
+                texts = check_quick_reply['texts']
+                reply_message = check_quick_reply['reply']
+                quick_reply_custom(userId, reply_message, labels, texts)
+            elif not check_quick_reply:
+                if type:
+                    contents = json.loads(contents)
+                    flex_custom = flex_mango(alt_text=intent_name, contents=contents)
+                    line_bot_api.reply_message(reply, flex_custom)
+                    message_user = save_message_question_reply(userId=userId, message=text, reply='Flex message Intent')
+                    db.insert_one(collection='message_user', data=message_user)
+                elif not type:
+                    choice = random.choice(choice_answers[label])
+                    line_bot_api.reply_message(reply, TextSendMessage(text=choice))
+                    message_user = save_message_question_reply(userId=userId, message=text, reply=choice)
+                    db.insert_one(collection='message_user', data=message_user)
         else:
 
             """

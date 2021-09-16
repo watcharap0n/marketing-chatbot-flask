@@ -30,7 +30,7 @@
       <v-card>
 
         <v-toolbar flat
-                   style="background: linear-gradient(90deg, rgba(252,117,149,1) 0%, rgba(255,16,117,1) 77%, rgba(255,67,118,1) 100%);"
+                   color="success"
                    dark>
           ชื่อ Rule Based
         </v-toolbar>
@@ -101,7 +101,7 @@
     <v-divider vertical></v-divider>
 
     <v-col
-        class="d-flex text-center"
+        class="text-center"
     >
       <v-scroll-y-transition mode="out-in">
         <div
@@ -115,7 +115,6 @@
         <v-card
             class="pt-6 mx-auto"
             flat
-            max-width="400"
         >
           <v-card-text>
             <div class="mb-2">
@@ -125,7 +124,6 @@
               </h3>
 
               <div v-if="!selectedRuleBased">
-                <h2>No Data</h2>
               </div>
               <div v-else>
                 <v-text-field
@@ -141,7 +139,6 @@
 
 
               <div v-if="!selectedRuleBased">
-                <h2>No Data</h2>
               </div>
 
             </div>
@@ -157,7 +154,6 @@
                 tag="v-card-text"
             >
               <div v-if="!selectedRuleBased">
-                <h2>No Data</h2>
               </div>
               <v-textarea
                   v-else
@@ -169,20 +165,17 @@
               ></v-textarea>
 
               <div v-if="!selectedRuleBased">
-                <h2>No Data</h2>
-              </div>
-              <v-checkbox
-                  v-else
-                  color="red"
-                  v-model="selectedRuleBased.status"
-                  label="Flex Message"
-              ></v-checkbox>
-
-              <div v-if="!selectedRuleBased">
-                <h2>No Data</h2>
               </div>
             </v-row>
 
+            <div v-if="!selectedRuleBased">
+            </div>
+            <v-checkbox
+                v-else
+                color="red"
+                v-model="selectedRuleBased.status"
+                label="Flex Message"
+            ></v-checkbox>
             <div>
               <strong>คุณสามารถไปออกแบบ Flex message ได้ที่ </strong> : <strong><a target="_blank"
                                                                                    href="https://developers.line.biz/flex-simulator">

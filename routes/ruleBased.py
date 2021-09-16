@@ -76,3 +76,49 @@ def delete_intent(id):
     db.delete_one(collection=collection, query={'id': id})
     res = {'message': 'success'}
     return jsonify(res)
+
+
+@rule_base.route('/quick_reply/get_intents')
+def get_quick_intent():
+    data = db.find(collection='intents', query={'access_token': mango_channel, 'type': False})
+    data = list(data)
+    for v in data:
+        del v['_id']
+    return jsonify(data)
+
+
+@rule_base.route('/quick_reply/get', methods=['POST'])
+def get_quick_reply():
+    data = db.find(collection='quick_reply', query={'access_token': mango_channel})
+    data = list(data)
+    for v in data:
+        del v['_id']
+    return jsonify(data)
+
+
+@rule_base.route('/quick_reply/create', methods=['POST'])
+def create_quick_reply():
+    item = request.get_json(force=True)
+    key = CutId(_id=ObjectId()).dict()['id']
+    item['access_token'] = mango_channel
+    item['id'] = key
+    db.insert_one(collection='quick_reply', data=item)
+    del item['_id']
+    return jsonify(item)
+
+
+@rule_base.route('/quick_reply/update/<string:id>', methods=['PUT'])
+def update_quick_reply(id):
+    item = request.get_json()
+    query = {'id': id}
+    values = {'$set': item}
+    db.update_one(collection='quick_reply', query=query, values=values)
+    res = {'message': 'success', 'status': True}
+    return jsonify(res)
+
+
+@rule_base.route('/quick_reply/delete/<string:id>', methods=['DELETE'])
+def delete_quick_reply(id):
+    db.delete_one(collection='quick_reply', query={'id': id})
+    res = {'message': 'success'}
+    return jsonify(res)

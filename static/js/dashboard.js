@@ -105,7 +105,9 @@ new Vue({
             },
 
         ],
-        transaction: []
+        transaction: [],
+        wordCloud: '',
+        spinImage: false,
     },
     async mounted() {
         const path = '/secure/read'
@@ -126,6 +128,7 @@ new Vue({
         await this.initialize()
         await this.chartMonthly()
         await this.initializedChart()
+        await this.getWordCloud()
     },
     watch: {
         selectedYear() {
@@ -289,6 +292,19 @@ new Vue({
                     this.selectedChannel = ''
                     this.selectedMonth = ''
                     this.spinChart = true
+                    console.error(err)
+                })
+        },
+        async getWordCloud() {
+
+            const path = '/api/chart/wordCloud'
+            await axios.get(path)
+                .then((res) => {
+                    console.log('success')
+                    this.wordCloud = '/static/uploads/word.png'
+                    this.spinImage = true
+                })
+                .catch((err) => {
                     console.error(err)
                 })
         },

@@ -4,6 +4,12 @@ from modules.swagger import api
 from config.db import MongoDB
 from modules.pandasModules import DataColumnFilter
 from environ.client_environ import MONGODB_URI
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+from wordcloud import WordCloud
+from pythainlp.tokenize import word_tokenize
+import pandas as pd
 
 route_dashboard = Blueprint('dashboard', __name__, template_folder='templates')
 
@@ -127,3 +133,49 @@ def chart_product_and_channel():
     new_dict['data'] = data
     new_data.append(new_dict)
     return jsonify(new_data)
+
+
+@route_dashboard.route('/api/chart/wordCloud')
+@api.validate(tags=['Chart'])
+def chart_wordCloud():
+    data = db.find(collection='message_user', query={})
+    data = list(data)
+    texts = [x['message'] for x in data]
+    regexp = r"[ก-๙a-zA-Z']+"
+    vectorized = CountVectorizer(tokenizer=word_tokenize)
+    df = pd.DataFrame(columns=['name', 'count'])
+    transform_data = vectorized.fit_transform(texts)
+    count = np.ravel(transform_data.sum(axis=0))
+    vector_name = vectorized.get_feature_names()
+    df['count'] = count
+    df['name'] = vector_name
+    data = df.sort_values(by=['count'], ascending=False)
+    data = data.drop(0)
+    data.plot(kind='bar', figsize=(12, 6))
+    word_dict = {}
+    for i in range(1, len(data)):
+        word_dict[data.name[i]] = data['count'][i]
+    font_path = 'static/tools/THSarabunNew.ttf'
+    wordcloud = WordCloud(
+        font_path=font_path,
+        relative_scaling=0.3,
+        min_font_size=1,
+        background_color="white",
+        width=1024,
+        height=768,
+        max_words=2000,
+        colormap='plasma',
+        scale=3,
+        font_step=4,
+        #   contour_width=3,
+        #   contour_color='steelblue',
+        collocations=False,
+        regexp=regexp,
+        margin=2
+    ).fit_words(word_dict)
+    fig, ax = plt.subplots(1, 1, figsize=(16, 12))
+    ax.imshow(wordcloud, interpolation='bilinear')
+    ax.axis("off")
+    fig.savefig('static/uploads/word.png')
+    plt.close(fig)
+    return send_file('static/uploads/word.png', mimetype='image/gif')

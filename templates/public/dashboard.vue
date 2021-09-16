@@ -135,26 +135,19 @@
         </v-card>
       </v-col>
       <v-col cols="4">
-        <v-card
-            elevation="2"
-            class="mx-auto overflow-y-auto"
-            max-width="520"
-
-        >
-          <v-card-title>
-
-            <v-select
-                v-model="selectedYear"
-                :items="years"
-                label="ปี"
-            ></v-select>
-
-          </v-card-title>
-          <v-card-text>
-            <apexcharts ref="chart" width="500" height="350" type="bar" :options="chartOptions" :series="series">
-            </apexcharts>
-          </v-card-text>
-        </v-card>
+        <div class="text-center" v-if="!spinImage">
+          <h2> กำลังสกัด features... </h2>
+          <v-progress-circular
+              :size="70"
+              :width="7"
+              color="amber"
+              indeterminate
+          ></v-progress-circular>
+        </div>
+        <v-img
+            height="450"
+            :src="wordCloud"
+        ></v-img>
       </v-col>
     </v-row>
     <br>
@@ -217,7 +210,29 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="8">
+      <v-col cols="4">
+        <v-card
+            elevation="2"
+            class="mx-auto overflow-y-auto"
+            max-width="520"
+
+        >
+          <v-card-title>
+
+            <v-select
+                v-model="selectedYear"
+                :items="years"
+                label="ปี"
+            ></v-select>
+
+          </v-card-title>
+          <v-card-text>
+            <apexcharts ref="chart" width="500" height="300" type="bar" :options="chartOptions" :series="series">
+            </apexcharts>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="4">
         <v-card
             elevation="2"
             class="mx-auto overflow-y-auto"

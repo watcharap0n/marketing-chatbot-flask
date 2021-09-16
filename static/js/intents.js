@@ -56,6 +56,10 @@ new Vue({
             {
                 icon: 'mdi-chat-alert',
                 text: 'RuleBased',
+            },
+            {
+                icon: 'mdi-android-messages',
+                text: 'QuickReply'
             }
         ],
         modelList: 0,
@@ -63,6 +67,7 @@ new Vue({
         showIntent: false,
         showBotMango: false,
         showRuleBased: false,
+        showQuickReply: false,
 
         spinAuth: false,
         hasSaved: false,
@@ -116,8 +121,28 @@ new Vue({
         timeout: 2000,
         dialogRuleBased: false,
         dialogDeleteRuleBased: false,
+        dialogQuickReply: false,
         checkbox: true,
         colorSnackbar: '',
+
+        // quick reply
+        dialogDeleteQuick: false,
+        choice_intents: [],
+        user_quick: [],
+        active_quick: [],
+        open_quick: [],
+        hiddenQuickReply: false,
+        textQuick: '',
+        labelQuick: '',
+        quickData: {
+            id: '',
+            name: '',
+            texts: [],
+            labels: [],
+            reply: '',
+            quick_name: '',
+            access_token: '',
+        }
 
     },
     delimiters: ["[[", "]]"],
@@ -156,6 +181,14 @@ new Vue({
                 }
             ]
         },
+        itemQuickReply() {
+            return [
+                {
+                    name: 'Quick Reply',
+                    children: this.user_quick
+                }
+            ]
+        },
         selectedIntent() {
             if (!this.active.length) return undefined
             const id = this.active[0]
@@ -165,7 +198,12 @@ new Vue({
             if (!this.active_r.length) return undefined
             const id = this.active_r[0]
             return this.user_r.find(user => user.id === id)
-        }
+        },
+        selectedQuickReply() {
+            if (!this.active_quick.length) return undefined
+            const id = this.active_quick[0]
+            return this.user_quick.find(user => user.id === id)
+        },
     },
     methods: {
         saveWebhook() {
@@ -196,6 +234,110 @@ new Vue({
             this.dialogAcesstoken = false
             this.treeHidden = true
         },
+        async quickReply(item) {
+            const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
+            await pause(1500)
+            if (this.showQuickReply === true) {
+                return this.getQuickReply(null, item)
+            }
+        },
+
+        getQuickReply(data, item) {
+            const path = `quick_reply/get`
+            return axios.post(path, data)
+                .then((res) => {
+                    item.children.push(...res.data)
+                    this.hiddenQuickReply = true
+                    let path = 'quick_reply/get_intents'
+                    axios.get(path)
+                        .then((res) => {
+                            res.data.forEach((val) => {
+                                this.choice_intents.push(val.name)
+                            })
+                        })
+                        .catch((err) => {
+                            console.error(err)
+                        })
+                })
+                .catch((err) => console.error(err))
+        },
+        createQuickReply() {
+            this.spinIntent = false
+            this.addQuickReply(this.quickData)
+        },
+
+        addQuickReply(data) {
+            const path = `/quick_reply/create`
+            axios.post(path, data)
+                .then((res) => {
+                    Object.assign(this.quickData, {})
+                    this.spinIntent = true
+                    this.user_quick.push(res.data)
+                    this.dialogQuickReply = false
+                })
+                .catch((err) => {
+                    Object.assign(this.quickData, {})
+                    this.spinIntent = true
+                    this.dialogQuickReply = false
+                    console.error(err)
+                })
+        },
+        async sendQuickReply() {
+            this.spinIntent = false
+            this.selectedQuickReply.texts.push(this.textQuick)
+            await this.putQuickReply()
+            this.textQuick = ''
+            this.spinIntent = true
+        },
+        async removeQuickReply(item) {
+            this.spinIntent = false
+            this.selectedQuickReply.texts.splice(this.selectedQuickReply.texts.indexOf(item), 1)
+            await this.putQuickReply()
+            this.spinIntent = true
+        },
+        async sendLabelQuick() {
+            this.spinIntent = false
+            this.selectedQuickReply.labels.push(this.labelQuick)
+            await this.putQuickReply()
+            this.labelQuick = ''
+            this.spinIntent = true
+        },
+        async removeLabelQuick(item) {
+            this.spinIntent = false
+            this.selectedQuickReply.labels.splice(this.selectedQuickReply.labels.indexOf(item), 1)
+            await this.putQuickReply()
+            this.spinIntent = true
+        },
+
+        async putQuickReply() {
+            const path = `quick_reply/update/${this.selectedQuickReply.id}`
+            await axios.put(path, this.selectedQuickReply)
+                .then((res) => {
+                    console.log(res.data)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        deleteQuickReply(item) {
+            this.spinIntent = false
+            const path = `/quick_reply/delete/${item.id}`
+            axios.delete(path)
+                .then((res) => {
+                    this.active_quick = []
+                    this.user_quick.splice(this.user_quick.indexOf(item), 1)
+                    this.dialogDeleteQuick = false
+                    this.spinIntent = true
+                })
+                .catch((err) => {
+                    console.error(err)
+                    this.active_quick = []
+                    this.dialogDeleteQuick = false
+                    this.spinIntent = true
+                })
+
+        },
+
         async ruleBased(item) {
             const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
             await pause(1500)
@@ -399,6 +541,7 @@ new Vue({
                 this.showWebhook = true
                 this.showBotMango = false
                 this.showRuleBased = false
+                this.showQuickReply = false
             } else if (data === 'สอนบอทด้วยไลน์อื่น') {
                 this.nameAccestoken = ''
                 this.mangoAccess = ''
@@ -406,6 +549,7 @@ new Vue({
                 this.showIntent = true
                 this.showBotMango = false
                 this.showRuleBased = false
+                this.showQuickReply = false
             } else if (data === 'สอนบอทแมงโก้') {
                 this.nameAccestoken = ''
                 this.mangoAccess = 'mango'
@@ -413,6 +557,7 @@ new Vue({
                 this.showIntent = false
                 this.showBotMango = true
                 this.showRuleBased = false
+                this.showQuickReply = false
             } else if (data === 'RuleBased') {
                 this.nameAccestoken = ''
                 this.mangoAccess = 'mango'
@@ -420,6 +565,15 @@ new Vue({
                 this.showIntent = false
                 this.showBotMango = false
                 this.showRuleBased = true
+                this.showQuickReply = false
+            } else if (data === 'QuickReply') {
+                this.nameAccestoken = ''
+                this.mangoAccess = 'mango'
+                this.showWebhook = false
+                this.showIntent = false
+                this.showBotMango = false
+                this.showRuleBased = false
+                this.showQuickReply = true
             }
         },
 

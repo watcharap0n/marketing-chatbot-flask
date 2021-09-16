@@ -283,7 +283,7 @@
               <v-divider vertical></v-divider>
 
               <v-col
-                  class="d-flex text-center"
+                  class="text-center"
               >
                 <v-scroll-y-transition mode="out-in">
                   <div
@@ -297,7 +297,6 @@
                   <v-card
                       class="pt-6 mx-auto"
                       flat
-                      max-width="400"
                   >
                     <v-card-text>
                       <div class="mb-2">
@@ -321,7 +320,6 @@
 
 
                         <div v-if="!selectedIntent">
-                          <h2>No Data</h2>
                         </div>
                         <v-combobox
                             v-else
@@ -353,7 +351,6 @@
                         คำตอบ (สิ่งที่ให้บอทตอบ)
                       </h3>
                       <div v-if="!selectedIntent">
-                        <h2>No Data</h2>
                       </div>
                       <v-switch
                           v-else
@@ -363,7 +360,6 @@
                       ></v-switch>
 
                       <div v-if="!selectedIntent">
-                        <h2>No Data</h2>
                       </div>
                       <v-row
                           v-else
@@ -386,7 +382,6 @@
 
 
                         <div v-if="!selectedIntent">
-                          <h2>No Data</h2>
                         </div>
                         <v-combobox
                             v-else
@@ -410,7 +405,6 @@
                       </v-row>
 
                       <div v-if="!selectedIntent">
-                        <h2>No Data</h2>
                       </div>
                       <v-row
                           v-else
@@ -419,7 +413,6 @@
                           tag="v-card-text"
                       >
                         <div v-if="!selectedIntent">
-                          <h2>No Data</h2>
                         </div>
                         <v-textarea
                             v-else
@@ -500,6 +493,10 @@
 
         <div :hidden="!showRuleBased">
           {% include 'public/extends/intents/ruleBased.vue' %}
+        </div>
+
+        <div :hidden="!showQuickReply">
+          {% include 'public/extends/intents/quickReply.vue' %}
         </div>
       </v-col>
     </v-row>
