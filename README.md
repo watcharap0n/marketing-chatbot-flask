@@ -1,4 +1,4 @@
-# CHATBOT Multiple Channel Flask
+# CHATBOT Multiple Channel Flask Fullstack
 
 `What Flask?`
 
@@ -16,7 +16,9 @@
     - Flask-RESTPlus and Swagger UI
     - LINE Official
     - LINE Developer
+    - LINELIFF LINELOGIN
     - Facebook Developer
+    - Facebook FacebookLOGIN
     - API From Public WEB Mango Consultant 
     - Concept Design Patterns (MVC)
 
@@ -33,16 +35,29 @@
     - pymongo
     - firebase_admin
     - pyrebase4
-      
+
+**Preview APIs**
+
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/api.png?raw=true "Title")
+
 **Preview Dashboard**
 
 ![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/preview_dashboard.png?raw=true "Title")
 
 **Preview Intents**
 
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/bot2.png?raw=true "Title")
 
 **Preview RulesBased**
 
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/bot1.png?raw=true "Title")
+
+**Preview RulesBased**
+
+
+**Preview CustomForm LINELIFF**
+
+![Alt text](https://github.com/watcharap0n/ChatbotMultiple-Flask/blob/main/static/github/line.png?raw=true "Title")
 
 
 **Structure Coding**
@@ -152,6 +167,7 @@ $ (venv) pip install -r requirements.txt
 ~~~~
 
 MAC requirement
+
 ~~~~
 $ brew tap mongodb/brew
 $ brew install mongodb-community@4.4
