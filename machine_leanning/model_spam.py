@@ -2,14 +2,14 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 import pandas as pd
-from pythainlp.tokenize import word_tokenize
+from attacut import tokenize
 
 
 def model_spam(text):
     df = pd.read_excel('machine_leanning/datasets_spam.xlsx')
     df = df.drop('Unnamed: 0', axis=1)
     df = df.replace(np.nan, '', regex=True)
-    vectorizer = CountVectorizer(tokenizer=word_tokenize)
+    vectorizer = CountVectorizer(tokenizer=tokenize)
     vectorize_message = vectorizer.fit_transform(df['message'].values)
     vectorizer.get_feature_names()
     classifier = MultinomialNB()
@@ -20,5 +20,3 @@ def model_spam(text):
     predictions = classifier.predict(example_counts)
     print(predictions)
     return list(predictions)
-
-

@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from wordcloud import WordCloud
-from pythainlp.tokenize import word_tokenize
+from attacut import tokenize
 import pandas as pd
 
 route_dashboard = Blueprint('dashboard', __name__, template_folder='templates')
@@ -142,7 +142,7 @@ def chart_wordCloud():
     data = list(data)
     texts = [x['message'] for x in data]
     regexp = r"[ก-๙a-zA-Z']+"
-    vectorized = CountVectorizer(tokenizer=word_tokenize)
+    vectorized = CountVectorizer(tokenizer=tokenize)
     df = pd.DataFrame(columns=['name', 'count'])
     transform_data = vectorized.fit_transform(texts)
     count = np.ravel(transform_data.sum(axis=0))
