@@ -9,6 +9,7 @@ from config.db import MongoDB
 from features_line.flex_message import flex_notify_channel
 from routes.wh_notify import line_bot_api_notify
 from environ.client_environ import MONGODB_URI
+from machine_leanning.model_spam import model_spam
 import os
 
 public = Blueprint('public', __name__, template_folder='templates')
@@ -57,6 +58,7 @@ def key_model_transaction(item: dict, channel: str, userId=None, email_private=N
     if item['product'] == 'Mango ERP (Real Estate)': item['product'] = 'RealEstate'
     if item['product'] == 'Pusit (Consulting)': item['product'] = 'Consulting'
     if item['company'] == 'google': item['tag'] = ['spam']
+    item['tag'] = model_spam(item['message'])
     return item
 
 
@@ -83,8 +85,9 @@ def get_demo():
         email = item['email']
         message = item['message']
         company = item['company']
+        tag = item['tag']
         del item['_id']
-        if company == 'google':
+        if company == 'google' or tag == ['spam']:
             return jsonify(item)
         else:
             condition_message(channel, date, time, company, name, tel, email, product, message)
