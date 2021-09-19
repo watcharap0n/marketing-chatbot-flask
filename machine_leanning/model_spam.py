@@ -6,7 +6,7 @@ from pythainlp.tokenize import word_tokenize
 
 
 def model_spam(text):
-    df = pd.read_excel('datasets_spam.xlsx')
+    df = pd.read_excel('machine_leanning/datasets_spam.xlsx')
     df = df.drop('Unnamed: 0', axis=1)
     df = df.replace(np.nan, '', regex=True)
     vectorizer = CountVectorizer(tokenizer=word_tokenize)
@@ -18,6 +18,7 @@ def model_spam(text):
     examples = [text]  # example ตรงนี้ ถ้าสร้างใหม่ให้มี , ตามด้วย 'test'
     example_counts = vectorizer.transform(examples)
     predictions = classifier.predict(example_counts)
-    return predictions
+    print(predictions)
+    return list(predictions)
 
 
