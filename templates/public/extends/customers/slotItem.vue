@@ -1,5 +1,24 @@
 <template v-slot:item.tag="{item}">
   <v-chip
+      v-if="page === 2"
+      dark
+      color="teal darken-1"
+      class="ma-2"
+      v-for="i in item.tag" :key="i.length"
+  >
+
+    [[ i ]]
+    <v-icon
+        ref="copyTag"
+        right
+        v-clipboard:copy.prevent="i"
+        @click.stop.prevent="copyTag(i)"
+    >
+      mdi-content-copy
+    </v-icon>
+  </v-chip>
+  <v-chip
+      v-else
       dark
       color="red"
       class="ma-2"
@@ -88,7 +107,13 @@
 
 <template v-slot:item.channel="{item}">
   <div v-if="item.channel === 'Contact'" @click="sortingOnclick({'channel': item.channel})">
-    <v-chip outlined color="blue darken-2">
+    <v-chip outlined color="amber darken-2">
+      [[item.channel ]]
+    </v-chip>
+  </div>
+
+  <div v-else-if="item.channel === 'Facebook'" @click="sortingOnclick({'channel': item.channel})">
+    <v-chip outlined color="blue darken-4">
       [[item.channel ]]
     </v-chip>
   </div>

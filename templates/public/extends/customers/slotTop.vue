@@ -4,20 +4,41 @@
 
     {% include "public/extends/customers/addCustomer.vue" %}
 
-    <!--            <v-btn-->
-    <!--                style="margin-left: 10px"-->
-    <!--                color="pink lighten-2"-->
-    <!--                dark-->
-    <!--                :hidden="!btnAPI"-->
-    <!--                @click="ImportRE(selected)"-->
-    <!--            >-->
-    <!--              <v-icon left>mdi-api</v-icon>-->
-    <!--              [[ formBtnAPI ]]-->
-    <!--            </v-btn>-->
+    <v-btn
+        style="margin-left: 10px"
+        color="pink lighten-2"
+        dark
+        :hidden="!btnAPI"
+        :loading="!spinRE"
+        @click="validCheckRE(selected)">
+
+      <v-icon left>mdi-api</v-icon>
+      ตรวจสอบเข้า RE
+    </v-btn>
+    <v-btn
+        color="teal darken-1"
+        dark
+        :hidden="!btnRE"
+        @click="createRE"
+    >
+      <v-icon left> mdi-wrench</v-icon>
+      สร้างที่ RE
+    </v-btn>
+
+    <v-btn
+        style="margin-left: 10px"
+        color="primary"
+        dark
+        @click="editRE"
+        :hidden="!btnRE"
+    >
+      <v-icon left>fas fa-edit</v-icon>
+      อัพเดทที่ RE
+    </v-btn>
 
     <v-dialog v-model="dialogDelete" max-width="500px">
       <v-card>
-        <v-card-title class="text-h5">คุณแน่ใจว่าจะลบข้อมูล ?</v-card-title>
+        <v-card-title><h5>คุณแน่ใจว่าจะลบข้อมูล ?</h5></v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="success" text @click="closeDelete">ยกเลิก</v-btn>
@@ -25,6 +46,90 @@
                  :loading="!spinButton">ตกลง
           </v-btn>
           <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogDuplicateRE" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <v-icon left> mdi-wrench</v-icon>
+          <h5>มีข้อมูลที่เคยนำเข้าโปรแกรม RE แล้ว !</h5></v-card-title>
+        <v-divider></v-divider>
+        <v-card-text v-for="(k, v) in itemsDuplicateRE" :key="k">
+          <v-responsive
+              class="overflow-y-auto"
+              max-height="400"
+          >
+            <b>ลำดับ [[v + 1]]: Customer code: [[k.customer_code]] ชื่อ: [[k.name]]</b>
+          </v-responsive>
+        </v-card-text>
+        <v-divider></v-divider>
+        <small
+            style="color: red; margin-left: 20px">*รายการที่ท่านต้องการบันทึก มีข้อมูลแล้วในระบบท่านต้องการดำเนินต่อหรือไม่?</small>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="closeDuplicateRE">ยกเลิก</v-btn>
+          <v-btn color="success" text @click="finallyCreate"
+                 :loading="!spinButton">
+            ตกลง
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogConfirmRE" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <v-icon left> mdi-wrench</v-icon>
+          <h5>ยืนยันเพื่อนำเข้าโปรแกรม RE ?</h5></v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-responsive
+              class="overflow-y-auto"
+              max-height="400"
+          >
+            <div class="mb-4" v-for="(k, v) in usersRE" :key="k">
+              <b>ลำดับ [[v + 1]]: ชื่อ: [[k.company]] บริษัท: [[k.first_name]]</b>
+            </div>
+          </v-responsive>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="closeConfirmRE">ยกเลิก</v-btn>
+          <v-btn color="success" text @click="finallyCreate" :loading="!spinButton">
+            ตกลง
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogUpdateRE" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <v-icon left>fas fa-edit</v-icon>
+          <h5>ยืนยันเพื่อแก้ไขรายชื่อต่อไปนี้ในโปรแกรม RE ?</h5></v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-responsive
+              class="overflow-y-auto"
+              max-height="400"
+          >
+            <div class="mb-4" v-for="(k, v) in usersRE" :key="k">
+              <b>ลำดับ [[v + 1]]: Customer code: [[k.customer_code]] ชื่อ: [[k.company]]</b>
+            </div>
+          </v-responsive>
+        </v-card-text>
+        <v-divider></v-divider>
+        <small style="color: red; margin-left: 20px">*ข้อมูลที่จะทำการอัพเดทได้จะต้องเคยเพิ่มเข้าโปรแกรม RE
+          แล้ว!</small>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="closeUpdateRE">ยกเลิก</v-btn>
+          <v-btn color="success" text @click="finallyEditRE" :loading="!spinButton">
+            ตกลง
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

@@ -70,11 +70,11 @@ new Vue({
                 href: 'imports',
                 icon: 'mdi-import'
             },
-            // {
-            //     header: 'API',
-            //     href: 'api',
-            //     icon: 'mdi-api'
-            // }
+            {
+                header: 'API',
+                href: 'api',
+                icon: 'mdi-api'
+            }
         ],
         headers: [
             {
@@ -230,7 +230,7 @@ new Vue({
 
         // btn or table hidden
         btnHiddenAPI: true,
-        btnAPI: true,
+        btnAPI: false,
 
         // import excel
         dialogImportExcel: false,
@@ -239,7 +239,17 @@ new Vue({
         ],
         fileImportExcel: null,
 
-
+        //Program RE
+        accountRE: {},
+        tokenRE: '',
+        spinRE: true,
+        btnRE: false,
+        itemsRE: [],
+        usersRE: [],
+        itemsDuplicateRE: [],
+        dialogDuplicateRE: false,
+        dialogConfirmRE: false,
+        dialogUpdateRE: false
     },
 
 
@@ -274,7 +284,7 @@ new Vue({
             } else if (this.selected.length === 0 || this.model.length === 0) {
                 this.btnTag = false
             }
-            if (this.selected.length > 0) {
+            if (this.selected.length > 0 && this.page !== 2) {
                 this.btnDelete = true
             } else if (this.selected.length === 0) {
                 this.btnDelete = false
@@ -302,6 +312,7 @@ new Vue({
             })
         await this.APIImport();
         await this.getTags();
+        await this.getUserRE();
     },
     computed: {
         datetimeNow() {
@@ -311,9 +322,6 @@ new Vue({
         formTitle() {
             return this.editedIndex === -1 ? 'เพิ่มข้อมูล' : 'แก้ไขข้อมูล'
         },
-        formBtnAPI() {
-            return this.btnHiddenAPI === true ? 'ตรวจสอบเข้า RE' : 'นำส่งเข้า RE'
-        },
         dateRangeText() {
             return this.date.join(' ~ ')
         },
@@ -321,12 +329,13 @@ new Vue({
     methods: {
         // table
         async initialize() {
-            this.btnAPI = true
-            this.btnHiddenAPI = true
             this.spinTable = false
             const path = `/api/customer?collection=${this.userAuth.collection}`
             await axios.get(path)
                 .then((res) => {
+                    this.btnRE = false
+                    this.btnHiddenAPI = true
+                    this.btnAPI = true
                     this.spinTable = true;
                     this.transaction = res.data.transaction;
                     this.products = res.data.products
@@ -340,12 +349,13 @@ new Vue({
                 })
         },
         async APIImport() {
-            this.btnAPI = false
-            this.btnHiddenAPI = true
             this.spinTable = false
             const path = `/api/import?collection=${this.userAuth._import}`
             await axios.get(path)
                 .then((res) => {
+                    this.btnRE = false
+                    this.btnAPI = false
+                    this.btnHiddenAPI = true
                     this.spinTable = true;
                     this.notify_today = res.data.notify_today
                     this.transaction = res.data.transaction;
@@ -439,26 +449,28 @@ new Vue({
             }
         },
         sortingOnclick(data) {
-            let dict = {
-                date: [],
-                channel: null,
-                product: null,
-                tag: null,
-            }
-            if (data.channel) {
-                dict.channel = data.channel
-            } else if (data.product) {
-                dict.product = data.product
-            } else if (data.tag) {
-                dict.tag = [data.tag]
-            }
-            if (this.href === 'customer') {
-                dict.collection = this.userAuth.collection
-                this.sendSorting('/api/c/sorting', dict)
-            }
-            if (this.href === 'import') {
-                dict.collection = this.userAuth._import
-                this.sendSorting('/api/m/sorting', dict)
+            if (this.page !== 2) {
+                let dict = {
+                    date: [],
+                    channel: null,
+                    product: null,
+                    tag: null,
+                }
+                if (data.channel) {
+                    dict.channel = data.channel
+                } else if (data.product) {
+                    dict.product = data.product
+                } else if (data.tag) {
+                    dict.tag = [data.tag]
+                }
+                if (this.href === 'customer') {
+                    dict.collection = this.userAuth.collection
+                    this.sendSorting('/api/c/sorting', dict)
+                }
+                if (this.href === 'import') {
+                    dict.collection = this.userAuth._import
+                    this.sendSorting('/api/m/sorting', dict)
+                }
             }
         },
         sendSorting(path, data) {
@@ -475,19 +487,288 @@ new Vue({
                     console.error(err)
                 })
         },
-        async ImportRE(selected) {
+
+        //Program RE
+        async editedItemRE(items) {
+            await items.forEach((item) => {
+                let _dict = {
+                    old_code: item.id,
+                    company: item.name,
+                    first_name: item.company,
+                    telephone: item.tel,
+                    mail: item.email,
+                    card_id: item.person_id,
+                    tax_id: item.tax_id,
+                    refcode: item.product,
+                    remark2: item.other,
+                    remark1: item.message,
+                    cm_call_in: item.channel,
+                    line_token: item.userId
+                }
+                _dict.cm_call_in = _dict.cm_call_in.charAt(0).toUpperCase() + _dict.cm_call_in.substring(1);
+                if (!_dict.card_id) {
+                    _dict.card_id = ''
+                }
+                if (!_dict.tax_id) {
+                    _dict.tax_id = ''
+                }
+                if (!_dict.line_token) {
+                    _dict.line_token = ''
+                }
+                if (!_dict.remark2) {
+                    _dict.remark2 = ''
+                }
+                if (_dict.cm_call_in === 'GetDemo' || _dict.cm_call_in === 'Contact' || _dict.cm_call_in === 'Website') {
+                    _dict.cm_call_in = '006'
+                } else if (_dict.cm_call_in === 'Facebook') {
+                    _dict.cm_call_in = '005'
+                } else if (_dict.cm_call_in === 'LINE' || _dict.cm_call_in === 'Line' || _dict.cm_call_in === 'Line@') {
+                    _dict.cm_call_in = '008'
+                }
+                this.itemsRE.push(_dict)
+            })
+            console.log(this.itemsRE)
+        },
+        async getUserRE() {
+            await axios.get('/requests/token/account')
+                .then((res) => {
+                    this.accountRE = res.data
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        async requestTokenRE() {
+            const path = `https://poc.mangoanywhere.com/demosql.sale.re/api/public/RequestApiToken`
+            await axios.post(path, this.accountRE)
+                .then((res) => {
+                    this.tokenRE = res.data.data.token
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        async checkTokenRE(selected) {
+            const path = `https://poc.mangoanywhere.com/demosql.sale.re/api/public/CheckToken`
+            await axios.get(path, {
+                headers: {
+                    'x-mg-api-token': this.tokenRE
+                }
+            })
+                .then((res) => {
+                    if (res.data.success) {
+                        this.$nextTick(() => {
+                            this.transaction = selected
+                            this.editedItemRE(this.transaction)
+                            this.validItemRE()
+                        })
+                    } else if (!res.data.success) {
+                        this.spinRE = true
+                        console.log('not valid')
+                    }
+                })
+        },
+        async validItemRE() {
+            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerValidation?servicetype=MKT`
+            await axios.post(path, this.itemsRE, {
+                headers: {
+                    'x-mg-api-token': this.tokenRE
+                }
+            })
+                .then((res) => {
+                    if (res.data.success) {
+                        this.spinRE = true
+                        this.btnRE = true
+                        this.btnAPI = false
+                        this.btnHiddenAPI = false
+                        this.btnDelete = false
+                        this.transaction.forEach((val) => {
+                            let idx = this.transaction.indexOf(val)
+                            let responseData = res.data.data[idx]
+                            let itemsRE = this.itemsRE[idx]
+                            if (responseData.customer_code) {
+                                Object.assign(val.tag = [responseData.customer_code], val)
+                                if (itemsRE.old_code === responseData.id) {
+                                    itemsRE.customer_code = responseData.customer_code
+                                }
+                            } else if (!responseData.customer_code) {
+                                Object.assign(val.tag = ['ไม่มีใน RE'], val)
+                                if (itemsRE.old_code === responseData.id) {
+                                    itemsRE.customer_code = ""
+                                }
+                            }
+                        })
+                        this.page = 2
+                        this.snackbar = true
+                        this.text = `รายการทั้งหมด ${this.transaction.length} รายการ`
+                        this.colorSb = 'primary'
+                        this.selected = []
+                    } else if (!res.data.success) {
+                        this.snackbar = true
+                        this.text = `มีข้อมูลบางอย่างผิดพลาด กรุณาตรวจสอบข้อมูลก่อน RE`
+                        this.colorSb = 'red'
+                        console.log(res.data)
+                    }
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        closeDuplicateRE() {
+            this.dialogDuplicateRE = false
+            this.$nextTick(() => {
+                this.usersRE = []
+                this.itemsDuplicateRE = []
+            })
+        },
+        closeConfirmRE() {
+            this.dialogConfirmRE = false
+            this.$nextTick(() => {
+                this.usersRE = []
+                this.itemsDuplicateRE = []
+            })
+        },
+        closeUpdateRE() {
+            this.dialogUpdateRE = false
+            this.$nextTick(() => {
+                this.usersRE = []
+                this.itemsDuplicateRE = []
+            })
+        },
+        async editRE() {
+            this.usersRE = []
+            await this.selected.forEach((item) => {
+                let idx = this.transaction.indexOf(item)
+                let itemsRE = this.itemsRE[idx]
+                if (itemsRE.customer_code) {
+                    this.usersRE.push(itemsRE)
+                    this.dialogUpdateRE = true
+                }
+            })
+        },
+        async finallyEditRE() {
+            this.spinButton = false
+            const path = 'https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerUpdate?servicetype=MKT'
+            await axios.post(path, this.usersRE, {
+                headers: {
+                    'x-mg-api-token': this.tokenRE
+                }
+            })
+                .then((res) => {
+                    console.log(res.data)
+                    if (res.data.success) {
+                        this.spinButton = true
+                        this.itemsRE = []
+                        this.usersRE = []
+                        this.itemsDuplicateRE = []
+                        this.selected = []
+                        this.dialogUpdateRE = false
+                        this.initialize().then(() => {
+                            this.page = 0
+                        })
+                        this.text = `คุณได้ทำการอัพเดทรายชื่อใน RE แล้ว!`
+                        this.colorSb = 'success'
+                        this.snackbar = true
+                    } else if (!res.data.success) {
+                        this.spinButton = true
+                        this.dialogUpdateRE = false
+                        this.text = `มีบางอย่างผิดพลาดโปรดตรวจสอบข้อมูลหรือลองใหม่อีกครั้ง!`
+                        this.colorSb = 'red'
+                        this.snackbar = true
+                    }
+                })
+                .catch((err) => {
+                    this.spinButton = true
+                    console.error(err)
+                })
+        },
+        createRE() {
+            if (this.selected.length === 0) {
+                this.text = `กรุณาเลือกข้อมูลก่อนทำรายการ!`
+                this.colorSb = 'red'
+                this.snackbar = true
+            } else {
+                this.usersRE = []
+                this.selected.forEach((item) => {
+                    let idx = this.transaction.indexOf(item)
+                    let itemsRE = this.itemsRE[idx]
+                    if (itemsRE.customer_code) {
+                        this.itemsDuplicateRE.push({
+                            id: itemsRE.old_code,
+                            customer_code: itemsRE.customer_code,
+                            name: itemsRE.company
+                        })
+                    } else {
+                        itemsRE.legal_person = 'N'
+                    }
+                    this.usersRE.push(itemsRE)
+                })
+                if (this.itemsDuplicateRE.length > 0) {
+                    this.dialogDuplicateRE = true
+                } else {
+                    this.dialogConfirmRE = true
+                }
+            }
+        },
+        async finallyCreate() {
+            this.spinButton = false
+            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerCreate?servicetype=MKT`
+            await axios.post(path, this.usersRE, {
+                headers: {
+                    'x-mg-api-token': this.tokenRE
+                }
+            })
+                .then((res) => {
+                    console.log(res.data)
+                    if (res.data.success) {
+                        this.selected.forEach((val) => {
+                            let idx = this.selected.indexOf(val)
+                            let item = res.data.data[idx]
+                            if (item.old_code === val.id) {
+                                val.tag = [item.customer_code]
+                                let data = Object.assign(this.selected[idx], val)
+                                this.editTransaction(data, data.id);
+                                console.log(data)
+                            }
+                        })
+                        this.spinButton = true
+                        this.dialogDuplicateRE = false
+                        this.dialogConfirmRE = false
+                        this.itemsDuplicateRE = []
+                        this.itemsRE = []
+                        this.usersRE = []
+                        this.initialize().then(() => {
+                            this.page = 0
+                        })
+                        this.text = `คุณได้ทำการเพิ่มข้อมูลไปยังโปรแกรม RE แล้ว!`
+                        this.colorSb = 'success'
+                        this.snackbar = true
+                    } else if (!res.data.success) {
+                        this.spinButton = true
+                        this.dialogDuplicateRE = false
+                        this.dialogConfirmRE = false
+                        this.text = `มีบางอย่างผิดพลาดโปรดตรวจสอบข้อมูลหรือลองใหม่อีกครั้ง!`
+                        this.colorSb = 'red'
+                        this.snackbar = true
+                    }
+                    console.log(res.data)
+                })
+                .catch((err) => {
+                    this.spinButton = true
+                    console.error(err)
+                })
+        },
+        async validCheckRE(selected) {
             if (this.selected.length === 0) {
                 this.snackbar = true
                 this.text = `กรุณาเลือกข้อมูลเพื่อนำเข้า RE`
                 this.colorSb = 'red'
             } else {
-                this.transaction = selected
-                this.btnHiddenAPI = false
-                this.btnDelete = false
-                this.page = 2
-                this.snackbar = true
-                this.text = `รายการทั้งหมด ${this.transaction.length} รายการ`
-                this.colorSb = 'primary'
+                this.spinRE = false
+                this.requestTokenRE().then(() => {
+                    this.checkTokenRE(selected);
+                })
+
             }
         },
         async moveImport() {
@@ -526,14 +807,16 @@ new Vue({
         async changeTransaction(data) {
             if (data === 'imports') {
                 await this.APIImport()
+                this.itemsRE = []
                 this.selected = []
                 this.model = []
             } else if (data === 'customers') {
                 await this.initialize()
+                this.itemsRE = []
                 this.selected = []
                 this.model = []
             } else if (data === 'api') {
-                this.btnAPI = true
+                this.btnAPI = false
                 this.btnHiddenAPI = false
                 this.btnImport = false
                 this.transaction = []
@@ -623,6 +906,7 @@ new Vue({
                     this.colorSb = 'primary'
                     this.text = `คุณได้อัพเดทข้อมูล ${this.editedItem.name}`
                     this.snackbar = true
+                    this.selected = []
                 })
                 .catch((err) => {
                     this.spinButton = true;

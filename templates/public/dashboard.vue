@@ -246,7 +246,7 @@
                 <v-select
                     v-model="selectedChannel"
                     :items="channels"
-                    label="ผลิตภัณฑ์"
+                    label="ช่องทาง"
                 ></v-select>
               </v-col>
               <v-col cols="3">

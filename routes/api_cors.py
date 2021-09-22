@@ -128,8 +128,9 @@ def contact():
         email = item['email']
         message = item['message']
         company = item['company']
+        tag = item['tag']
         del item['_id']
-        if company == 'google':
+        if company == 'google' or tag == ['spam']:
             return jsonify(item)
         else:
             condition_message(channel, date, time, company, name, tel, email, product, message)
@@ -144,3 +145,13 @@ def preview_excel():
     file = os.path.join('static', 'excels/preview.xlsx')
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                      attachment_filename='preview.xlsx')
+
+
+@public.route('/requests/token/account')
+def account_token():
+    res = {
+        "company": "MG1",
+        "userid": "api01",
+        "userpass": "1234"
+    }
+    return jsonify(res)
