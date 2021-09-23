@@ -333,6 +333,7 @@ new Vue({
             const path = `/api/customer?collection=${this.userAuth.collection}`
             await axios.get(path)
                 .then((res) => {
+                    this.selected = []
                     this.btnRE = false
                     this.btnHiddenAPI = true
                     this.btnAPI = true
@@ -353,6 +354,7 @@ new Vue({
             const path = `/api/import?collection=${this.userAuth._import}`
             await axios.get(path)
                 .then((res) => {
+                    this.selected = []
                     this.btnRE = false
                     this.btnAPI = false
                     this.btnHiddenAPI = true
