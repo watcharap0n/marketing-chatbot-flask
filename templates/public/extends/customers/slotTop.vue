@@ -4,17 +4,7 @@
 
     {% include "public/extends/customers/addCustomer.vue" %}
 
-    <v-btn
-        style="margin-left: 10px"
-        color="pink lighten-2"
-        dark
-        :hidden="!btnAPI"
-        :loading="!spinRE"
-        @click="validCheckRE(selected)">
 
-      <v-icon left>mdi-api</v-icon>
-      ตรวจสอบเข้า RE
-    </v-btn>
     <v-btn
         color="teal darken-1"
         dark
@@ -66,7 +56,8 @@
         </v-card-text>
         <v-divider></v-divider>
         <small
-            style="color: red; margin-left: 20px">*รายการที่ท่านต้องการบันทึก มีข้อมูลแล้วในระบบท่านต้องการดำเนินต่อหรือไม่?</small>
+            style="color: red; margin-left: 20px">*รายการที่ท่านต้องการบันทึก
+          มีข้อมูลแล้วในระบบท่านต้องการดำเนินต่อหรือไม่?</small>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="error" text @click="closeDuplicateRE">ยกเลิก</v-btn>
@@ -163,6 +154,18 @@
       </v-icon>
     </v-btn>
 
+
+    <v-btn
+        style="margin-left: 10px"
+        color="teal darken-1"
+        dark
+        :hidden="!btnAPI"
+        :loading="!spinRE"
+        @click="validCheckRE(selected)">
+
+      <v-icon left>mdi-api</v-icon>
+      ตรวจสอบเข้า RE
+    </v-btn>
     <v-spacer></v-spacer>
 
     <div class="small" style="margin-right: 20px">

@@ -1,26 +1,7 @@
 <template v-slot:item.tag="{item}">
   <v-chip
-      v-if="page === 2"
       dark
-      color="teal darken-1"
-      class="ma-2"
-      v-for="i in item.tag" :key="i.length"
-  >
-
-    [[ i ]]
-    <v-icon
-        ref="copyTag"
-        right
-        v-clipboard:copy.prevent="i"
-        @click.stop.prevent="copyTag(i)"
-    >
-      mdi-content-copy
-    </v-icon>
-  </v-chip>
-  <v-chip
-      v-else
-      dark
-      color="red"
+      :color="page !== 2 ? 'red' : 'teal darken-1' "
       class="ma-2"
       v-for="i in item.tag" :key="i.length"
       @click="sortingOnclick({'tag': i})"
