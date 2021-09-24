@@ -43,6 +43,8 @@ def register():
         return jsonify(user.__dict__)
     except auth.EmailAlreadyExistsError:
         raise InvalidUsage(message='your register already exists', status_code=400)
+    except:
+        raise InvalidUsage(message='your register already exists', status_code=500)
 
 
 @secure.route('/secure/login', methods=['POST'])
