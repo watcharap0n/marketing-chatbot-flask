@@ -83,7 +83,7 @@
                       clearable
                       v-model="formElement.other"
                       :items="others"
-                      label="รายละเอียดที่ต้องการทราบเพิ่มเติม"
+                      label="ท่านรู้จักเราจากสื่อใด"
                       required
                   ></v-select>
 
@@ -94,7 +94,7 @@
                       v-model="formElement.message"
                       clearable
                       autocomplete
-                      label="ท่านรู้จักเราจากสื่อใด"
+                      label="รายละเอียดที่ต้องการทราบเพิ่มเติม"
                   ></v-textarea>
                   <v-card-actions>
                     <v-btn block
