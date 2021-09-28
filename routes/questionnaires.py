@@ -28,6 +28,7 @@ def handle_invalid_usage(error):
 @question.route('/api/all/questionnaire', methods=['POST'])
 @api.validate(resp=Response(HTTP_201=None, HTTP_400=None), tags=['Questionnaire'])
 def api_send_all_question():
+    query_collection = request.args.get('collection')
     item = request.get_json()
     key = CutId(_id=ObjectId()).dict()['id']
     _d = datetime.datetime.now()
@@ -43,7 +44,7 @@ def api_send_all_question():
     item = key_model_transaction(item=item, channel=channel, userId=userId, email_private=email_private,
                                  profile=profile,
                                  picture=picture, other=other)
-    db.insert_one(collection, item)
+    db.insert_one(query_collection, item) if query_collection else db.insert_one(collection, item)
     name = item['name']
     product = item['product']
     tel = item['tel']
