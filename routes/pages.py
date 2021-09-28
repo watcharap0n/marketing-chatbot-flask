@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect
+from flask import Blueprint, render_template, url_for, redirect, request, current_app
 from modules.swagger import api
 from routes.secure import g
 
@@ -74,6 +74,11 @@ def line_realestate():
 @page.route('/line/questionnaire/care')
 def line_mangocare():
     return render_template('LINE/care.vue')
+
+
+@page.route('/line/questionnaire/mg_home')
+def line_mg_home():
+    return render_template('LINE/mg_home.vue')
 
 
 @page.route('/facebook/questionnaire/quotation')
