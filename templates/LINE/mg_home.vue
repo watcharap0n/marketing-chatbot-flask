@@ -73,7 +73,7 @@
                       clearable
                       v-model="formElement.product"
                       :items="products"
-                      label="โตรงการ"
+                      label="โครงการ"
                       required
                   ></v-select>
 
@@ -83,7 +83,7 @@
                       clearable
                       v-model="formElement.other"
                       :items="others"
-                      label="โตรงการ"
+                      label="รายละเอียดที่ต้องการทราบเพิ่มเติม"
                       required
                   ></v-select>
 

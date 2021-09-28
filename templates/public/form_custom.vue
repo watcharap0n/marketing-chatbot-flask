@@ -202,7 +202,6 @@
               </v-combobox>
               <v-text-field
                   :rules="validOther"
-                  disabled
                   v-if="form.type === 'LINE'"
                   v-model="form.token_liff"
                   dense

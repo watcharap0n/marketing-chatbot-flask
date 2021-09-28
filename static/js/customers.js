@@ -249,7 +249,36 @@ new Vue({
         itemsDuplicateRE: [],
         dialogDuplicateRE: false,
         dialogConfirmRE: false,
-        dialogUpdateRE: false
+        dialogUpdateRE: false,
+
+        //form
+        dialogForm: false,
+        spinForm: false,
+        formCustom: [],
+        dialogInForm: false,
+        formElementCustom: {
+            id: "",
+            name: "Name",
+            company: "Company",
+            email: "Email",
+            tel: "Tel",
+            message: "Message",
+            channel: "Twitter",
+            product: "Product",
+            other: "Other",
+            token_liff: "",
+            itemProducts: [
+                "Construction"
+            ],
+            itemOthers: [
+                "Mango"
+            ],
+            uid: "",
+            type: "LINE",
+            href: "",
+            page_name: "",
+            collection: ""
+        }
     },
 
 
@@ -486,6 +515,56 @@ new Vue({
                 .catch((err) => {
                     this.spinTable = true
                     this.date = []
+                    console.error(err)
+                })
+        },
+
+        // form custom
+        openForm() {
+            this.dialogForm = true
+            this.getObjectForm()
+        },
+        openInForm(){
+            this.dialogInForm = true
+        },
+        getObjectForm() {
+            const path = `/api/form/custom/object?collection=${this.userAuth.collection}`
+            axios.get(path)
+                .then((res) => {
+                    this.spinForm = true
+                    console.log(res.data)
+                    this.formCustom = res.data
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        deleteObjectForm(data) {
+            this.spinForm = false
+            const path = `/api/form/custom/delete/form/${data.id}`
+            axios.delete(path)
+                .then((res) => {
+                    console.log(res.data)
+                    this.formCustom.splice(this.formCustom.indexOf(data), 1)
+                    this.spinForm = true
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        addForm() {
+            this.spinForm = false
+            this.formElementCustom.collection = this.userAuth.collection
+            this.formElementCustom.uid = this.userAuth.uid
+            const path = `/api/form/custom/add/form`
+            axios.post(path, this.formElementCustom)
+                .then((res) => {
+                    this.spinForm = true
+                    console.log(res.data)
+                    this.formCustom.push(res.data)
+                    this.dialogInForm = false
+                })
+                .catch((err) => {
                     console.error(err)
                 })
         },

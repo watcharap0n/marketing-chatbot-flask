@@ -25,6 +25,7 @@ new Vue({
             email_private: '',
             profile: '',
             picture: '',
+            collection: '',
         },
         form: {},
         valid: false,
@@ -69,7 +70,7 @@ new Vue({
             let validate = this.$refs.form.validate()
             if (validate === true) {
                 this.spinBtn = false
-                const path = '/api/all/questionnaire'
+                const path = `/api/all/questionnaire?collection=${this.formElement.collection}`
                 this.formElement.channel = this.form.channel
                 axios.post(path, this.formElement)
                     .then(() => {

@@ -92,7 +92,7 @@ new Vue({
         logout() {
             return window.location = '/secure/logout'
         },
-       redirectPage(item) {
+        redirectPage(item) {
             console.log(item)
             if (item.text === 'Mango')
                 window.location = '/'
