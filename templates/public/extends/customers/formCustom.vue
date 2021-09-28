@@ -1,7 +1,6 @@
 <v-btn
     style="margin-left: 8px;"
-    color="pink lighten-2"
-    color="primary"
+    color="purple lighten-1"
     dark
     @click="openForm"
     :hidden="!btnHiddenAPI"
