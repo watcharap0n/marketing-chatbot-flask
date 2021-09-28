@@ -70,10 +70,10 @@ def webhook(token):
             profile = get_profile(userId, q)
             inserted = {'displayName': profile['displayName'], 'userId': userId, 'img': profile['img'],
                         'status': profile['status']}
-            db.insert_one(collection='line_follower', data=inserted)
+            db.insert_one(collection=f'line_follower{token}', data=inserted)
         elif _type == 'unfollow':
             userId = events['source']['userId']
-            db.delete_one('line_follower', query={'userId': userId})
+            db.delete_one(f'line_follower{token}', query={'userId': userId})
         elif _type == 'postback':
             event_postback(events, q)
         elif _type == 'message':

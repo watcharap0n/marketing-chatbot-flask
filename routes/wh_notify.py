@@ -52,10 +52,10 @@ def callback_notify():
             profile = get_profile_notify(userId)
             inserted = {'displayName': profile['displayName'], 'userId': userId, 'img': profile['img'],
                         'status': profile['status']}
-            db.insert_one(collection='line_follower', data=inserted)
+            db.insert_one(collection='line_follower_notify', data=inserted)
         elif _type == 'unfollow':
             userId = events['source']['userId']
-            db.delete_one('line_follower', query={'userId': userId})
+            db.delete_one('line_follower_notify', query={'userId': userId})
         elif _type == 'postback':
             event_postback_notify(events)
         elif _type == 'message':
