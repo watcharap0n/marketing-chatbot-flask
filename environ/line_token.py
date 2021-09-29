@@ -1,5 +1,5 @@
 """
-1. line notify
+1. line notifyMKT
 2. mango server
 3. mango test
 """

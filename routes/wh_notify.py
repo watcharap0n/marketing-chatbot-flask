@@ -9,6 +9,9 @@ from config.db import MongoDB
 from environ.client_environ import MONGODB_URI
 import json
 import os
+from bson import ObjectId
+from config.object_str import CutId
+import datetime
 
 notify = Blueprint('callback_notify', __name__, template_folder='templates')
 
@@ -33,11 +36,23 @@ def get_profile_notify(user_id):
     userId = profile.user_id
     img = profile.picture_url
     status = profile.status_message
-    result = {'displayName': displayName, 'userId': userId, 'img': img, 'status': status}
+    key = CutId(_id=ObjectId()).dict()['id']
+    _d = datetime.datetime.now()
+    date = _d.strftime("%d/%m/%y")
+    time = _d.strftime("%H:%M:%S")
+    result = {
+        'displayName': displayName,
+        'userId': userId,
+        'img': img,
+        'status': status,
+        'id': key,
+        'date': date,
+        'time': time
+    }
     return result
 
 
-@notify.route('/callback/token/notify', methods=['POST'])
+@notify.route('/callback/token/notifyMKT', methods=['POST'])
 def callback_notify():
     raw_json = request.get_json()
     with open('log/notify_log.json', 'w') as log_line:
@@ -50,9 +65,7 @@ def callback_notify():
         if _type == 'follow':
             userId = events['source']['userId']
             profile = get_profile_notify(userId)
-            inserted = {'displayName': profile['displayName'], 'userId': userId, 'img': profile['img'],
-                        'status': profile['status']}
-            db.insert_one(collection='line_follower_notify', data=inserted)
+            db.insert_one(collection='line_follower_notify', data=profile)
         elif _type == 'unfollow':
             userId = events['source']['userId']
             db.delete_one('line_follower_notify', query={'userId': userId})
@@ -88,7 +101,19 @@ def event_postback_notify(event):
 
 @handler_notify.add(MessageEvent, message=TextMessage)
 def handler_message_notify(event):
-    print(event)
     replyToken = event.reply_token
     message_text = event.message.text
     line_bot_api_notify.reply_message(replyToken, TextSendMessage(text=message_text))
+
+
+@notify.route('/user_notify/<string:userId>/valid')
+def valid_user(userId):
+    user = db.find_one(collection='line_follower_notify', query={'userId': userId})
+    if user:
+        del user['_id']
+        return jsonify(status=True, message='user in already!', data=user)
+    else:
+        user = get_profile_notify(userId)
+        db.insert_one(collection='line_follower_notify', data=user)
+        del user['_id']
+        return jsonify(status=False, message='user not in already!', data=user), 201
