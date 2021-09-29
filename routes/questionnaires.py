@@ -66,8 +66,6 @@ def get_custom_form_object():
     query = {'collection': request.args.get('collection')}
     items = db.find(collection='form_custom', query=query)
     items = list(items)
-    for id in items:
-        del id['_id']
     return jsonify(items)
 
 
@@ -76,7 +74,6 @@ def get_custom_form_object():
 def get_custom_form_line():
     id = request.args.get('id')
     item = db.find_one(collection='form_custom', query={'id': id})
-    del item['_id']
     return jsonify(message=id, item=item)
 
 
@@ -110,8 +107,7 @@ def update_custom_form_line(id):
     data = request.get_json()
     query = {'id': id}
     values = {'$set': data}
-    item = db.update_one(collection='form_custom', query=query, values=values)
-    print(item)
+    db.update_one(collection='form_custom', query=query, values=values)
     res = {'message': 'success'}
     return jsonify(res)
 

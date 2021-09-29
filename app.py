@@ -91,7 +91,7 @@ app.register_blueprint(
     api_cors.public,
 )
 app.register_blueprint(
-    wh_notify.notify
+    wh_notify.notifyMKT
 )
 app.register_blueprint(
     dashboard.route_dashboard
@@ -99,4 +99,4 @@ app.register_blueprint(
 if __name__ == "__main__":
     PORT = int(os.environ.get('PORT', 7000))
     api.register(app)  # if you don't register in api init step
-    app.run(host='0.0.0.0', port=PORT, debug=True, use_reloader=True,)
+    app.run(port=PORT, debug=True, use_reloader=True)

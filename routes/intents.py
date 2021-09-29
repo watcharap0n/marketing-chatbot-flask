@@ -24,13 +24,9 @@ def data_intent():
         access_token = access_token.get('access_token')
         data = db.find(collection=collection, query={'access_token': access_token})
         data = list(data)
-        for v in data:
-            del v['_id']
         return jsonify(data)
     data = db.find(collection=collection, query={'access_token': mango_channel})
     data = list(data)
-    for v in data:
-        del v['_id']
     return jsonify(data)
 
 
@@ -56,7 +52,6 @@ def add_intent():
 def query_intent(id):
     data = db.find_one(collection=collection, query={'id': id})
     data = dict(data)
-    del data['_id']
     res = {'message': data}
     return jsonify(res)
 

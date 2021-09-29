@@ -19,8 +19,6 @@ def find_tag():
     collection = request.args.get('collection')
     data = db.find(collection=collection, query={})
     data = list(data)
-    for v in data:
-        del v['_id']
     return jsonify(data[::-1])
 
 

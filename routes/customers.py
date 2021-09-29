@@ -30,8 +30,6 @@ def get_customers():
     collection = request.args.get('collection')
     data = db.find(collection=collection, query={})
     data = list(data)
-    for v in data:
-        del v['_id']
     products = set([v['product'] for v in data if v['product']])
     channels = set([v['channel'] for v in data if v['channel']])
     tags = set([v['tag'][0] for v in data if v['tag']])

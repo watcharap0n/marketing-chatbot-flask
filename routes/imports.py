@@ -31,11 +31,6 @@ def get_customers():
     data = db.find(collection=collection, query={})
     data = list(data)
     module = DataColumnFilter(database=db, collection=collection)
-    for v in data:
-        try:
-            del v['_id']
-        except KeyError:
-            pass
     try:
         products = set([v['product'] for v in data if v['product']])
         channels = set([v['channel'] for v in data if v['channel']])

@@ -28,13 +28,9 @@ def get_rule_based():
         access_token = access_token.get('access_token')
         data = db.find(collection=collection, query={'access_token': access_token})
         data = list(data)
-        for v in data:
-            del v['_id']
         return jsonify(data)
     data = db.find(collection=collection, query={'access_token': mango_channel})
     data = list(data)
-    for v in data:
-        del v['_id']
     return jsonify(data)
 
 
@@ -82,8 +78,6 @@ def delete_intent(id):
 def get_quick_intent():
     data = db.find(collection='intents', query={'access_token': mango_channel, 'type': False})
     data = list(data)
-    for v in data:
-        del v['_id']
     return jsonify(data)
 
 
@@ -91,8 +85,6 @@ def get_quick_intent():
 def get_quick_reply():
     data = db.find(collection='quick_reply', query={'access_token': mango_channel})
     data = list(data)
-    for v in data:
-        del v['_id']
     return jsonify(data)
 
 

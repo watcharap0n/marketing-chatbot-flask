@@ -15,13 +15,13 @@ class MongoDB:
         return programming.find(query)
 
     def find_one(self, collection, query):
-        return self.database[collection].find_one(query)
+        return self.database[collection].find_one(query, {'_id': False})
 
     def find_one_lasted(self, collection, query):
         return self.database[collection].find_one(query, sort=[('_id', pymongo.DESCENDING)])
 
     def find(self, collection, query):
-        return self.database[collection].find(query)
+        return self.database[collection].find(query, {'_id': False})
 
     def insert_one(self, collection, data):
         ids = None

@@ -13,7 +13,7 @@ from bson import ObjectId
 from config.object_str import CutId
 import datetime
 
-notify = Blueprint('callback_notify', __name__, template_folder='templates')
+notifyMKT = Blueprint('callback_notify', __name__, template_folder='templates', url_prefix='/MKT')
 
 # client = os.environ.get('MONGODB_URI')
 db = MongoDB(database_name='Mango', uri=MONGODB_URI)
@@ -22,8 +22,12 @@ collection = 'line_bot_notify'
 line_bot_api_notify = LineBotApi(line_bot_api)
 handler_notify = WebhookHandler(handler)
 
+ADMIN = 'ADMIN'
+MEMBER = 'MEMBER'
+STAY = 'STAY'
 
-@notify.errorhandler(InvalidUsage)
+
+@notifyMKT.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
@@ -47,12 +51,13 @@ def get_profile_notify(user_id):
         'status': status,
         'id': key,
         'date': date,
-        'time': time
+        'time': time,
+        'access': MEMBER
     }
     return result
 
 
-@notify.route('/callback/token/notifyMKT', methods=['POST'])
+@notifyMKT.route('/callback/token/notifyMKT', methods=['POST'])
 def callback_notify():
     raw_json = request.get_json()
     with open('log/notify_log.json', 'w') as log_line:
@@ -106,14 +111,30 @@ def handler_message_notify(event):
     line_bot_api_notify.reply_message(replyToken, TextSendMessage(text=message_text))
 
 
-@notify.route('/user_notify/<string:userId>/valid')
-def valid_user(userId):
+@notifyMKT.route('/notify/users/<string:userId>/save')
+def user_save(userId):
     user = db.find_one(collection='line_follower_notify', query={'userId': userId})
     if user:
-        del user['_id']
         return jsonify(status=True, message='user in already!', data=user)
     else:
         user = get_profile_notify(userId)
         db.insert_one(collection='line_follower_notify', data=user)
         del user['_id']
         return jsonify(status=False, message='user not in already!', data=user), 201
+
+
+@notifyMKT.route('/notify/users/<string:userId>/validation')
+def user_validation(userId):
+    user = db.find(collection='line_follower_notify', query={'userId': userId})
+    user_access = user['access']
+    if user_access == MEMBER:
+        return InvalidUsage(message='you not in access to program!', payload={'status': False}, status_code=401)
+    elif user_access == ADMIN:
+        return jsonify(message='success to access program!', status=True)
+
+
+@notifyMKT.route('/notify/users')
+def users_notify():
+    users = db.find(collection='line_follower_notify', query={})
+    users = list(users)
+    return jsonify(users)

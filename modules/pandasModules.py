@@ -68,7 +68,6 @@ class DataColumnFilter:
         data = self.database.find(self.collection, {})
         data = list(data)
         df = pd.DataFrame(data)
-        df = df.drop(['_id'], axis=1)
         df['date'] = pd.to_datetime(df['date'])
         self.filter_data(df)
         df1 = df.reset_index()[['date']]
@@ -93,7 +92,7 @@ class DataColumnFilter:
         data = self.database.find(self.collection, {})
         data = list(data)
         df = pd.DataFrame(data)
-        df = df.drop(['_id', 'collection', 'year', 'month', 'english_day', 'day', 'index'], axis=1)
+        df = df.drop(['collection', 'year', 'month', 'english_day', 'day', 'index'], axis=1)
         df = df.replace(np.nan, '', regex=True)
         events = df.loc[df['channel'] == 'event Impact']
         df.drop(events.index, inplace=True)
@@ -265,7 +264,6 @@ class DataColumnFilter:
         for i in self.id:
             v = self.database.find_one(self.collection, query={'id': i})
             v = dict(v)
-            del v['_id']
             data.append(v)
 
         index = len(data)
