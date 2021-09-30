@@ -62,9 +62,9 @@ new Vue({
                     console.log(res.data)
                     this.spinBtn = false
                     Swal.fire(
-                        'Good job!',
-                        'You clicked the button!',
-                        'success'
+                        'Success!',
+                        'You will receive a notification after being approved!',
+                        'warning'
                     ).then(() => {
                         liff.closeWindow();
                     })

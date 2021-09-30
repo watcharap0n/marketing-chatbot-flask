@@ -3,7 +3,6 @@
 
   <v-container>
     <br>
-    [[user]]
     <h2><strong>Select Product | LINE NOTIFY</strong></h2>
     <v-divider></v-divider>
     <v-card>
