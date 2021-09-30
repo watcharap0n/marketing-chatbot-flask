@@ -23,8 +23,23 @@ new Vue({
             email: '',
         },
     },
-    mounted() {
-        this.initializedLIFF();
+     created() {
+        liff.init({liffId: '1655208213-9LgNYbLl'}, () => {
+                if (liff.isLoggedIn()) {
+                    liff.getProfile()
+                        .then((profile) => {
+                            console.log(liff.getContext());
+                            this.user.user_id = profile.userId
+                            this.user.display_name = profile.displayName
+                            this.user.picture = profile.pictureUrl
+                            this.user.email = liff.getDecodedIDToken().email
+                            console.log(this.user)
+                        })
+                } else {
+                    liff.login();
+                }
+            }
+        )
     },
     methods: {
         async validationSave() {
