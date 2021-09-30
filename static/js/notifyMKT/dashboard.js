@@ -26,9 +26,8 @@ new Vue({
     },
     delimiters: ["[[", "]]"],
     async mounted() {
-        this.initializedLIFF().then(()=>{
-            this.validationSave()
-        })
+        await this.initializedLIFF()
+        this.validationSave()
     },
     methods: {
         async initializedLIFF() {
@@ -48,10 +47,10 @@ new Vue({
                 }
             )
         },
-        async validationSave() {
+        validationSave() {
             let user = this.user
             console.log(user)
-            await axios.post(`/MKT/notify/users/id/save`, user)
+            axios.post(`/MKT/notify/users/id/save`, user)
                 .then((res) => {
                     console.log(res.data)
                     this.validationUser()
