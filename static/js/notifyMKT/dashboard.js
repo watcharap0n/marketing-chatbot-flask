@@ -65,7 +65,13 @@ new Vue({
                 })
                 .catch((err) => {
                     console.error(err)
-                    return window.location = '/signin'
+                    Swal.fire({
+                        icon: 'error',
+                        title: "You can't to access!",
+                        text: 'Please contact to admin!',
+                    }).then(() => {
+                        return window.location = '/signin'
+                    })
                 })
         },
         initialized() {
