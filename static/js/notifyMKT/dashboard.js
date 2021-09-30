@@ -16,11 +16,19 @@ new Vue({
             {text: 'Date', value: 'date', align: 'center'},
         ],
         transaction: [],
-        userLIFF: {
-            user_id: '',
-            display_name: '',
-            picture: '',
+        formElement: {
+            name: '',
             email: '',
+            company: '',
+            tel: '',
+            product: 'Construction',
+            other: '',
+            message: '',
+            userId: '',
+            email_private: '',
+            profile: '',
+            picture: '',
+            channel: 'LINE'
         },
     },
     created() {
@@ -29,11 +37,10 @@ new Vue({
                     liff.getProfile()
                         .then((profile) => {
                             console.log(liff.getContext());
-                            this.userLIFF.user_id = profile.userId
-                            this.userLIFF.display_name = profile.displayName
-                            this.userLIFF.picture = profile.pictureUrl
-                            this.userLIFF.email = liff.getDecodedIDToken().email
-                            console.log(this.userLIFF)
+                            this.formElement.userId = profile.userId
+                            this.formElement.profile = profile.displayName
+                            this.formElement.picture = profile.pictureUrl
+                            this.formElement.email_private = liff.getDecodedIDToken().email
                         })
                 } else {
                     liff.login();
