@@ -16,7 +16,12 @@ new Vue({
             {text: 'Date', value: 'date', align: 'center'},
         ],
         transaction: [],
-        user: {}
+        user: {
+            user_id: '',
+            display_name: '',
+            img: '',
+            email: '',
+        }
 
     },
     delimiters: ["[[", "]]"],
@@ -57,12 +62,11 @@ new Vue({
                     console.error(err)
                 })
         },
-        initializedLIFF() {
-            liff.init({liffId: '1655208213-k48wpvK9'}, () => {
+        async initializedLIFF() {
+            await liff.init({liffId: '1655208213-k48wpvK9'}, () => {
                     if (liff.isLoggedIn()) {
                         liff.getProfile()
                             .then((profile) => {
-                                console.log(profile)
                                 this.user.user_id = profile.userId
                                 this.user.display_name = profile.displayName
                                 this.user.img = profile.pictureUrl
