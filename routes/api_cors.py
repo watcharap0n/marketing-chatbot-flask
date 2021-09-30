@@ -30,17 +30,28 @@ def handle_invalid_usage(error):
 def condition_message(channel, date, time, company, name, tel, email, product,
                       message):
     if message:
-        line_bot_api_notify.broadcast(
-            flex_notify_channel(channel=channel, date_time=f'{date} {time}',
-                                company=company,
-                                name=name, tel=tel,
-                                email=email, product=product, message=message))
+        users = db.find(collection='line_follower_notify', query={})
+        users = list(users)
+        for user in users:
+            if user['approval_status']:
+                if product in user['model']:
+                    line_bot_api_notify.push_message(user['user_id'],
+                                                     flex_notify_channel(channel=channel, date_time=f'{date} {time}',
+                                                                         company=company,
+                                                                         name=name, tel=tel,
+                                                                         email=email, product=product, message=message))
     else:
-        line_bot_api_notify.broadcast(
-            flex_notify_channel(channel=channel, date_time=f'{date} {time}',
-                                company=company,
-                                name=name, tel=tel,
-                                email=email, product=product, message='ไม่มีข้อความ'))
+        users = db.find(collection='line_follower_notify', query={})
+        users = list(users)
+        for user in users:
+            if user['approval_status']:
+                if product in user['model']:
+                    line_bot_api_notify.push_message(user['user_id'],
+                                                     flex_notify_channel(channel=channel, date_time=f'{date} {time}',
+                                                                         company=company,
+                                                                         name=name, tel=tel,
+                                                                         email=email, product=product,
+                                                                         message='ไม่มีข้อความ'))
 
 
 def key_model_transaction(item: dict, channel: str, userId=None, email_private=None, profile=None, picture=None,
