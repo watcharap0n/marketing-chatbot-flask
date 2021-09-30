@@ -47,24 +47,26 @@ new Vue({
             )
         },
         validationSave(user) {
-            console.log(user)
-            console.log(user.user_id)
             axios.post(`/MKT/notify/users/id/save`, user)
                 .then((res) => {
                     console.log(res.data)
-                    // this.validationUser()
+                    this.validationUser(user)
                 })
                 .catch((err) => {
                     console.error(err)
                 })
         },
-        validationUser() {
-            console.log(this.user)
-            const path = `/MKT/notify/users/${this.user.user_id}/validation`
+        validationUser(user) {
+            const path = `/MKT/notify/users/${user.user_id}/validation`
             axios.get(path)
                 .then((res) => {
                     console.log(res.data)
-                    this.initialized()
+                    let role = res.data.status
+                    if (role === 'ADMIN') {
+                        this.initialized()
+                    } else {
+                        return window.location = '/signin'
+                    }
                 })
                 .catch((err) => {
                     console.error(err)
