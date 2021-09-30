@@ -31,6 +31,7 @@ new Vue({
     },
     methods: {
         async validationSave() {
+            console.log(this.user)
             const path = `/MKT/notify/users/${this.user.user_id}/save`
             await axios.get(path)
                 .then((res) => {
