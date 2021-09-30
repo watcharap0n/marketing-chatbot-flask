@@ -43,7 +43,6 @@ new Vue({
                             this.formElement.profile = profile.displayName
                             this.formElement.picture = profile.pictureUrl
                             this.formElement.email_private = liff.getDecodedIDToken().email
-                            console.log(this.formElement)
                         })
                 } else {
                     liff.login();

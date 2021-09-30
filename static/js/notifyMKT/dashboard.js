@@ -23,13 +23,12 @@ new Vue({
             email: '',
         },
     },
-    created() {
+    mounted() {
         this.initializedLIFF();
-        this.validationSave();
     },
     methods: {
         async validationSave() {
-            const path = `/MKT/notify/users/${this.user.user_id}/save`
+            const path = `/notify/users/${this.user.user_id}/save`
             await axios.get(path)
                 .then((res) => {
                     console.log(res.data)
@@ -61,15 +60,17 @@ new Vue({
                     console.error(err)
                 })
         },
-        async initializedLIFF() {
-            await liff.init({liffId: '1655208213-9LgNYbLl'}, () => {
+        initializedLIFF() {
+            liff.init({liffId: '1655208213-9LgNYbLl'}, () => {
                     if (liff.isLoggedIn()) {
                         liff.getProfile()
                             .then((profile) => {
+                                console.log(profile)
                                 this.user.user_id = profile.userId
                                 this.user.display_name = profile.displayName
                                 this.user.img = profile.pictureUrl
                                 this.user.email = liff.getDecodedIDToken().email
+                                console.log(this.user)
                             })
                     } else {
                         liff.login();
