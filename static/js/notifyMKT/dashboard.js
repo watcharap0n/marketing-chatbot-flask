@@ -25,7 +25,7 @@ new Vue({
 
     },
     delimiters: ["[[", "]]"],
-    async mounted() {
+    async created() {
         await this.initializedLIFF()
         await this.validationSave()
     },
