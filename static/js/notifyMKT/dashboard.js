@@ -25,13 +25,14 @@ new Vue({
 
     },
     delimiters: ["[[", "]]"],
-    async mounted() {
-        await this.initializedLIFF()
-        this.validationSave()
+    mounted() {
+        this.initializedLIFF().then(()=>{
+            this.validationSave()
+        })
     },
     methods: {
-        async initializedLIFF() {
-            await liff.init({liffId: '1655208213-k48wpvK9'}, () => {
+        initializedLIFF() {
+            liff.init({liffId: '1655208213-k48wpvK9'}, () => {
                     if (liff.isLoggedIn()) {
                         liff.getProfile()
                             .then((profile) => {
