@@ -1,7 +1,8 @@
 {% extends 'LINE/layout/layout.html' %}
 {% block content %}
 
-  <v-container :hidden="!showDashboard">
+  <div :hidden="!showDashboard">
+  <v-container >
     <br>
     <h2><strong>Follower Users LINE NOTIFY</strong></h2>
     <v-divider></v-divider>
@@ -147,6 +148,7 @@
 
   </v-container>
 
+  </div>
 
 
   {% block script %}
