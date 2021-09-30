@@ -1,11 +1,11 @@
-{% extends "notifyMKT/layout/layout.html" %}
+{% extends 'LINE/layout/layout.html' %}
 {% block content %}
 
   <v-container>
     <br>
     <h2><strong>Follower Users LINE NOTIFY</strong></h2>
     <v-divider></v-divider>
-[[user]]
+[[userLIFF]]
     <v-card>
       <v-card-title>
         <v-text-field

@@ -16,24 +16,24 @@ new Vue({
             {text: 'Date', value: 'date', align: 'center'},
         ],
         transaction: [],
-        user: {
+        userLIFF: {
             user_id: '',
             display_name: '',
             picture: '',
             email: '',
         },
     },
-     created() {
-        liff.init({liffId: '1655208213-9LgNYbLl'}, () => {
+    created() {
+        liff.init({liffId: '1655208213-k48wpvK9'}, () => {
                 if (liff.isLoggedIn()) {
                     liff.getProfile()
                         .then((profile) => {
                             console.log(liff.getContext());
-                            this.user.user_id = profile.userId
-                            this.user.display_name = profile.displayName
-                            this.user.picture = profile.pictureUrl
-                            this.user.email = liff.getDecodedIDToken().email
-                            console.log(this.user)
+                            this.userLIFF.user_id = profile.userId
+                            this.userLIFF.display_name = profile.displayName
+                            this.userLIFF.picture = profile.pictureUrl
+                            this.userLIFF.email = liff.getDecodedIDToken().email
+                            console.log(this.userLIFF)
                         })
                 } else {
                     liff.login();
@@ -43,7 +43,7 @@ new Vue({
     },
     methods: {
         async validationSave() {
-            const path = `/notify/users/${this.user.user_id}/save`
+            const path = `/MKT/notify/users/${this.user.user_id}/save`
             await axios.get(path)
                 .then((res) => {
                     console.log(res.data)
