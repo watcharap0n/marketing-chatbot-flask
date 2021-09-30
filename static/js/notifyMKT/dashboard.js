@@ -29,7 +29,7 @@ new Vue({
     },
     methods: {
         async validationSave() {
-            const path = `/notify/users/${this.user.user_id}/save`
+            const path = `/MKT/notify/users/${this.user.user_id}/save`
             await axios.get(path)
                 .then((res) => {
                     console.log(res.data)
