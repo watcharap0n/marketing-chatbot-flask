@@ -31,6 +31,7 @@ new Vue({
             channel: 'LINE'
         },
     },
+    delimiters: ["[[", "]]"],
     created() {
         liff.init({liffId: '1655208213-k48wpvK9'}, () => {
                 if (liff.isLoggedIn()) {
@@ -116,5 +117,4 @@ new Vue({
         },
 
     },
-    delimiters: ["[[", "]]"],
 })
