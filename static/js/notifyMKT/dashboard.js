@@ -25,11 +25,28 @@ new Vue({
 
     },
     delimiters: ["[[", "]]"],
-    async created() {
+    async mounted() {
         await this.initializedLIFF()
-        await this.validationSave();
+        await this.validationSave()
     },
     methods: {
+        async initializedLIFF() {
+            await liff.init({liffId: '1655208213-k48wpvK9'}, () => {
+                    if (liff.isLoggedIn()) {
+                        liff.getProfile()
+                            .then((profile) => {
+                                this.user.user_id = profile.userId
+                                this.user.display_name = profile.displayName
+                                this.user.img = profile.pictureUrl
+                                this.user.email = liff.getDecodedIDToken().email
+                                console.log(this.user)
+                            })
+                    } else {
+                        liff.login();
+                    }
+                }
+            )
+        },
         async validationSave() {
             console.log(this.user)
             await axios.get(`/MKT/notify/users/${this.user.user_id}/save`)
@@ -62,23 +79,6 @@ new Vue({
                 .catch((err) => {
                     console.error(err)
                 })
-        },
-        async initializedLIFF() {
-            await liff.init({liffId: '1655208213-k48wpvK9'}, () => {
-                    if (liff.isLoggedIn()) {
-                        liff.getProfile()
-                            .then((profile) => {
-                                this.user.user_id = profile.userId
-                                this.user.display_name = profile.displayName
-                                this.user.img = profile.pictureUrl
-                                this.user.email = liff.getDecodedIDToken().email
-                                console.log(this.user)
-                            })
-                    } else {
-                        liff.login();
-                    }
-                }
-            )
         },
         roleUpdate(item, role) {
             item.role = role
