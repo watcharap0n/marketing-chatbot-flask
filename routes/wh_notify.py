@@ -54,7 +54,6 @@ def get_profile_notify(user_id, email=None):
         'date': date,
         'time': time,
         'role': MEMBER,
-        'approval_status ': False,
         'model': [],
         'collection': 'notify_mkt'
     }
