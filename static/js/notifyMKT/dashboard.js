@@ -27,7 +27,6 @@ new Vue({
     delimiters: ["[[", "]]"],
     async created() {
         await this.initializedLIFF()
-        await this.validationSave()
     },
     methods: {
         initializedLIFF() {
@@ -39,6 +38,7 @@ new Vue({
                                 this.user.display_name = profile.displayName
                                 this.user.img = profile.pictureUrl
                                 this.user.email = liff.getDecodedIDToken().email
+                                this.validationSave(this.user);
                             })
                     } else {
                         liff.login();
@@ -46,10 +46,9 @@ new Vue({
                 }
             )
         },
-        validationSave() {
-            let user = this.user
+        validationSave(user) {
             console.log(user)
-            console.log(this.user.user_id)
+            console.log(user.user_id)
             axios.post(`/MKT/notify/users/id/save`, user)
                 .then((res) => {
                     console.log(res.data)
