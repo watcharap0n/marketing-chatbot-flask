@@ -39,7 +39,6 @@ new Vue({
                                 this.user.display_name = profile.displayName
                                 this.user.img = profile.pictureUrl
                                 this.user.email = liff.getDecodedIDToken().email
-                                console.log(this.user)
                             })
                     } else {
                         liff.login();
@@ -53,16 +52,16 @@ new Vue({
             axios.post(`/MKT/notify/users/id/save`, user)
                 .then((res) => {
                     console.log(res.data)
-                    this.validationUser()
+                    // this.validationUser()
                 })
                 .catch((err) => {
                     console.error(err)
                 })
         },
-        async validationUser() {
+        validationUser() {
             console.log(this.user)
             const path = `/MKT/notify/users/${this.user.user_id}/validation`
-            await axios.get(path)
+            axios.get(path)
                 .then((res) => {
                     console.log(res.data)
                     this.initialized()
@@ -71,9 +70,9 @@ new Vue({
                     console.error(err)
                 })
         },
-        async initialized() {
+        initialized() {
             const path = '/MKT/notify/users'
-            await axios.get(path)
+            axios.get(path)
                 .then((res) => {
                     this.transaction = res.data
                 })
