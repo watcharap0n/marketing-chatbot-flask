@@ -1,11 +1,10 @@
 {% extends 'LINE/layout/layout.html' %}
 {% block content %}
 
-  <v-container>
+  <v-container :hidden="!showDashboard">
     <br>
     <h2><strong>Follower Users LINE NOTIFY</strong></h2>
     <v-divider></v-divider>
-    [[user]]
     <v-card>
       <v-card-title>
         <v-text-field

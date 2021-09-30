@@ -21,8 +21,8 @@ new Vue({
             display_name: '',
             img: '',
             email: '',
-        }
-
+        },
+        showDashboard: false
     },
     delimiters: ["[[", "]]"],
     async created() {
@@ -78,6 +78,7 @@ new Vue({
             const path = '/MKT/notify/users'
             axios.get(path)
                 .then((res) => {
+                    this.showDashboard = true
                     this.transaction = res.data
                 })
                 .catch((err) => {
