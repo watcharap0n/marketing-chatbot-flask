@@ -15,6 +15,7 @@
                 label="Combobox"
                 multiple
                 outlined
+                chips
                 dense
             ></v-combobox>
           </v-col>
