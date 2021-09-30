@@ -153,6 +153,11 @@ def select_notify(userId):
                                payload={'data': {}})
     elif request.method == 'PUT':
         selected = request.get_json(force=True)
+        if selected.get('approval_status'):
+            if selected['approval_status']:
+                line_bot_api_notify.push_message(selected['user_id'], TextSendMessage(text=f'Approved!'))
+        elif selected.get('approval_status') == False:
+            line_bot_api_notify.push_message(selected['user_id'], TextSendMessage(text=f'Disapproved!'))
         value = {'$set': selected}
         db.update_one(collection=line_follower_notify, query={'user_id': userId}, values=value)
         return jsonify({'message': 'success'})

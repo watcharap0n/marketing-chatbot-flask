@@ -64,7 +64,7 @@ new Vue({
                     Swal.fire(
                         'Success!',
                         'You will receive a notification after being approved!',
-                        'warning'
+                        'success'
                     ).then(() => {
                         liff.closeWindow();
                     })
