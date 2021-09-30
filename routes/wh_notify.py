@@ -34,7 +34,7 @@ def handle_invalid_usage(error):
     return response
 
 
-def get_profile_notify(user_id):
+def get_profile_notify(user_id, email=None):
     profile = line_bot_api_notify.get_profile(user_id)
     displayName = profile.display_name
     userId = profile.user_id
@@ -48,7 +48,7 @@ def get_profile_notify(user_id):
         'display_name': displayName,
         'user_id': userId,
         'img': img,
-        'email': '',
+        'email': email,
         'status': status,
         'id': key,
         'date': date,
@@ -122,7 +122,7 @@ def user_save():
     if user:
         return jsonify(status=True, message='user in already!', data=user, received=item)
     elif user is None:
-        user = get_profile_notify(item['user_id'])
+        user = get_profile_notify(item['user_id'], item['email'])
         db.insert_one(collection='line_follower_notify', data=user)
         del user['_id']
         return jsonify(status=False, message='user not in already!', data=user, received=item), 201
