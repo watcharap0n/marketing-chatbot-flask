@@ -89,3 +89,8 @@ def facebook_quotation():
 @page.route('/custom/page/<string:id>')
 def custom_page(id):
     return render_template('public/page_custom.vue', id=id)
+
+
+@page.route('/root/MKT/notify/')
+def root_mkt_notify():
+    return render_template('notifyMKT/dashboard.vue')

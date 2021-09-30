@@ -45,14 +45,18 @@ def get_profile_notify(user_id):
     date = _d.strftime("%d/%m/%y")
     time = _d.strftime("%H:%M:%S")
     result = {
-        'displayName': displayName,
-        'userId': userId,
+        'display_name': displayName,
+        'user_id': userId,
         'img': img,
+        'email': '',
         'status': status,
         'id': key,
         'date': date,
         'time': time,
-        'access': MEMBER
+        'role': MEMBER,
+        'approval_status ': False,
+        'model': [],
+        'collection': 'notify_mkt'
     }
     return result
 
@@ -113,8 +117,8 @@ def handler_message_notify(event):
 
 @notifyMKT.route('/notify/users/<string:userId>/save')
 def user_save(userId):
-    user = db.find_one(collection='line_follower_notify', query={'userId': userId})
-    if user:
+    user = db.find_one(collection='line_follower_notify', query={'user_id': userId})
+    if user.get('email'):
         return jsonify(status=True, message='user in already!', data=user)
     else:
         user = get_profile_notify(userId)
@@ -125,12 +129,29 @@ def user_save(userId):
 
 @notifyMKT.route('/notify/users/<string:userId>/validation')
 def user_validation(userId):
-    user = db.find(collection='line_follower_notify', query={'userId': userId})
-    user_access = user['access']
+    user = db.find_one(collection='line_follower_notify', query={'user_id': userId})
+    user_access = user['role']
     if user_access == MEMBER:
         return InvalidUsage(message='you not in access to program!', payload={'status': False}, status_code=401)
     elif user_access == ADMIN:
         return jsonify(message='success to access program!', status=True)
+
+
+@notifyMKT.route('/notify/users/<string:userId>/obj/notify', methods=['GET', 'PUT'])
+def select_notify(userId):
+    line_follower_notify = 'line_follower_notify'
+    if request.method == 'GET':
+        try:
+            user = db.find_one(line_follower_notify, query={'user_id': userId})
+            return jsonify(message='query success to line userId!', status=True, data=user)
+        except:
+            raise InvalidUsage(message='error something wrong! please contact dev', status_code=500,
+                               payload={'data': {}})
+    elif request.method == 'PUT':
+        selected = request.get_json(force=True)
+        value = {'$set': selected}
+        db.update_one(collection=line_follower_notify, query={'user_id': userId}, values=value)
+        return jsonify({'message': 'success'})
 
 
 @notifyMKT.route('/notify/users')
