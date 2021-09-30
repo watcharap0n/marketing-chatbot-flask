@@ -61,15 +61,11 @@ new Vue({
             axios.get(path)
                 .then((res) => {
                     console.log(res.data)
-                    let role = res.data.status
-                    if (role === 'ADMIN') {
-                        this.initialized()
-                    } else {
-                        return window.location = '/signin'
-                    }
+                    this.initialized();
                 })
                 .catch((err) => {
                     console.error(err)
+                    return window.location = '/signin'
                 })
         },
         initialized() {
