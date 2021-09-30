@@ -144,7 +144,11 @@ def select_notify(userId):
     if request.method == 'GET':
         try:
             user = db.find_one(line_follower_notify, query={'user_id': userId})
-            return jsonify(message='query success to line userId!', status=True, data=user)
+            data = db.find('customers', query={})
+            data = list(data)
+            product = [val['product'] for val in data]
+            product = set(product)
+            return jsonify(message='query success to line userId!', status=True, data=user, products=list(product))
         except:
             raise InvalidUsage(message='error something wrong! please contact dev', status_code=500,
                                payload={'data': {}})

@@ -94,3 +94,8 @@ def custom_page(id):
 @page.route('/dashboard/mkt/notify')
 def root_mkt_notify():
     return render_template('notifyMKT/dashboard.vue')
+
+
+@page.route('/dashboard/mkt/selected')
+def root_mkt_selected():
+    return render_template('notifyMKT/notify.vue')
