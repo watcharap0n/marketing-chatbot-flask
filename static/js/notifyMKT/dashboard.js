@@ -70,7 +70,7 @@ new Vue({
                         title: "You can't to access!",
                         text: 'Please contact to admin!',
                     }).then(() => {
-                        return window.location = '/signin'
+                        liff.closeWindow();
                     })
                 })
         },
