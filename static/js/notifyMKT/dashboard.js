@@ -26,14 +26,14 @@ new Vue({
     },
     delimiters: ["[[", "]]"],
     async mounted() {
-        await this.initializedLIFF();
-        await this.validationSave();
+        await this.initializedLIFF().then(()=>{
+            this.validationSave();
+        })
     },
     methods: {
         async validationSave() {
             console.log(this.user)
-            const path = `/MKT/notify/users/${this.user.user_id}/save`
-            await axios.get(path)
+            await axios.get(`/MKT/notify/users/${this.user.user_id}/save`)
                 .then((res) => {
                     console.log(res.data)
                     this.validationUser()
