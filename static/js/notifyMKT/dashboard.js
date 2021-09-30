@@ -49,6 +49,7 @@ new Vue({
         validationSave() {
             let user = this.user
             console.log(user)
+            console.log(this.user.user_id)
             axios.post(`/MKT/notify/users/id/save`, user)
                 .then((res) => {
                     console.log(res.data)
