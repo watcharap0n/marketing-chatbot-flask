@@ -49,9 +49,7 @@ new Vue({
             )
         },
         async validationSave() {
-            console.log(this.user)
-            console.log(this.user.user_id)
-            await axios.get(`/MKT/notify/users/${this.user.user_id}/save`)
+            await axios.post(`/MKT/notify/users/id/save`, this.user)
                 .then((res) => {
                     console.log(res.data)
                     this.validationUser()

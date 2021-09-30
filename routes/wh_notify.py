@@ -115,16 +115,17 @@ def handler_message_notify(event):
     line_bot_api_notify.reply_message(replyToken, TextSendMessage(text=message_text))
 
 
-@notifyMKT.route('/notify/users/<string:userId>/save')
-def user_save(userId):
-    user = db.find_one(collection='line_follower_notify', query={'user_id': userId})
+@notifyMKT.route('/notify/users/id/save', methods=['POST'])
+def user_save():
+    item = request.get_json()
+    user = db.find_one(collection='line_follower_notify', query={'user_id': item['user_id']})
     if user:
-        return jsonify(status=True, message='user in already!', data=user)
+        return jsonify(status=True, message='user in already!', data=user, received=item)
     elif user is None:
-        user = get_profile_notify(userId)
+        user = get_profile_notify(item['user_id'])
         db.insert_one(collection='line_follower_notify', data=user)
         del user['_id']
-        return jsonify(status=False, message='user not in already!', data=user), 201
+        return jsonify(status=False, message='user not in already!', data=user, received=item), 201
 
 
 @notifyMKT.route('/notify/users/<string:userId>/validation')
