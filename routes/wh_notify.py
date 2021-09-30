@@ -118,9 +118,9 @@ def handler_message_notify(event):
 @notifyMKT.route('/notify/users/<string:userId>/save')
 def user_save(userId):
     user = db.find_one(collection='line_follower_notify', query={'user_id': userId})
-    if user.get('email'):
+    if user:
         return jsonify(status=True, message='user in already!', data=user)
-    else:
+    elif user is None:
         user = get_profile_notify(userId)
         db.insert_one(collection='line_follower_notify', data=user)
         del user['_id']
@@ -132,7 +132,7 @@ def user_validation(userId):
     user = db.find_one(collection='line_follower_notify', query={'user_id': userId})
     user_access = user['role']
     if user_access == MEMBER:
-        return InvalidUsage(message='you not in access to program!', payload={'status': False}, status_code=401)
+        return jsonify(message='you not in access to program!', status=False), 401
     elif user_access == ADMIN:
         return jsonify(message='success to access program!', status=True)
 
