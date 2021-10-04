@@ -250,6 +250,7 @@ new Vue({
         dialogDuplicateRE: false,
         dialogConfirmRE: false,
         dialogUpdateRE: false,
+        pathService: 'MKT',
 
         //form
         dialogForm: false,
@@ -342,6 +343,10 @@ new Vue({
         await this.APIImport();
         await this.getTags();
         await this.getUserRE();
+        if (this.userAuth.collection !== 'customers') {
+            this.itemsAppbar = []
+            this.pathService = 'CUST'
+        }
     },
     computed: {
         datetimeNow() {
@@ -524,7 +529,7 @@ new Vue({
             this.dialogForm = true
             this.getObjectForm()
         },
-        openInForm(){
+        openInForm() {
             this.dialogInForm = true
         },
         getObjectForm() {
@@ -574,8 +579,8 @@ new Vue({
             await items.forEach((item) => {
                 let _dict = {
                     old_code: item.id,
-                    company: item.name,
-                    first_name: item.company,
+                    company: this.userAuth.collection !== 'customers' ? item.company : item.name,
+                    first_name: this.userAuth.collection !== 'customers' ? item.name : item.company,
                     telephone: item.tel,
                     mail: item.email,
                     card_id: item.person_id,
@@ -650,7 +655,7 @@ new Vue({
                 })
         },
         async validItemRE() {
-            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerValidation?servicetype=MKT`
+            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerValidation?servicetype=${this.pathService}`
             await axios.post(path, this.itemsRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
@@ -690,6 +695,8 @@ new Vue({
                         this.colorSb = 'red'
                         console.log(res.data)
                     }
+                    console.log(this.itemsRE)
+                    console.log(this.pathService)
                 })
                 .catch((err) => {
                     console.error(err)
@@ -729,7 +736,7 @@ new Vue({
         },
         async finallyEditRE() {
             this.spinButton = false
-            const path = 'https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerUpdate?servicetype=MKT'
+            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerUpdate?servicetype=${this.pathService}`
             await axios.post(path, this.usersRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
@@ -793,7 +800,7 @@ new Vue({
         },
         async finallyCreate() {
             this.spinButton = false
-            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerCreate?servicetype=MKT`
+            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerCreate?servicetype=${this.pathService}`
             await axios.post(path, this.usersRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
