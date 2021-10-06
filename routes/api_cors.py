@@ -160,9 +160,18 @@ def preview_excel():
 
 @public.route('/requests/token/account')
 def account_token():
-    res = {
-        "company": "MG1",
-        "userid": "api01",
-        "userpass": "1234"
-    }
-    return jsonify(res)
+    collect = request.args.get('collection')
+    if collect != 'customers':
+        res = {
+            "company": "MG1",
+            "userid": "api01",
+            "userpass": "1"
+        }
+        return jsonify(res)
+    else:
+        res = {
+            "company": "MG1",
+            "userid": "api01",
+            "userpass": "1234"
+        }
+        return jsonify(res)

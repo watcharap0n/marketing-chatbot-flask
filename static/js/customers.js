@@ -251,6 +251,7 @@ new Vue({
         dialogConfirmRE: false,
         dialogUpdateRE: false,
         pathService: 'MKT',
+        baseURL: 'https://poc.mangoanywhere.com/demosql.sale.re/',
 
         //form
         dialogForm: false,
@@ -346,6 +347,7 @@ new Vue({
         if (this.userAuth.collection !== 'customers') {
             this.itemsAppbar = []
             this.pathService = 'CUST'
+            this.baseURL = 'https://poc.mangoanywhere.com/test_websql/'
         }
     },
     computed: {
@@ -613,10 +615,9 @@ new Vue({
                 }
                 this.itemsRE.push(_dict)
             })
-            console.log(this.itemsRE)
         },
         async getUserRE() {
-            await axios.get('/requests/token/account')
+            await axios.get(`/requests/token/account?collection=${this.userAuth.collection}`)
                 .then((res) => {
                     this.accountRE = res.data
                 })
@@ -625,7 +626,9 @@ new Vue({
                 })
         },
         async requestTokenRE() {
-            const path = `https://poc.mangoanywhere.com/demosql.sale.re/api/public/RequestApiToken`
+            const path = `${this.baseURL}api/public/RequestApiToken`
+            console.log(this.accountRE)
+            console.log(path)
             await axios.post(path, this.accountRE)
                 .then((res) => {
                     this.tokenRE = res.data.data.token
@@ -635,7 +638,8 @@ new Vue({
                 })
         },
         async checkTokenRE(selected) {
-            const path = `https://poc.mangoanywhere.com/demosql.sale.re/api/public/CheckToken`
+            const path = `${this.baseURL}api/public/CheckToken`
+            console.log(path)
             await axios.get(path, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
@@ -655,7 +659,8 @@ new Vue({
                 })
         },
         async validItemRE() {
-            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerValidation?servicetype=${this.pathService}`
+            const path = `${this.baseURL}Re_Api/CustomerValidation?servicetype=${this.pathService}`
+            console.log(path)
             await axios.post(path, this.itemsRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
@@ -695,8 +700,6 @@ new Vue({
                         this.colorSb = 'red'
                         console.log(res.data)
                     }
-                    console.log(this.itemsRE)
-                    console.log(this.pathService)
                 })
                 .catch((err) => {
                     console.error(err)
@@ -736,7 +739,8 @@ new Vue({
         },
         async finallyEditRE() {
             this.spinButton = false
-            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerUpdate?servicetype=${this.pathService}`
+            const path = `${this.baseURL}Re_Api/CustomerUpdate?servicetype=${this.pathService}`
+            console.log(path)
             await axios.post(path, this.usersRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
@@ -800,7 +804,8 @@ new Vue({
         },
         async finallyCreate() {
             this.spinButton = false
-            const path = `https://poc.mangoanywhere.com/demosql.sale.re/Re_Api/CustomerCreate?servicetype=${this.pathService}`
+            const path = `${this.baseURL}Re_Api/CustomerCreate?servicetype=${this.pathService}`
+            console.log(path)
             await axios.post(path, this.usersRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
