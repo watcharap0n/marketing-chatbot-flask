@@ -657,6 +657,10 @@ new Vue({
                         console.log('not valid')
                     }
                 })
+                .catch((err) => {
+                    this.spinRE = true
+                    console.error(err)
+                })
         },
         async validItemRE() {
             const path = `${this.baseURL}Re_Api/CustomerValidation?servicetype=${this.pathService}`
