@@ -627,8 +627,6 @@ new Vue({
         },
         async requestTokenRE() {
             const path = `${this.baseURL}api/public/RequestApiToken`
-            console.log(this.accountRE)
-            console.log(path)
             await axios.post(path, this.accountRE)
                 .then((res) => {
                     this.tokenRE = res.data.data.token
@@ -639,7 +637,6 @@ new Vue({
         },
         async checkTokenRE(selected) {
             const path = `${this.baseURL}api/public/CheckToken`
-            console.log(path)
             await axios.get(path, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
@@ -664,7 +661,6 @@ new Vue({
         },
         async validItemRE() {
             const path = `${this.baseURL}Re_Api/CustomerValidation?servicetype=${this.pathService}`
-            console.log(path)
             await axios.post(path, this.itemsRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
