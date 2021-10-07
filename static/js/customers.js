@@ -619,7 +619,11 @@ new Vue({
         async getUserRE() {
             await axios.get(`/requests/token/account?collection=${this.userAuth.collection}`)
                 .then((res) => {
-                    this.accountRE = res.data
+                    if (res.data.status) {
+                        this.accountRE = res.data.user
+                    } else {
+                        this.tokenRE = res.data.token
+                    }
                 })
                 .catch((err) => {
                     console.error(err)
@@ -630,9 +634,6 @@ new Vue({
             await axios.post(path, this.accountRE)
                 .then((res) => {
                     this.tokenRE = res.data.data.token
-                })
-                .catch((err) => {
-                    console.error(err)
                 })
         },
         async checkTokenRE(selected) {
@@ -659,6 +660,41 @@ new Vue({
                     console.error(err)
                 })
         },
+        validationRE(res) {
+            if (res.data.success) {
+                this.spinRE = true
+                this.btnRE = true
+                this.btnAPI = false
+                this.btnHiddenAPI = false
+                this.btnDelete = false
+                this.transaction.forEach((val) => {
+                    let idx = this.transaction.indexOf(val)
+                    let responseData = res.data.data[idx]
+                    let itemsRE = this.itemsRE[idx]
+                    if (responseData.customer_code) {
+                        Object.assign(val.tag = [responseData.customer_code], val)
+                        if (itemsRE.old_code === responseData.id) {
+                            itemsRE.customer_code = responseData.customer_code
+                        }
+                    } else if (!responseData.customer_code) {
+                        Object.assign(val.tag = ['ไม่มีใน RE'], val)
+                        if (itemsRE.old_code === responseData.id) {
+                            itemsRE.customer_code = ""
+                        }
+                    }
+                })
+                this.page = 2
+                this.snackbar = true
+                this.text = `รายการทั้งหมด ${this.transaction.length} รายการ`
+                this.colorSb = 'primary'
+                this.selected = []
+            } else if (!res.data.success) {
+                this.snackbar = true
+                this.text = `มีข้อมูลบางอย่างผิดพลาด กรุณาตรวจสอบข้อมูลก่อน RE`
+                this.colorSb = 'red'
+                console.log(res.data)
+            }
+        },
         async validItemRE() {
             const path = `${this.baseURL}Re_Api/CustomerValidation?servicetype=${this.pathService}`
             await axios.post(path, this.itemsRE, {
@@ -667,39 +703,7 @@ new Vue({
                 }
             })
                 .then((res) => {
-                    if (res.data.success) {
-                        this.spinRE = true
-                        this.btnRE = true
-                        this.btnAPI = false
-                        this.btnHiddenAPI = false
-                        this.btnDelete = false
-                        this.transaction.forEach((val) => {
-                            let idx = this.transaction.indexOf(val)
-                            let responseData = res.data.data[idx]
-                            let itemsRE = this.itemsRE[idx]
-                            if (responseData.customer_code) {
-                                Object.assign(val.tag = [responseData.customer_code], val)
-                                if (itemsRE.old_code === responseData.id) {
-                                    itemsRE.customer_code = responseData.customer_code
-                                }
-                            } else if (!responseData.customer_code) {
-                                Object.assign(val.tag = ['ไม่มีใน RE'], val)
-                                if (itemsRE.old_code === responseData.id) {
-                                    itemsRE.customer_code = ""
-                                }
-                            }
-                        })
-                        this.page = 2
-                        this.snackbar = true
-                        this.text = `รายการทั้งหมด ${this.transaction.length} รายการ`
-                        this.colorSb = 'primary'
-                        this.selected = []
-                    } else if (!res.data.success) {
-                        this.snackbar = true
-                        this.text = `มีข้อมูลบางอย่างผิดพลาด กรุณาตรวจสอบข้อมูลก่อน RE`
-                        this.colorSb = 'red'
-                        console.log(res.data)
-                    }
+                    this.validationRE(res)
                 })
                 .catch((err) => {
                     console.error(err)
@@ -737,6 +741,28 @@ new Vue({
                 }
             })
         },
+        editedRE(res) {
+            if (res.data.success) {
+                this.spinButton = true
+                this.itemsRE = []
+                this.usersRE = []
+                this.itemsDuplicateRE = []
+                this.selected = []
+                this.dialogUpdateRE = false
+                this.initialize().then(() => {
+                    this.page = 0
+                })
+                this.text = `คุณได้ทำการอัพเดทรายชื่อใน RE แล้ว!`
+                this.colorSb = 'success'
+                this.snackbar = true
+            } else if (!res.data.success) {
+                this.spinButton = true
+                this.dialogUpdateRE = false
+                this.text = `มีบางอย่างผิดพลาดโปรดตรวจสอบข้อมูลหรือลองใหม่อีกครั้ง!`
+                this.colorSb = 'red'
+                this.snackbar = true
+            }
+        },
         async finallyEditRE() {
             this.spinButton = false
             const path = `${this.baseURL}Re_Api/CustomerUpdate?servicetype=${this.pathService}`
@@ -748,30 +774,11 @@ new Vue({
             })
                 .then((res) => {
                     console.log(res.data)
-                    if (res.data.success) {
-                        this.spinButton = true
-                        this.itemsRE = []
-                        this.usersRE = []
-                        this.itemsDuplicateRE = []
-                        this.selected = []
-                        this.dialogUpdateRE = false
-                        this.initialize().then(() => {
-                            this.page = 0
-                        })
-                        this.text = `คุณได้ทำการอัพเดทรายชื่อใน RE แล้ว!`
-                        this.colorSb = 'success'
-                        this.snackbar = true
-                    } else if (!res.data.success) {
-                        this.spinButton = true
-                        this.dialogUpdateRE = false
-                        this.text = `มีบางอย่างผิดพลาดโปรดตรวจสอบข้อมูลหรือลองใหม่อีกครั้ง!`
-                        this.colorSb = 'red'
-                        this.snackbar = true
-                    }
+                    this.editedRE(res)
                 })
                 .catch((err) => {
-                    this.spinButton = true
                     console.error(err)
+                    this.editItemBackend()
                 })
         },
         createRE() {
@@ -802,10 +809,42 @@ new Vue({
                 }
             }
         },
+        async createdRE(res) {
+            if (res.data.success) {
+                await this.selected.forEach((val) => {
+                    let idx = this.selected.indexOf(val)
+                    let item = res.data.data[idx]
+                    if (item.old_code === val.id) {
+                        val.tag = [item.customer_code]
+                        let data = Object.assign(this.selected[idx], val)
+                        this.editTransaction(data, data.id);
+                        console.log(data)
+                    }
+                })
+                this.spinButton = true
+                this.dialogDuplicateRE = false
+                this.dialogConfirmRE = false
+                this.itemsDuplicateRE = []
+                this.itemsRE = []
+                this.usersRE = []
+                await this.initialize().then(() => {
+                    this.page = 0
+                })
+                this.text = `คุณได้ทำการเพิ่มข้อมูลไปยังโปรแกรม RE แล้ว!`
+                this.colorSb = 'success'
+                this.snackbar = true
+            } else if (!res.data.success) {
+                this.spinButton = true
+                this.dialogDuplicateRE = false
+                this.dialogConfirmRE = false
+                this.text = `มีบางอย่างผิดพลาดโปรดตรวจสอบข้อมูลหรือลองใหม่อีกครั้ง!`
+                this.colorSb = 'red'
+                this.snackbar = true
+            }
+        },
         async finallyCreate() {
             this.spinButton = false
             const path = `${this.baseURL}Re_Api/CustomerCreate?servicetype=${this.pathService}`
-            console.log(path)
             await axios.post(path, this.usersRE, {
                 headers: {
                     'x-mg-api-token': this.tokenRE
@@ -813,41 +852,10 @@ new Vue({
             })
                 .then((res) => {
                     console.log(res.data)
-                    if (res.data.success) {
-                        this.selected.forEach((val) => {
-                            let idx = this.selected.indexOf(val)
-                            let item = res.data.data[idx]
-                            if (item.old_code === val.id) {
-                                val.tag = [item.customer_code]
-                                let data = Object.assign(this.selected[idx], val)
-                                this.editTransaction(data, data.id);
-                                console.log(data)
-                            }
-                        })
-                        this.spinButton = true
-                        this.dialogDuplicateRE = false
-                        this.dialogConfirmRE = false
-                        this.itemsDuplicateRE = []
-                        this.itemsRE = []
-                        this.usersRE = []
-                        this.initialize().then(() => {
-                            this.page = 0
-                        })
-                        this.text = `คุณได้ทำการเพิ่มข้อมูลไปยังโปรแกรม RE แล้ว!`
-                        this.colorSb = 'success'
-                        this.snackbar = true
-                    } else if (!res.data.success) {
-                        this.spinButton = true
-                        this.dialogDuplicateRE = false
-                        this.dialogConfirmRE = false
-                        this.text = `มีบางอย่างผิดพลาดโปรดตรวจสอบข้อมูลหรือลองใหม่อีกครั้ง!`
-                        this.colorSb = 'red'
-                        this.snackbar = true
-                    }
-                    console.log(res.data)
+                    this.createdRE(res)
                 })
                 .catch((err) => {
-                    this.spinButton = true
+                    this.createItemBackend()
                     console.error(err)
                 })
         },
@@ -858,12 +866,82 @@ new Vue({
                 this.colorSb = 'red'
             } else {
                 this.spinRE = false
-                this.requestTokenRE().then(() => {
-                    this.checkTokenRE(selected);
-                })
+                this.requestTokenRE()
+                    .then(() => {
+                        this.checkTokenRE(selected);
+                    })
+                    .catch(() => {
+                        axios.get(`/requests/token/checkToken?token=${this.tokenRE}`)
+                            .then((res) => {
+                                if (res.data.success) {
+                                    this.$nextTick(() => {
+                                        this.transaction = selected
+                                        this.editedItemRE(this.transaction)
+                                        this.validItemBackend()
+                                    })
+                                } else if (!res.data.success) {
+                                    this.spinRE = true
+                                    console.log('not valid')
+                                }
+                            })
+                            .catch((err) => {
+                                this.spinRE = true
+                                console.err(err)
+                            })
+                    })
 
             }
         },
+        async validItemBackend() {
+            let dict = {
+                url: `${this.baseURL}Re_Api/CustomerValidation?servicetype=${this.pathService}`,
+                token: this.tokenRE,
+                data: this.itemsRE
+            }
+            await axios.post('/requests/dynamic/optional', dict)
+                .then((res) => {
+                    console.log(res.data)
+                    this.validationRE(res)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+
+        async createItemBackend() {
+            this.spinButton = false
+            let dict = {
+                url: `${this.baseURL}Re_Api/CustomerCreate?servicetype=${this.pathService}`,
+                data: this.usersRE,
+                token: this.tokenRE
+            }
+            await axios.post('/requests/dynamic/optional', dict)
+                .then((res) => {
+                    this.createdRE(res)
+                    console.log(res.data)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        async editItemBackend() {
+            this.spinButton = false
+            let dict = {
+                url: `${this.baseURL}Re_Api/CustomerUpdate?servicetype=${this.pathService}`,
+                data: this.usersRE,
+                token: this.tokenRE
+            }
+            await axios.post('/requests/dynamic/optional', dict)
+                .then((res) => {
+                    console.log(res.data)
+                    this.editedRE(res)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+
+
         async moveImport() {
             if (this.selected.length > 0) {
                 this.spinImport = true

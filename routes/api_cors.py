@@ -2,6 +2,7 @@ from flask import request, jsonify, Blueprint, send_file
 from flask_pydantic_spec import Response
 from modules.Invalidate import InvalidUsage
 import datetime
+import requests
 from bson import ObjectId
 from config.object_str import CutId
 from modules.swagger import api
@@ -11,6 +12,7 @@ from routes.wh_notify import line_bot_api_notify
 from environ.client_environ import MONGODB_URI
 from machine_leanning.model_spam import model_spam
 import os
+import json
 
 public = Blueprint('public', __name__, template_folder='templates')
 
@@ -158,20 +160,49 @@ def preview_excel():
                      attachment_filename='preview.xlsx')
 
 
+@public.route('/requests/token/checkToken')
+def request_token():
+    param = request.args.get('token')
+    url = "https://poc.mangoanywhere.com/test_websql/api/public/CheckToken"
+    headers = {
+        'x-mg-api-token': param
+    }
+    response = requests.request("GET", url, headers=headers)
+    res = response.json()
+    return jsonify(res)
+
+
+@public.route('/requests/dynamic/optional', methods=['POST'])
+def request_validation():
+    item = request.get_json()
+    param = item['token']
+    url = item['url']
+    data = item['data']
+    headers = {
+        'x-mg-api-token': param
+    }
+    response = requests.post(url, data=json.dumps(data), headers=headers)
+    res = response.json()
+    return jsonify(res)
+
+
 @public.route('/requests/token/account')
 def account_token():
     collect = request.args.get('collection')
     if collect != 'customers':
-        res = {
+        user = {
             "company": "MG1",
             "userid": "api01",
             "userpass": "1"
         }
-        return jsonify(res)
+        path = 'https://poc.mangoanywhere.com/test_websql/api/public/RequestApiToken'
+        res = requests.post(url=path, json=user)
+        res = res.json()
+        return jsonify(user={}, token=res['data']['token'], status=False)
     else:
         res = {
             "company": "MG1",
             "userid": "api01",
             "userpass": "1234"
         }
-        return jsonify(res)
+        return jsonify(user=res, token={}, status=True)
