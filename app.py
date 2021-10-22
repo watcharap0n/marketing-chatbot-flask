@@ -7,15 +7,15 @@ github: watcharap0n
 
 """
 
-from flask import Flask, jsonify, session, g, request, current_app, render_template
-from modules.swagger import api
-from routes import customers, imports, intents, tags, wh_client, secure, pages, questionnaires, wh_mango, ruleBased, \
-    wh_notify, api_cors, dashboard
-from flask_cors import CORS
+import os
 from datetime import timedelta
+from flask import Flask, jsonify, session, g, request, current_app, render_template
+from flask_cors import CORS
+from routes import customers, imports, intents, tags, wh_client, secure, pages, \
+    questionnaires, wh_mango, ruleBased, wh_notify, api_cors, dashboard
+from modules.swagger import api
 from modules.Invalidate import InvalidUsage
 from routes.secure import auth
-import os
 
 app = Flask(__name__)
 
@@ -25,6 +25,11 @@ app.secret_key = 'watcharaponweeraborirakz'
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
+    """
+
+    :param error:
+    :return:
+    """
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
@@ -32,12 +37,22 @@ def handle_invalid_usage(error):
 
 @app.errorhandler(404)
 def page_not_found(error):
+    """
+
+    :param error:
+    :return render_template(404):
+    """
     current_app.logger.error("Page not found: %s", (request.path, error))
     return render_template("error_handle/404.html"), 404
 
 
 @app.before_request
 def before_request():
+    """
+    description: before render template javascript for the authentication -
+
+    :return:
+    """
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=60)
     try:
@@ -54,6 +69,11 @@ def before_request():
 
 @app.after_request
 def after_request_func(response):
+    """
+
+    :param response:
+    :return:
+    """
     return response
 
 
