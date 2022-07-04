@@ -7,7 +7,7 @@ from bson import ObjectId
 from config.object_str import CutId
 from modules.swagger import api
 from config.db import MongoDB
-from features_line.flex_message import flex_notify_channel
+from features_line.flex_message import flex_notify_channel, flex_notify_channel_subject
 from routes.wh_notify import line_bot_api_notify
 from environ.client_environ import MONGODB_URI
 from machine_leanning.model_spam import model_spam
@@ -29,31 +29,34 @@ def handle_invalid_usage(error):
     return response
 
 
+def split_text_coma(text: str):
+    sentence = text.split(',')
+    return sentence[1]
+
+
 def condition_message(channel, date, time, company, name, tel, email, product,
-                      message):
-    if message:
-        users = db.find(collection='line_follower_notify', query={})
-        users = list(users)
-        for user in users:
-            if user['approval_status']:
-                if product in user['model']:
-                    line_bot_api_notify.push_message(user['user_id'],
-                                                     flex_notify_channel(channel=channel, date_time=f'{date} {time}',
-                                                                         company=company,
-                                                                         name=name, tel=tel,
-                                                                         email=email, product=product, message=message))
-    else:
-        users = db.find(collection='line_follower_notify', query={})
-        users = list(users)
-        for user in users:
-            if user['approval_status']:
-                if product in user['model']:
-                    line_bot_api_notify.push_message(user['user_id'],
-                                                     flex_notify_channel(channel=channel, date_time=f'{date} {time}',
-                                                                         company=company,
-                                                                         name=name, tel=tel,
-                                                                         email=email, product=product,
-                                                                         message='ไม่มีข้อความ'))
+                      message, subject=None):
+    users = db.find(collection='line_follower_notify', query={'approval_status': True})
+    users = list(users)
+    for user in users:
+        if subject:
+            if subject in user['model_subject']:
+                line_bot_api_notify.push_message(user['user_id'],
+                                                 flex_notify_channel_subject(channel=channel,
+                                                                             date_time=f'{date} {time}',
+                                                                             company=company,
+                                                                             name=name, tel=tel,
+                                                                             email=email, product=product,
+                                                                             message=message, subject=subject))
+        elif channel != 'Contact':
+            if product in user['model']:
+                line_bot_api_notify.push_message(user['user_id'],
+                                                 flex_notify_channel(channel=channel,
+                                                                     date_time=f'{date} {time}',
+                                                                     company=company,
+                                                                     name=name, tel=tel,
+                                                                     email=email, product=product,
+                                                                     message=message))
 
 
 def key_model_transaction(item: dict, channel: str, userId=None, email_private=None, profile=None, picture=None,
@@ -128,7 +131,8 @@ def contact():
         item["date"] = _d.strftime("%d/%m/%y")
         item["time"] = _d.strftime("%H:%M:%S")
         item["id"] = key
-        del item['contact_email_div']
+        sentence = split_text_coma(item.get('contact_email_div'))
+        item['subject'] = sentence
         item = key_model_transaction(item, 'Contact')
         db.insert_one(collection=collection, data=item)
 
@@ -146,7 +150,7 @@ def contact():
         if company == 'google' or tag == ['spam']:
             return jsonify(item)
         else:
-            condition_message(channel, date, time, company, name, tel, email, product, message)
+            condition_message(channel, date, time, company, name, tel, email, product, message, sentence)
         return jsonify(item)
     except:
         raise InvalidUsage(message='please try again', status_code=400, payload={'status': True})
@@ -163,6 +167,16 @@ def preview_excel():
 @public.route('/requests/token/checkToken')
 def request_token():
     param = request.args.get('token')
+    collect = request.args.get('collection')
+    print(collect)
+    if collect:
+        url = 'https://marketing.mangoanywhere.com/estate/api/public/CheckToken'
+        headers = {
+            'x-mg-api-token': param
+        }
+        response = requests.request("GET", url, headers=headers)
+        res = response.json()
+        return jsonify(res)
     url = "https://poc.mangoanywhere.com/test_websql/api/public/CheckToken"
     headers = {
         'x-mg-api-token': param
@@ -202,7 +216,10 @@ def account_token():
     else:
         res = {
             "company": "MG1",
-            "userid": "api01",
+            "userid": "API01",
             "userpass": "1234"
         }
-        return jsonify(user=res, token={}, status=True)
+        path = 'https://marketing.mangoanywhere.com/estate/api/public/RequestApiToken'
+        res = requests.post(url=path, json=res)
+        res = res.json()
+        return jsonify(user={}, token=res['data']['token'], status=False)
