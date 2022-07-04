@@ -8,7 +8,7 @@
         absolute
         dense
     >
-      Copyright &copy; 2021 Mango Consultant Built @watcharapon. All Rights Reserved
+      copyright &copy; 2021 mango consultant built @watcharapon. all rights reserved
       <v-spacer></v-spacer>
       <small>
         <v-btn
