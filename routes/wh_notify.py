@@ -55,6 +55,7 @@ def get_profile_notify(user_id, email=None):
         'time': time,
         'role': MEMBER,
         'model': [],
+        'model_subject': [],
         'collection': 'notify_mkt'
     }
     return result
