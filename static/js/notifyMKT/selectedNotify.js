@@ -4,6 +4,7 @@ new Vue({
     data: {
         user: {},
         products: [],
+        subjects: ['สนใจสินค้าและบริการ', 'สอบถามการใช้งาน', 'แจ้งปัญหาโปรแกรม', 'ร้องเรียนการให้บริการ'],
         spinBtn: false,
     },
     delimiters: ["[[", "]]"],
@@ -31,7 +32,6 @@ new Vue({
         validationSave(user) {
             axios.post(`/MKT/notify/users/id/save`, user)
                 .then((res) => {
-                    console.log(res.data)
                     this.getProfile(user)
                 })
                 .catch((err) => {
@@ -39,11 +39,9 @@ new Vue({
                 })
         },
         getProfile(item) {
-            console.log(item)
             const path = `/MKT/notify/users/${item.user_id}/obj/notify`
             axios.get(path)
                 .then((res) => {
-                    console.log(res.data)
                     this.user = res.data.data
                     this.products = res.data.products
                 })
@@ -59,7 +57,6 @@ new Vue({
             const path = `/MKT/notify/users/${item.user_id}/obj/notify`
             axios.put(path, item)
                 .then((res) => {
-                    console.log(res.data)
                     this.spinBtn = false
                     Swal.fire(
                         'Success!',
