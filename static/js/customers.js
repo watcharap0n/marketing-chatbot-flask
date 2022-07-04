@@ -251,7 +251,7 @@ new Vue({
         dialogConfirmRE: false,
         dialogUpdateRE: false,
         pathService: 'MKT',
-        baseURL: 'https://poc.mangoanywhere.com/demosql.sale.re/',
+        baseURL: 'https://marketing.mangoanywhere.com/estate/',
 
         //form
         dialogForm: false,
@@ -871,7 +871,8 @@ new Vue({
                         this.checkTokenRE(selected);
                     })
                     .catch(() => {
-                        axios.get(`/requests/token/checkToken?token=${this.tokenRE}`)
+                        console.log(this.userAuth.collection)
+                        axios.get(`/requests/token/checkToken?token=${this.tokenRE}${this.userAuth.collection === 'customers' ? '&collection=customers' : ''}`)
                             .then((res) => {
                                 if (res.data.success) {
                                     this.$nextTick(() => {
